@@ -1,8 +1,6 @@
 package com.ums.ums_backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -12,7 +10,17 @@ public class Course {
     @Id
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    private String code;
+
     private String name;
+
+    private String description;
+
+    private Double credits;
 
     @OneToMany(mappedBy = "course")
     private List<Enrollment> enrollments;

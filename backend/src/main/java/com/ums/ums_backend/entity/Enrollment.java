@@ -1,8 +1,6 @@
 package com.ums.ums_backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -12,6 +10,10 @@ public class Enrollment {
     @Id
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "semester_id")
+    private Semester semester;
+
     private LocalDate enrollmentDate;
 
     @ManyToOne
@@ -19,5 +21,10 @@ public class Enrollment {
 
     @ManyToOne
     private Course course;
+
+    private Double grade;
+
+    @Enumerated(EnumType.STRING)
+    private EnrollmentStatus enrollmentStatus;
 
 }

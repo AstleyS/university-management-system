@@ -3,23 +3,22 @@ package com.ums.ums_backend.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Email;
 
 import java.util.List;
 
 @Entity
-public class Professor {
+public class Faculty {
 
     @Id
     private Long id;
 
     private String name;
 
-    @Email
-    private String email;
+    private String code;
 
-    @OneToMany(mappedBy = "professor")
-    private List<TeachingAssignment> courses;
+    private String description;
 
+    @OneToMany(mappedBy = "faculty")
+    private List<Department> departments;
 
 }
