@@ -1,0 +1,102 @@
+# ==========================
+# General
+# ==========================
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+
+# ==========================
+# Angular Frontend
+# ==========================
+
+# Dependencies
+frontend/node_modules/
+
+# Angular build
+frontend/dist/
+frontend/.angular/
+
+# Environment files
+frontend/src/environments/*.ts
+
+# Test coverage
+frontend/coverage/
+
+
+# ==========================
+# Spring Boot Backend
+# ==========================
+
+# Maven
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+backend/.gradle/
+backend/build/
+
+# Spring logs
+backend/*.log
+
+
+# ==========================
+# Database
+# ==========================
+
+# Local databases
+*.db
+*.sqlite
+
+# Docker volumes
+data/
+
+
+# ==========================
+# Environment / Secrets
+# ==========================
+
+.env
+.env.*
+
+application-local.properties
+application-local.yml
+
+# JWT secrets, API keys, etc.
+*.pem
+*.key
+
+
+# ==========================
+# Docker
+# ==========================
+
+docker-compose.override.yml
+
+
+# ==========================
+# Node
+# ==========================
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# ==========================
+# Python (if you add AI service later)
+# ==========================
+
+__pycache__/
+*.pyc
+.venv/
+venv/
