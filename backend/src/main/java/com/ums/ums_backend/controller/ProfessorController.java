@@ -1,0 +1,56 @@
+package com.ums.ums_backend.controller;
+
+import com.ums.ums_backend.dto.ProfessorDTO;
+import com.ums.ums_backend.service.ProfessorService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/professors")
+public class ProfessorController {
+
+    private final ProfessorService service;
+
+    public ProfessorController(ProfessorService service) {
+        this.service = service;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProfessorDTO>> getProfessors() {
+        return ResponseEntity.ok(service.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfessorDTO> getProfessorById(@PathVariable Long id) {
+        Optional<ProfessorDTO> professor = service.findById(id);
+        return professor.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<ProfessorDTO> createProfessor(@RequestBody ProfessorDTO dto) {
+        ProfessorDTO created = service.save(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProfessorDTO> updateProfessor(@PathVariable Long id, @RequestBody ProfessorDTO dto) {
+        try {
+            ProfessorDTO updated = service.update(id, dto);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProfessor(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+}

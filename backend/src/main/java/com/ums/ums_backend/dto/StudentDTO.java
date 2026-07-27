@@ -23,7 +23,14 @@ public class StudentDTO {
     public StudentDTO() {
     }
 
-    public StudentDTO(Long id, Long userId, String firstName, String lastName, String gender, LocalDate dateOfBirth, String email, List<Long> enrollmentIds) {
+    public StudentDTO(Long id,
+                      Long userId,
+                      String firstName,
+                      String lastName,
+                      String gender,
+                      LocalDate dateOfBirth,
+                      String email,
+                      List<Long> enrollmentIds) {
         this.id = id;
         this.userId = userId;
         this.firstName = firstName;
