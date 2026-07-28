@@ -1,5 +1,7 @@
 package com.ums.ums_backend.controller;
 
+import com.ums.ums_backend.dto.auth.LoginRequest;
+import com.ums.ums_backend.dto.auth.LoginResponse;
 import com.ums.ums_backend.dto.auth.RegisterRequest;
 import com.ums.ums_backend.dto.auth.RegisterResponse;
 import com.ums.ums_backend.service.AuthService;
@@ -27,6 +29,17 @@ public class AuthController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .body(response);
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+
+        LoginResponse response = authService.login(request);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(response);
 
     }
