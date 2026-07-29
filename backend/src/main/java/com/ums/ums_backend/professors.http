@@ -2,9 +2,9 @@
 ### Paste your tokens here after logging in (from auth.http)
 ### Format: @variable_name = token_value
 
-@admin_token = 
-@professor_token = 
-@student_token = 
+@admin_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc4NTMyOTkyMCwiZXhwIjoxNzg1MzMzNTIwfQ.Tc-KS1nWRPPyfqBi8F0i00sv9yRAZhWMbVtN-DsJtaU
+@professor_token =
+@student_token =
 
 ### ===== PROFESSOR ENDPOINTS =====
 ### This file contains all professor-related requests with role-based access tests
@@ -12,44 +12,44 @@
 
 ### Admin: Get all professors (ALLOWED)
 GET http://localhost:8080/api/professors
-Authorization: Bearer @admin_token
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc4NTMyOTkyMCwiZXhwIjoxNzg1MzMzNTIwfQ.Tc-KS1nWRPPyfqBi8F0i00sv9yRAZhWMbVtN-DsJtaU
 
 ###
 
 ### Professor: Get all professors (ALLOWED)
 GET http://localhost:8080/api/professors
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm9mZXNzb3IxIiwiaWF0IjoxNzg1MzI3MDE5LCJleHAiOjE3ODUzMzA2MTl9.MJcyDBhis1M4QpiBdnb4BDynELOdcuqE9jA0iptf5Qg
+Authorization: Bearer @professor_token
 
 ###
 
 ### Student: Get all professors (DENIED - 403 Forbidden)
 GET http://localhost:8080/api/professors
-Authorization: Bearer @student_token
+Authorization: Bearer {student_token}
 
 ###
 
 ### Admin: Get professor by ID (ALLOWED)
 GET http://localhost:8080/api/professors/1
-Authorization: Bearer @admin_token
+Authorization: Bearer {admin_token}
 
 ###
 
 ### Professor: Get professor by ID (ALLOWED)
 GET http://localhost:8080/api/professors/1
-Authorization: Bearer @professor_token
+Authorization: Bearer {professor_token}
 
 ###
 
 ### Student: Get professor by ID (ALLOWED)
 GET http://localhost:8080/api/professors/1
-Authorization: Bearer @student_token
+Authorization: Bearer {student_token}
 
 ###
 
 ### Admin: Create professor (ALLOWED)
 POST http://localhost:8080/api/professors
 Content-Type: application/json
-Authorization: Bearer @admin_token
+Authorization: Bearer {admin_token}
 
 {
   "id": 1,
@@ -66,7 +66,7 @@ Authorization: Bearer @admin_token
 ### Professor: Create professor (DENIED - 403 Forbidden)
 POST http://localhost:8080/api/professors
 Content-Type: application/json
-Authorization: Bearer @professor_token
+Authorization: Bearer {professor_token}
 
 {
   "id": 2,
@@ -83,7 +83,7 @@ Authorization: Bearer @professor_token
 ### Student: Create professor (DENIED - 403 Forbidden)
 POST http://localhost:8080/api/professors
 Content-Type: application/json
-Authorization: Bearer @student_token
+Authorization: Bearer {student_token}
 
 {
   "id": 3,
@@ -100,7 +100,7 @@ Authorization: Bearer @student_token
 ### Admin: Update professor (ALLOWED)
 PUT http://localhost:8080/api/professors/1
 Content-Type: application/json
-Authorization: Bearer @admin_token
+Authorization: Bearer {admin_token}
 
 {
   "id": 1,
@@ -117,7 +117,7 @@ Authorization: Bearer @admin_token
 ### Professor: Update professor (DENIED - 403 Forbidden)
 PUT http://localhost:8080/api/professors/1
 Content-Type: application/json
-Authorization: Bearer @professor_token
+Authorization: Bearer {professor_token}
 
 {
   "id": 1,
@@ -133,12 +133,12 @@ Authorization: Bearer @professor_token
 
 ### Admin: Delete professor (ALLOWED)
 DELETE http://localhost:8080/api/professors/1
-Authorization: Bearer @admin_token
+Authorization: Bearer {admin_token}
 
 ###
 
 ### Professor: Delete professor (DENIED - 403 Forbidden)
 DELETE http://localhost:8080/api/professors/1
-Authorization: Bearer @professor_token
+Authorization: Bearer {professor_token}
 
 ###

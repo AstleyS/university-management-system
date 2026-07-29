@@ -2,7 +2,7 @@
 ### Paste your tokens here after logging in (from auth.http)
 ### Format: @variable_name = token_value
 
-@admin_token = 
+@admin_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc4NTMyOTkyMCwiZXhwIjoxNzg1MzMzNTIwfQ.Tc-KS1nWRPPyfqBi8F0i00sv9yRAZhWMbVtN-DsJtaU
 @professor_token = 
 @student_token = 
 
