@@ -33,7 +33,7 @@ public class Professor {
     private String email;
 
     @OneToMany(mappedBy = "professor")
-    private List<TeachingAssignment> courses;
+    private List<CourseInstructor> courseInstructors;
 
 
 }

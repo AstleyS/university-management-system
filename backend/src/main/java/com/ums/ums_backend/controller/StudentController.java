@@ -4,6 +4,7 @@ import com.ums.ums_backend.dto.StudentDTO;
 import com.ums.ums_backend.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class StudentController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
     @GetMapping
     public ResponseEntity<List<StudentDTO>> getStudents() {
         return ResponseEntity.ok(service.findAll());
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR') or hasRole('STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
         Optional<StudentDTO> student = service.findById(id);
@@ -31,12 +34,14 @@ public class StudentController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO dto) {
         StudentDTO created = service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO dto) {
         try {
@@ -47,6 +52,7 @@ public class StudentController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         service.delete(id);

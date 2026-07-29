@@ -33,6 +33,13 @@ public class EnrollmentService {
                 .map(mapper::toDTO);
     }
 
+    public List<EnrollmentDTO> findByStudentId(Long studentId) {
+        return repository.findByStudentId(studentId)
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
+    }
+
     public EnrollmentDTO save(EnrollmentDTO dto) {
         Enrollment entity = mapper.toEntity(dto);
         Enrollment saved = repository.save(entity);
@@ -47,6 +54,16 @@ public class EnrollmentService {
                     if (dto.getEnrollmentStatus() != null) {
                         existing.setEnrollmentStatus(com.ums.ums_backend.entity.EnrollmentStatus.valueOf(dto.getEnrollmentStatus()));
                     }
+                    Enrollment updated = repository.save(existing);
+                    return mapper.toDTO(updated);
+                })
+                .orElseThrow(() -> new RuntimeException("Enrollment not found with id: " + id));
+    }
+
+    public EnrollmentDTO updateGrade(Long id, Double grade) {
+        return repository.findById(id)
+                .map(existing -> {
+                    existing.setGrade(grade);
                     Enrollment updated = repository.save(existing);
                     return mapper.toDTO(updated);
                 })

@@ -30,6 +30,6 @@ public class Course {
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course")
-    private List<TeachingAssignment> teachingAssignments;
+    private List<CourseInstructor> courseInstructors;
 
 }
