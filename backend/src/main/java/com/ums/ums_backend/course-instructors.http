@@ -1,0 +1,161 @@
+### ===== TOKEN SETUP =====
+### Paste your tokens here after logging in (from auth.http)
+### Format: @variable_name = token_value
+
+@admin_token = 
+@professor_token = 
+@student_token = 
+
+### ===== COURSE INSTRUCTOR ENDPOINTS =====
+### This file contains all course-instructor-related requests with role-based access tests
+### Token Variables: @admin_token, @professor_token, @student_token
+
+### Admin: Get all course instructors (ALLOWED)
+GET http://localhost:8080/api/course-instructors
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Get all course instructors (ALLOWED)
+GET http://localhost:8080/api/course-instructors
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Get all course instructors (DENIED - 403 Forbidden)
+GET http://localhost:8080/api/course-instructors
+Authorization: Bearer @student_token
+
+###
+
+### Admin: Get course instructor by ID (ALLOWED)
+GET http://localhost:8080/api/course-instructors/1
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Get course instructor by ID (ALLOWED)
+GET http://localhost:8080/api/course-instructors/1
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Get course instructor by ID (ALLOWED)
+GET http://localhost:8080/api/course-instructors/1
+Authorization: Bearer @student_token
+
+###
+
+### Admin: Get professor courses (ALLOWED)
+GET http://localhost:8080/api/course-instructors/professor/1/courses
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Get professor courses (ALLOWED)
+GET http://localhost:8080/api/course-instructors/professor/1/courses
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Get professor courses (ALLOWED)
+GET http://localhost:8080/api/course-instructors/professor/1/courses
+Authorization: Bearer @student_token
+
+###
+
+### Admin: Create course instructor (ALLOWED)
+POST http://localhost:8080/api/course-instructors
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "id": 1,
+  "courseId": 1,
+  "professorId": 1
+}
+
+###
+
+### Professor: Create course instructor (DENIED - 403 Forbidden)
+POST http://localhost:8080/api/course-instructors
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "id": 2,
+  "courseId": 2,
+  "professorId": 1
+}
+
+###
+
+### Student: Create course instructor (DENIED - 403 Forbidden)
+POST http://localhost:8080/api/course-instructors
+Content-Type: application/json
+Authorization: Bearer @student_token
+
+{
+  "id": 3,
+  "courseId": 1,
+  "professorId": 2
+}
+
+###
+
+### Admin: Update course instructor (ALLOWED)
+PUT http://localhost:8080/api/course-instructors/1
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "id": 1,
+  "courseId": 1,
+  "professorId": 2
+}
+
+###
+
+### Professor: Update course instructor (DENIED - 403 Forbidden)
+PUT http://localhost:8080/api/course-instructors/1
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "id": 1,
+  "courseId": 2,
+  "professorId": 1
+}
+
+###
+
+### Student: Update course instructor (DENIED - 403 Forbidden)
+PUT http://localhost:8080/api/course-instructors/1
+Content-Type: application/json
+Authorization: Bearer @student_token
+
+{
+  "id": 1,
+  "courseId": 1,
+  "professorId": 3
+}
+
+###
+
+### Admin: Delete course instructor (ALLOWED)
+DELETE http://localhost:8080/api/course-instructors/1
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Delete course instructor (DENIED - 403 Forbidden)
+DELETE http://localhost:8080/api/course-instructors/1
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Delete course instructor (DENIED - 403 Forbidden)
+DELETE http://localhost:8080/api/course-instructors/1
+Authorization: Bearer @student_token
+
+###

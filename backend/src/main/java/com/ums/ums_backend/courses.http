@@ -1,0 +1,127 @@
+### ===== TOKEN SETUP =====
+### Paste your tokens here after logging in (from auth.http)
+### Format: @variable_name = token_value
+
+@admin_token = 
+@professor_token = 
+@student_token = 
+
+### ===== COURSE ENDPOINTS =====
+### This file contains all course-related requests with role-based access tests
+### Token Variables: @admin_token, @professor_token, @student_token
+
+### Admin: Get all courses (ALLOWED)
+GET http://localhost:8080/api/courses
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Get all courses (ALLOWED)
+GET http://localhost:8080/api/courses
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Get all courses (ALLOWED)
+GET http://localhost:8080/api/courses
+Authorization: Bearer @student_token
+
+###
+
+### Get course by ID (All roles allowed)
+GET http://localhost:8080/api/courses/1
+Authorization: Bearer @admin_token
+
+###
+
+### Admin: Create course (ALLOWED)
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "id": 1,
+  "departmentId": 1,
+  "code": "CS101",
+  "name": "Introduction to Computer Science",
+  "description": "Basic fundamentals of computer science",
+  "credits": 3.0
+}
+
+###
+
+### Professor: Create course (DENIED - 403 Forbidden)
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "id": 2,
+  "departmentId": 1,
+  "code": "CS102",
+  "name": "Data Structures",
+  "description": "Advanced data structures",
+  "credits": 4.0
+}
+
+###
+
+### Student: Create course (DENIED - 403 Forbidden)
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+Authorization: Bearer @student_token
+
+{
+  "id": 3,
+  "departmentId": 1,
+  "code": "CS103",
+  "name": "Algorithms",
+  "description": "Algorithm analysis",
+  "credits": 4.0
+}
+
+###
+
+### Admin: Update course (ALLOWED)
+PUT http://localhost:8080/api/courses/1
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "id": 1,
+  "departmentId": 1,
+  "code": "CS101",
+  "name": "Intro to CS - Updated",
+  "description": "Updated description",
+  "credits": 3.5
+}
+
+###
+
+### Professor: Update course (DENIED - 403 Forbidden)
+PUT http://localhost:8080/api/courses/1
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "id": 1,
+  "departmentId": 1,
+  "code": "CS101",
+  "name": "Intro to CS - Professor Update",
+  "description": "Professor update",
+  "credits": 3.0
+}
+
+###
+
+### Admin: Delete course (ALLOWED)
+DELETE http://localhost:8080/api/courses/1
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Delete course (DENIED - 403 Forbidden)
+DELETE http://localhost:8080/api/courses/1
+Authorization: Bearer @professor_token
+
+###

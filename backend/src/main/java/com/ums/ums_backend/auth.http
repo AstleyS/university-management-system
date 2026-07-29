@@ -1,0 +1,79 @@
+### ===== TOKEN SETUP =====
+### Paste your tokens here after logging in
+### Format: @variable_name = token_value
+
+@admin_token = 
+@professor_token = 
+@student_token = 
+
+### ===== AUTHENTICATION =====
+### This file contains all authentication-related requests
+
+### Register Admin User
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password123",
+  "role": "ADMIN"
+}
+
+###
+
+### Register Student User
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "student1",
+  "password": "student123",
+  "role": "STUDENT"
+}
+
+###
+
+### Register Professor User
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "professor1",
+  "password": "professor123",
+  "role": "PROFESSOR"
+}
+
+###
+
+### Login as Admin
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password123"
+}
+
+###
+
+### Login as Student
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "student1",
+  "password": "student123"
+}
+
+###
+
+### Login as Professor
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "professor1",
+  "password": "professor123"
+}
+
+###

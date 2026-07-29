@@ -1,0 +1,144 @@
+### ===== TOKEN SETUP =====
+### Paste your tokens here after logging in (from auth.http)
+### Format: @variable_name = token_value
+
+@admin_token =
+@student_token =
+@professor_token =
+
+### ===== STUDENT ENDPOINTS =====
+### This file contains all student-related requests with role-based access tests
+### Token Variables: @admin_token, @professor_token, @student_token
+
+### Admin: Get all students (ALLOWED)
+GET http://localhost:8080/api/students
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Get all students (ALLOWED)
+GET http://localhost:8080/api/students
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Get all students (DENIED - 403 Forbidden)
+GET http://localhost:8080/api/students
+Authorization: Bearer @student_token
+
+###
+
+### Admin: Get student by ID (ALLOWED)
+GET http://localhost:8080/api/students/1
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Get student by ID (ALLOWED)
+GET http://localhost:8080/api/students/1
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Get own student profile (ALLOWED)
+GET http://localhost:8080/api/students/1
+Authorization: Bearer @student_token
+
+###
+
+### Admin: Create student (ALLOWED)
+POST http://localhost:8080/api/students
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "id": 1,
+  "userId": 1,
+  "firstName": "John",
+  "lastName": "Doe",
+  "gender": "MALE",
+  "dateOfBirth": "2002-05-15",
+  "email": "john@university.edu"
+}
+
+###
+
+### Professor: Create student (DENIED - 403 Forbidden)
+POST http://localhost:8080/api/students
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "id": 2,
+  "userId": 2,
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "gender": "FEMALE",
+  "dateOfBirth": "2001-08-20",
+  "email": "jane@university.edu"
+}
+
+###
+
+### Student: Create student (DENIED - 403 Forbidden)
+POST http://localhost:8080/api/students
+Content-Type: application/json
+Authorization: Bearer @student_token
+
+{
+  "id": 3,
+  "userId": 3,
+  "firstName": "Bob",
+  "lastName": "Wilson",
+  "gender": "MALE",
+  "dateOfBirth": "2003-01-10",
+  "email": "bob@university.edu"
+}
+
+###
+
+### Admin: Update student (ALLOWED)
+PUT http://localhost:8080/api/students/1
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "id": 1,
+  "userId": 1,
+  "firstName": "John",
+  "lastName": "Doe-Updated",
+  "gender": "MALE",
+  "dateOfBirth": "2002-05-15",
+  "email": "john.updated@university.edu"
+}
+
+###
+
+### Professor: Update student (DENIED - 403 Forbidden)
+PUT http://localhost:8080/api/students/1
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "id": 1,
+  "userId": 1,
+  "firstName": "John",
+  "lastName": "Doe-Modified",
+  "gender": "MALE",
+  "dateOfBirth": "2002-05-15",
+  "email": "john@university.edu"
+}
+
+###
+
+### Admin: Delete student (ALLOWED)
+DELETE http://localhost:8080/api/students/1
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Delete student (DENIED - 403 Forbidden)
+DELETE http://localhost:8080/api/students/1
+Authorization: Bearer @professor_token
+
+###

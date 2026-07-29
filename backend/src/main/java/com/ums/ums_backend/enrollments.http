@@ -1,0 +1,195 @@
+### ===== TOKEN SETUP =====
+### Paste your tokens here after logging in (from auth.http)
+### Format: @variable_name = token_value
+
+@admin_token = 
+@professor_token = 
+@student_token = 
+
+### ===== ENROLLMENT ENDPOINTS =====
+### This file contains all enrollment-related requests with role-based access tests
+### Token Variables: @admin_token, @professor_token, @student_token
+
+### Admin: Get all enrollments (ALLOWED)
+GET http://localhost:8080/api/enrollments
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Get all enrollments (ALLOWED)
+GET http://localhost:8080/api/enrollments
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Get all enrollments (DENIED - 403 Forbidden)
+GET http://localhost:8080/api/enrollments
+Authorization: Bearer @student_token
+
+###
+
+### Admin: Get enrollment by ID (ALLOWED)
+GET http://localhost:8080/api/enrollments/1
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Get enrollment by ID (ALLOWED)
+GET http://localhost:8080/api/enrollments/1
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Get enrollment by ID (ALLOWED)
+GET http://localhost:8080/api/enrollments/1
+Authorization: Bearer @student_token
+
+###
+
+### Student: Get own enrollments (ALLOWED)
+GET http://localhost:8080/api/enrollments/student/1
+Authorization: Bearer @student_token
+
+###
+
+### Professor: Get student enrollments (ALLOWED)
+GET http://localhost:8080/api/enrollments/student/1
+Authorization: Bearer @professor_token
+
+###
+
+### Admin: Create enrollment (ALLOWED)
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "id": 1,
+  "semesterId": 1,
+  "enrollmentDate": "2024-01-15",
+  "studentId": 1,
+  "courseId": 1,
+  "grade": null,
+  "enrollmentStatus": "ENROLLED"
+}
+
+###
+
+### Professor: Create enrollment (DENIED - 403 Forbidden)
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "id": 2,
+  "semesterId": 1,
+  "enrollmentDate": "2024-01-15",
+  "studentId": 2,
+  "courseId": 1,
+  "grade": null,
+  "enrollmentStatus": "ENROLLED"
+}
+
+###
+
+### Student: Create enrollment (DENIED - 403 Forbidden)
+POST http://localhost:8080/api/enrollments
+Content-Type: application/json
+Authorization: Bearer @student_token
+
+{
+  "id": 3,
+  "semesterId": 1,
+  "enrollmentDate": "2024-01-15",
+  "studentId": 1,
+  "courseId": 2,
+  "grade": null,
+  "enrollmentStatus": "ENROLLED"
+}
+
+###
+
+### Admin: Update enrollment (ALLOWED)
+PUT http://localhost:8080/api/enrollments/1
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "id": 1,
+  "semesterId": 1,
+  "enrollmentDate": "2024-01-15",
+  "studentId": 1,
+  "courseId": 1,
+  "grade": 85.0,
+  "enrollmentStatus": "ENROLLED"
+}
+
+###
+
+### Professor: Update enrollment (DENIED - 403 Forbidden)
+PUT http://localhost:8080/api/enrollments/1
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "id": 1,
+  "semesterId": 1,
+  "enrollmentDate": "2024-01-15",
+  "studentId": 1,
+  "courseId": 1,
+  "grade": 90.0,
+  "enrollmentStatus": "ENROLLED"
+}
+
+###
+
+### Admin: Update enrollment grade (ALLOWED)
+PATCH http://localhost:8080/api/enrollments/1/grade
+Content-Type: application/json
+Authorization: Bearer @admin_token
+
+{
+  "grade": 92.5
+}
+
+###
+
+### Professor: Update enrollment grade (ALLOWED)
+PATCH http://localhost:8080/api/enrollments/1/grade
+Content-Type: application/json
+Authorization: Bearer @professor_token
+
+{
+  "grade": 88.0
+}
+
+###
+
+### Student: Update enrollment grade (DENIED - 403 Forbidden)
+PATCH http://localhost:8080/api/enrollments/1/grade
+Content-Type: application/json
+Authorization: Bearer @student_token
+
+{
+  "grade": 100.0
+}
+
+###
+
+### Admin: Delete enrollment (ALLOWED)
+DELETE http://localhost:8080/api/enrollments/1
+Authorization: Bearer @admin_token
+
+###
+
+### Professor: Delete enrollment (DENIED - 403 Forbidden)
+DELETE http://localhost:8080/api/enrollments/1
+Authorization: Bearer @professor_token
+
+###
+
+### Student: Delete enrollment (DENIED - 403 Forbidden)
+DELETE http://localhost:8080/api/enrollments/1
+Authorization: Bearer @student_token
+
+###
