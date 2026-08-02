@@ -12,18 +12,23 @@ import java.util.List;
 public class Course {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
+    @Column(nullable = false, unique = true, length = 10)
     private String code;
 
+    @Column(nullable = false, length = 30)
     private String name;
 
+    @Column(length = 250)
     private String description;
 
+    @Column(nullable = false)
     private Double credits;
 
     @OneToMany(mappedBy = "course")

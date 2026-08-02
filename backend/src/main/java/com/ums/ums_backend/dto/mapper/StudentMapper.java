@@ -1,6 +1,7 @@
 package com.ums.ums_backend.dto.mapper;
 
 import com.ums.ums_backend.dto.StudentDTO;
+import com.ums.ums_backend.entity.Enrollment;
 import com.ums.ums_backend.entity.Student;
 import com.ums.ums_backend.entity.Gender;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class StudentMapper {
         dto.setEmail(student.getEmail());
         if (student.getEnrollments() != null) {
             dto.setEnrollmentIds(student.getEnrollments().stream()
-                    .map(e -> e.getId())
+                    .map(Enrollment::getId)
                     .collect(Collectors.toList()));
         }
 

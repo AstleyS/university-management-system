@@ -3,6 +3,7 @@ package com.ums.ums_backend.controller;
 import com.ums.ums_backend.dto.CourseDTO;
 import com.ums.ums_backend.dto.CourseInstructorDTO;
 import com.ums.ums_backend.service.CourseInstructorService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,14 +45,14 @@ public class CourseInstructorController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<CourseInstructorDTO> createCourseInstructor(@RequestBody CourseInstructorDTO dto) {
+    public ResponseEntity<CourseInstructorDTO> createCourseInstructor(@Valid @RequestBody CourseInstructorDTO dto) {
         CourseInstructorDTO created = service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<CourseInstructorDTO> updateCourseInstructor(@PathVariable Long id, @RequestBody CourseInstructorDTO dto) {
+    public ResponseEntity<CourseInstructorDTO> updateCourseInstructor(@PathVariable Long id, @Valid @RequestBody CourseInstructorDTO dto) {
         try {
             CourseInstructorDTO updated = service.update(id, dto);
             return ResponseEntity.ok(updated);

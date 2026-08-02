@@ -47,7 +47,7 @@ public class ProfessorService {
                     existing.setEmail(dto.getEmail());
                     existing.setDateOfBirth(dto.getDateOfBirth());
                     if (dto.getGender() != null) {
-                        existing.setGender(com.ums.ums_backend.entity.Gender.valueOf(dto.getGender()));
+                        existing.setGender(dto.getGender());
                     }
                     Professor updated = repository.save(existing);
                     return mapper.toDTO(updated);

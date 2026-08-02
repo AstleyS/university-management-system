@@ -2,6 +2,7 @@ package com.ums.ums_backend.controller;
 
 import com.ums.ums_backend.dto.StudentDTO;
 import com.ums.ums_backend.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,14 +37,14 @@ public class StudentController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO dto) {
+    public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO dto) {
         StudentDTO created = service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO dto) {
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @Valid @RequestBody StudentDTO dto) {
         try {
             StudentDTO updated = service.update(id, dto);
             return ResponseEntity.ok(updated);

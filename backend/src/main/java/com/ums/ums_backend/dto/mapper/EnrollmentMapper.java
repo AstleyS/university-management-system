@@ -23,7 +23,7 @@ public class EnrollmentMapper {
         dto.setCourseId(enrollment.getCourse() != null ? enrollment.getCourse().getId() : null);
 
         dto.setGrade(enrollment.getGrade());
-        dto.setEnrollmentStatus(enrollment.getEnrollmentStatus() != null ? enrollment.getEnrollmentStatus().toString() : null);
+        dto.setEnrollmentStatus(enrollment.getEnrollmentStatus() != null ? enrollment.getEnrollmentStatus() : null);
 
         return dto;
     }
@@ -40,7 +40,7 @@ public class EnrollmentMapper {
 
         enrollment.setGrade(dto.getGrade());
         if (dto.getEnrollmentStatus() != null) {
-            enrollment.setEnrollmentStatus(EnrollmentStatus.valueOf(dto.getEnrollmentStatus()));
+            enrollment.setEnrollmentStatus(dto.getEnrollmentStatus());
         }
 
         return enrollment;

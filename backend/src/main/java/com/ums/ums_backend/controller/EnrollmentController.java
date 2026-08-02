@@ -2,6 +2,9 @@ package com.ums.ums_backend.controller;
 
 import com.ums.ums_backend.dto.EnrollmentDTO;
 import com.ums.ums_backend.service.EnrollmentService;
+import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,14 +46,14 @@ public class EnrollmentController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<EnrollmentDTO> createEnrollment(@RequestBody EnrollmentDTO dto) {
+    public ResponseEntity<EnrollmentDTO> createEnrollment(@Valid @RequestBody EnrollmentDTO dto) {
         EnrollmentDTO created = service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<EnrollmentDTO> updateEnrollment(@PathVariable Long id, @RequestBody EnrollmentDTO dto) {
+    public ResponseEntity<EnrollmentDTO> updateEnrollment(@PathVariable Long id, @Valid @RequestBody EnrollmentDTO dto) {
         try {
             EnrollmentDTO updated = service.update(id, dto);
             return ResponseEntity.ok(updated);
@@ -61,7 +64,7 @@ public class EnrollmentController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
     @PatchMapping("/{id}/grade")
-    public ResponseEntity<EnrollmentDTO> updateGrade(@PathVariable Long id, @RequestBody GradeUpdateRequest request) {
+    public ResponseEntity<EnrollmentDTO> updateGrade(@PathVariable Long id, @Valid @RequestBody GradeUpdateRequest request) {
         try {
             EnrollmentDTO updated = service.updateGrade(id, request.getGrade());
             return ResponseEntity.ok(updated);
@@ -77,16 +80,11 @@ public class EnrollmentController {
         return ResponseEntity.noContent().build();
     }
 
+    @Getter
+    @Setter
     public static class GradeUpdateRequest {
         private Double grade;
 
-        public Double getGrade() {
-            return grade;
-        }
-
-        public void setGrade(Double grade) {
-            this.grade = grade;
-        }
     }
 
 }

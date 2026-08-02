@@ -5,6 +5,7 @@ import com.ums.ums_backend.dto.auth.LoginResponse;
 import com.ums.ums_backend.dto.auth.RegisterRequest;
 import com.ums.ums_backend.dto.auth.RegisterResponse;
 import com.ums.ums_backend.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<RegisterResponse> register(
+            @Valid @RequestBody RegisterRequest request) {
 
         RegisterResponse response = authService.register(request);
 
@@ -43,6 +45,4 @@ public class AuthController {
                 .body(response);
 
     }
-
-
 }

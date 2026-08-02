@@ -14,22 +14,26 @@ import java.util.List;
 public class Professor {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
+    @Column(nullable = false, length = 30)
     private String firstName;
 
+    @Column(nullable = false, length = 30)
     private String lastName;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @Email
+    @Column(nullable = false, unique = true)
     private String email;
 
     @OneToMany(mappedBy = "professor")

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 @Getter
 @Setter
@@ -18,6 +20,6 @@ public class RegisterResponse {
 
     private String username;
 
-    private Role role;
+    private Set<Role> role;
 
 }

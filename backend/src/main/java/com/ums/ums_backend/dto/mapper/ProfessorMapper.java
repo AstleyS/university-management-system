@@ -21,7 +21,7 @@ public class ProfessorMapper {
         dto.setFirstName(professor.getFirstName());
         dto.setLastName(professor.getLastName());
 
-        dto.setGender(professor.getGender() != null ? professor.getGender().toString() : null);
+        dto.setGender(professor.getGender() != null ? professor.getGender() : null);
         dto.setDateOfBirth(professor.getDateOfBirth());
 
         dto.setEmail(professor.getEmail());
@@ -49,7 +49,7 @@ public class ProfessorMapper {
 
         professor.setDateOfBirth(dto.getDateOfBirth());
         if (dto.getGender() != null) {
-            professor.setGender(Gender.valueOf(dto.getGender()));
+            professor.setGender(dto.getGender());
         }
 
         return professor;

@@ -1,6 +1,10 @@
 package com.ums.ums_backend.dto;
 
+import com.ums.ums_backend.entity.Gender;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -9,35 +13,33 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfessorDTO {
 
     private Long id;
+
+    @NotNull(message = "User is required.")
     private Long userId;
+
+    @NotBlank(message = "First name is required.")
+    @Size(min = 2, max = 30)
     private String firstName;
+
+    @NotBlank(message = "Last name is required.")
+    @Size(min = 2, max = 30)
     private String lastName;
-    private String gender;
+
+    @NotNull(message = "Gender is required.")
+    private Gender gender;
+
+    @NotNull(message = "Date of Birth is required.")
+    @Past(message = "Date of Birth must be in the past.")
     private LocalDate dateOfBirth;
+
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Invalid email format.")
     private String email;
+
     private List<Long> courseIds = new ArrayList<>();
-
-    public ProfessorDTO() {
-    }
-
-    public ProfessorDTO(Long id,
-                        Long userId,
-                        String firstName,
-                        String lastName,
-                        String gender,
-                        LocalDate dateOfBirth,
-                        String email,
-                        List<Long> courseIds) {
-        this.id = id;
-        this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
-        this.email = email;
-        this.courseIds = courseIds == null ? new ArrayList<>() : courseIds;
-    }
 }

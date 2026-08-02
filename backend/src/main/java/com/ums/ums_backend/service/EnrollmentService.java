@@ -52,7 +52,7 @@ public class EnrollmentService {
                     existing.setEnrollmentDate(dto.getEnrollmentDate());
                     existing.setGrade(dto.getGrade());
                     if (dto.getEnrollmentStatus() != null) {
-                        existing.setEnrollmentStatus(com.ums.ums_backend.entity.EnrollmentStatus.valueOf(dto.getEnrollmentStatus()));
+                        existing.setEnrollmentStatus(dto.getEnrollmentStatus());
                     }
                     Enrollment updated = repository.save(existing);
                     return mapper.toDTO(updated);

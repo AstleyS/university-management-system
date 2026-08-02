@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 public class AuthService {
 
@@ -38,13 +40,15 @@ public class AuthService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
+        if (request.getRoles() != null) {
+            user.setRoles(new HashSet<>(request.getRoles()));
+        }
 
         User savedUser = repository.save(user);
 
         return new RegisterResponse(savedUser.getId(),
                                     savedUser.getUsername(),
-                                    savedUser.getRole());
+                                    savedUser.getRoles());
 
 
     }
@@ -61,4 +65,5 @@ public class AuthService {
         return new LoginResponse(token);
 
     }
+
 }
