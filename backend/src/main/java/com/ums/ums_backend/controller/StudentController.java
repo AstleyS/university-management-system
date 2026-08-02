@@ -1,6 +1,7 @@
 package com.ums.ums_backend.controller;
 
 import com.ums.ums_backend.dto.StudentDTO;
+import com.ums.ums_backend.entity.Student;
 import com.ums.ums_backend.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,36 +22,32 @@ public class StudentController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @GetMapping
     public ResponseEntity<List<StudentDTO>> getStudents() {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR') or hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
-        Optional<StudentDTO> student = service.findById(id);
-        return student.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        StudentDTO student = service.findById(id);
+        return ResponseEntity.ok(student);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO dto) {
-        StudentDTO created = service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        StudentDTO student = service.save(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(student);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @Valid @RequestBody StudentDTO dto) {
-        try {
-            StudentDTO updated = service.update(id, dto);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        StudentDTO student = service.update(id, dto);
+        return ResponseEntity.ok(student);
+
     }
 
     @PreAuthorize("hasRole('ADMIN')")

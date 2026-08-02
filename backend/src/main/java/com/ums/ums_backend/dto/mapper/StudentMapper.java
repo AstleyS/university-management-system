@@ -22,7 +22,7 @@ public class StudentMapper {
         dto.setFirstName(student.getFirstName());
         dto.setLastName(student.getLastName());
 
-        dto.setGender(student.getGender() != null ? student.getGender().toString() : null);
+        dto.setGender(student.getGender() != null ? student.getGender() : null);
         dto.setDateOfBirth(student.getDateOfBirth());
 
         dto.setEmail(student.getEmail());
@@ -50,7 +50,7 @@ public class StudentMapper {
 
         student.setDateOfBirth(dto.getDateOfBirth());
         if (dto.getGender() != null) {
-            student.setGender(Gender.valueOf(dto.getGender()));
+            student.setGender(dto.getGender());
         }
 
         return student;

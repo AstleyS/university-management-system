@@ -2,24 +2,28 @@ package com.ums.ums_backend.service;
 
 import com.ums.ums_backend.dto.EnrollmentDTO;
 import com.ums.ums_backend.dto.mapper.EnrollmentMapper;
+import com.ums.ums_backend.entity.Course;
 import com.ums.ums_backend.entity.Enrollment;
+import com.ums.ums_backend.entity.Student;
+import com.ums.ums_backend.exception.AlreadyExistsException;
+import com.ums.ums_backend.exception.ResourceNotFoundException;
+import com.ums.ums_backend.repository.CourseRepository;
 import com.ums.ums_backend.repository.EnrollmentRepository;
+import com.ums.ums_backend.repository.StudentRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class EnrollmentService {
 
     private final EnrollmentRepository repository;
+    private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
     private final EnrollmentMapper mapper;
-
-    public EnrollmentService(EnrollmentRepository repository,
-                             EnrollmentMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
 
     public List<EnrollmentDTO> findAll() {
         return repository.findAll()
@@ -28,9 +32,14 @@ public class EnrollmentService {
                 .toList();
     }
 
-    public Optional<EnrollmentDTO> findById(Long id) {
-        return repository.findById(id)
-                .map(mapper::toDTO);
+    public EnrollmentDTO findById(Long id) {
+        Enrollment enrollment = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                                "Enrollment not found with id: " + id
+                        )
+                );
+
+        return mapper.toDTO(enrollment);
     }
 
     public List<EnrollmentDTO> findByStudentId(Long studentId) {
@@ -41,37 +50,84 @@ public class EnrollmentService {
     }
 
     public EnrollmentDTO save(EnrollmentDTO dto) {
-        Enrollment entity = mapper.toEntity(dto);
-        Enrollment saved = repository.save(entity);
+
+        if (repository.existsByStudentIdAndCourseIdAndSemesterId(
+                dto.getStudentId(),
+                dto.getCourseId(),
+                dto.getSemesterId())) {
+
+            throw new AlreadyExistsException(
+                    "Student is already enrolled in this course for this semester"
+            );
+        }
+
+        Student student = studentRepository.findById(dto.getStudentId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                                "Student not found with id: " + dto.getStudentId()
+                        )
+                );
+
+        Course course = courseRepository.findById(dto.getCourseId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                                "Course not found with id: " + dto.getCourseId()
+                        )
+                );
+
+
+        Enrollment enrollment = mapper.toEntity(dto);
+
+        enrollment.setStudent(student);
+        enrollment.setCourse(course);
+
+        Enrollment saved = repository.save(enrollment);
+
         return mapper.toDTO(saved);
     }
 
     public EnrollmentDTO update(Long id, EnrollmentDTO dto) {
-        return repository.findById(id)
-                .map(existing -> {
-                    existing.setEnrollmentDate(dto.getEnrollmentDate());
-                    existing.setGrade(dto.getGrade());
-                    if (dto.getEnrollmentStatus() != null) {
-                        existing.setEnrollmentStatus(dto.getEnrollmentStatus());
-                    }
-                    Enrollment updated = repository.save(existing);
-                    return mapper.toDTO(updated);
-                })
-                .orElseThrow(() -> new RuntimeException("Enrollment not found with id: " + id));
+
+        Enrollment existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                                "Enrollment not found with id: " + id
+                        )
+                );
+
+        existing.setEnrollmentDate(dto.getEnrollmentDate());
+
+        if(dto.getEnrollmentStatus() != null) {
+            existing.setEnrollmentStatus(dto.getEnrollmentStatus());
+        }
+
+        return mapper.toDTO(repository.save(existing));
     }
 
     public EnrollmentDTO updateGrade(Long id, Double grade) {
-        return repository.findById(id)
-                .map(existing -> {
-                    existing.setGrade(grade);
-                    Enrollment updated = repository.save(existing);
-                    return mapper.toDTO(updated);
-                })
-                .orElseThrow(() -> new RuntimeException("Enrollment not found with id: " + id));
+
+        Enrollment enrollment = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                                "Enrollment not found with id: " + id
+                        )
+                );
+
+        if(grade != null && (grade < 0 || grade > 20)) {
+            throw new IllegalArgumentException(
+                    "Grade must be between 0 and 20"
+            );
+        }
+
+        enrollment.setGrade(grade);
+        return mapper.toDTO(repository.save(enrollment));
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+
+        Enrollment enrollment = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                                "Enrollment not found with id: " + id
+                        )
+                );
+
+        repository.delete(enrollment);
     }
 
 }

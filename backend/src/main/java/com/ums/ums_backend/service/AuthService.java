@@ -5,6 +5,7 @@ import com.ums.ums_backend.dto.auth.LoginResponse;
 import com.ums.ums_backend.dto.auth.RegisterRequest;
 import com.ums.ums_backend.dto.auth.RegisterResponse;
 import com.ums.ums_backend.entity.User;
+import com.ums.ums_backend.exception.AlreadyExistsException;
 import com.ums.ums_backend.repository.UserRepository;
 import com.ums.ums_backend.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +35,7 @@ public class AuthService {
     public RegisterResponse register(RegisterRequest request) {
 
         if (repository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            throw new AlreadyExistsException("Username already exists");
         }
 
         User user = new User();
@@ -58,7 +59,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        User user = repository.findByUsername(request.getUsername()).orElseThrow();
+        User user = repository.findByUsername(request.getUsername());
 
         String token = jwtService.generateToken(user);
 

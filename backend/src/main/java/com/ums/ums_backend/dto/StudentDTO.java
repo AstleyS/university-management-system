@@ -1,5 +1,6 @@
 package com.ums.ums_backend.dto;
 
+import com.ums.ums_backend.entity.Gender;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class StudentDTO {
     private String lastName;
 
     @NotBlank(message = "Gender is required.")
-    private String gender;
+    private Gender gender;
 
     @NotNull(message = "Date of Birth is required.")
     @Past(message = "Date of Birth must be in the past.")

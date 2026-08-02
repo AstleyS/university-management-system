@@ -29,6 +29,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("Username does not exist");
         }
 
-        return repository.findByUsername(username).orElseThrow();
+        return repository.findByUsername(username);
         };
 }

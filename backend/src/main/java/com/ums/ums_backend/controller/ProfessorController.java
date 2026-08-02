@@ -21,18 +21,17 @@ public class ProfessorController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @GetMapping
     public ResponseEntity<List<ProfessorDTO>> getProfessors() {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR') or hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<ProfessorDTO> getProfessorById(@PathVariable Long id) {
-        Optional<ProfessorDTO> professor = service.findById(id);
-        return professor.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        ProfessorDTO professor = service.findById(id);
+        return ResponseEntity.ok(professor);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -45,12 +44,8 @@ public class ProfessorController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ProfessorDTO> updateProfessor(@PathVariable Long id, @Valid @RequestBody ProfessorDTO dto) {
-        try {
-            ProfessorDTO updated = service.update(id, dto);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        ProfessorDTO updated = service.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

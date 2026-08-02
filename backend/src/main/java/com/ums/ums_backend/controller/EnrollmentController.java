@@ -23,18 +23,17 @@ public class EnrollmentController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @GetMapping
     public ResponseEntity<List<EnrollmentDTO>> getEnrollments() {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @GetMapping("/{id}")
     public ResponseEntity<EnrollmentDTO> getEnrollmentById(@PathVariable Long id) {
-        Optional<EnrollmentDTO> enrollment = service.findById(id);
-        return enrollment.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        EnrollmentDTO enrollment = service.findById(id);
+        return ResponseEntity.ok(enrollment);
     }
 
     @PreAuthorize("hasRole('STUDENT')")
@@ -54,23 +53,15 @@ public class EnrollmentController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<EnrollmentDTO> updateEnrollment(@PathVariable Long id, @Valid @RequestBody EnrollmentDTO dto) {
-        try {
-            EnrollmentDTO updated = service.update(id, dto);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        EnrollmentDTO updated = service.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @PatchMapping("/{id}/grade")
     public ResponseEntity<EnrollmentDTO> updateGrade(@PathVariable Long id, @Valid @RequestBody GradeUpdateRequest request) {
-        try {
-            EnrollmentDTO updated = service.updateGrade(id, request.getGrade());
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        EnrollmentDTO updated = service.updateGrade(id, request.getGrade());
+        return ResponseEntity.ok(updated);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

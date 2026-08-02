@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/course-instructors")
@@ -22,21 +21,20 @@ public class CourseInstructorController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @GetMapping
     public ResponseEntity<List<CourseInstructorDTO>> getCourseInstructors() {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR') or hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<CourseInstructorDTO> getCourseInstructorById(@PathVariable Long id) {
-        Optional<CourseInstructorDTO> assignment = service.findById(id);
-        return assignment.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        CourseInstructorDTO assignment = service.findById(id);
+        return ResponseEntity.ok(assignment);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR') or hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping("/professor/{professorId}/courses")
     public ResponseEntity<List<CourseDTO>> getCoursesByProfessor(@PathVariable Long professorId) {
         List<CourseDTO> courses = service.getCoursesByProfessorId(professorId);
@@ -53,12 +51,8 @@ public class CourseInstructorController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<CourseInstructorDTO> updateCourseInstructor(@PathVariable Long id, @Valid @RequestBody CourseInstructorDTO dto) {
-        try {
-            CourseInstructorDTO updated = service.update(id, dto);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        CourseInstructorDTO updated = service.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

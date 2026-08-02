@@ -9,4 +9,9 @@ import java.util.List;
 @Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     List<Enrollment> findByStudentId(Long studentId);
+    boolean existsByStudentIdAndCourseIdAndSemesterId(
+            Long studentId,
+            Long courseId,
+            Long semesterId
+    );
 }

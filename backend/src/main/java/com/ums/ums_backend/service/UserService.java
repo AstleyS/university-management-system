@@ -3,6 +3,7 @@ package com.ums.ums_backend.service;
 import com.ums.ums_backend.dto.UserDTO;
 import com.ums.ums_backend.dto.mapper.UserMapper;
 import com.ums.ums_backend.entity.User;
+import com.ums.ums_backend.exception.ResourceNotFoundException;
 import com.ums.ums_backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class UserService {
     public UserDTO updateUser(Long id, UserDTO updatedUser) {
 
         User existingUser = repository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setRoles(updatedUser.getRoles());
@@ -48,7 +49,7 @@ public class UserService {
     public void deleteUser(Long id) {
 
         User user = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         repository.delete(user);
     }

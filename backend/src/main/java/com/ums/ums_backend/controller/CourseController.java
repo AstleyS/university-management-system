@@ -21,36 +21,31 @@ public class CourseController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR') or hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping
     public ResponseEntity<List<CourseDTO>> getCourses() {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('PROFESSOR') or hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<CourseDTO> getCourseById(@PathVariable Long id) {
-        Optional<CourseDTO> course = service.findById(id);
-        return course.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        CourseDTO course = service.findById(id);
+        return ResponseEntity.ok(course);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CourseDTO dto) {
-        CourseDTO created = service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        CourseDTO course = service.save(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(course);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<CourseDTO> updateCourse(@PathVariable Long id, @Valid @RequestBody CourseDTO dto) {
-        try {
-            CourseDTO updated = service.update(id, dto);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        CourseDTO course = service.update(id, dto);
+        return ResponseEntity.ok(course);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
