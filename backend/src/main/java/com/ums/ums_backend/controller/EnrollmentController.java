@@ -64,6 +64,20 @@ public class EnrollmentController {
         return ResponseEntity.ok(updated);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<EnrollmentDTO> changeStatus(@PathVariable Long id, @Valid @RequestBody StatusUpdateRequest request) {
+        EnrollmentDTO updated = service.changeStatus(id, request.getStatus());
+        return ResponseEntity.ok(updated);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
+    @PostMapping("/{id}/drop")
+    public ResponseEntity<EnrollmentDTO> dropStudent(@PathVariable Long id) {
+        EnrollmentDTO updated = service.dropStudent(id);
+        return ResponseEntity.ok(updated);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEnrollment(@PathVariable Long id) {
@@ -76,6 +90,12 @@ public class EnrollmentController {
     public static class GradeUpdateRequest {
         private Double grade;
 
+    }
+
+    @Getter
+    @Setter
+    public static class StatusUpdateRequest {
+        private com.ums.ums_backend.entity.EnrollmentStatus status;
     }
 
 }

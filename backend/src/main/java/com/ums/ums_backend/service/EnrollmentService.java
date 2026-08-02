@@ -119,6 +119,30 @@ public class EnrollmentService {
         return mapper.toDTO(repository.save(enrollment));
     }
 
+    public EnrollmentDTO changeStatus(Long id, com.ums.ums_backend.entity.EnrollmentStatus status) {
+        Enrollment enrollment = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Enrollment not found with id: " + id
+                ));
+
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null");
+        }
+
+        enrollment.setEnrollmentStatus(status);
+        return mapper.toDTO(repository.save(enrollment));
+    }
+
+    public EnrollmentDTO dropStudent(Long id) {
+        Enrollment enrollment = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Enrollment not found with id: " + id
+                ));
+
+        enrollment.setEnrollmentStatus(com.ums.ums_backend.entity.EnrollmentStatus.DROPPED);
+        return mapper.toDTO(repository.save(enrollment));
+    }
+
     public void delete(Long id) {
 
         Enrollment enrollment = repository.findById(id)
