@@ -19,7 +19,7 @@ public class Department {
     @JoinColumn(name = "faculty_id", nullable = false)
     private Faculty faculty;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 50)
     private String name;
 
     @Column(nullable = false, length = 10)

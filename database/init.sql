@@ -1,7 +1,7 @@
 -- Faculty Table
 CREATE TABLE IF NOT EXISTS faculty (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(30) NOT NULL,
+    name VARCHAR(50) NOT NULL,
     code VARCHAR(10) NOT NULL,
     description VARCHAR(250)
 );
