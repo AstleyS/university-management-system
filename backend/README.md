@@ -484,13 +484,83 @@ The initialisation scripts are executed automatically by PostgreSQL during the f
 
 ---
 
+# Docker Support
+
+The backend is fully containerised using a multi-stage Docker build.
+
+The build process consists of two stages:
+
+1. **Build stage**
+    - Compiles the Spring Boot application using Gradle.
+    - Produces the executable JAR inside the container.
+
+2. **Runtime stage**
+    - Uses a lightweight Java Runtime Environment (JRE) image.
+    - Copies only the generated JAR from the build stage.
+    - Exposes port `8080` and starts the application.
+
+This approach keeps the final image smaller, improves build reproducibility, and removes the need to have Java or Gradle installed on the host machine.
+
+### Build the backend image
+
+From the project root:
+
+```bash
+docker compose build backend
+```
+
+### Run the backend
+
+```bash
+docker compose up backend
+```
+
+Or build and start all services together:
+
+```bash
+docker compose up --build
+```
+
+This command will:
+- Build the backend image
+- Start the PostgreSQL container
+- Start the backend container
+
+---
+
 # Running the Backend
 ## Requirements
 
 Install:
-
 - Java 17+
 - Docker
+
+## Spring Boot Dependencies
+The project uses the following Spring Boot starters and libraries:
+
+### Core
+- Spring Boot Starter Web
+- Spring Boot Starter Data JPA
+- Spring Boot Starter Validation
+
+### Security
+- Spring Boot Starter Security
+- JSON Web Token (JJWT)
+- BCrypt Password Encoder
+
+### Database
+- PostgreSQL Driver
+- Hibernate ORM
+
+### Development
+- Lombok
+- Spring Boot DevTools
+
+### Testing
+- Spring Boot Starter Test
+- Spring Security Test
+- Mockito
+- JUnit 5
 
 ---
 
@@ -514,35 +584,168 @@ The API will run at:
 
 # API Documentation
 
-Main API groups:
+The backend exposes a RESTful API organized by resource and business operations.
+
+Base URL:
 
 ```
-/api/auth
-
-Authentication endpoints
-
-
-/api/students
-
-Student management
-
-
-/api/professors
-
-Professor management
-
-
-/api/courses
-
-Course management
-
-
-/api/enrollments
-
-Enrollment management
+http://localhost:8080
 ```
 
 ---
+
+## Authentication
+
+```
+/api/auth
+```
+
+Handles user authentication and account creation.
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| POST | `/api/auth/register` | Register a new user | Public |
+| POST | `/api/auth/login` | Authenticate user and receive JWT token | Public |
+
+Authentication flow:
+
+```
+POST /api/auth/login
+
+        |
+        v
+
+Receive JWT token
+
+        |
+        v
+
+Include token in requests:
+
+Authorization: Bearer <token>
+```
+
+---
+
+# Users
+
+```
+/api/users
+```
+
+User account management.
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/api/users` | Retrieve all users | ADMIN |
+| GET | `/api/users/{id}` | Retrieve user by ID | ADMIN |
+| POST | `/api/users` | Create user | ADMIN |
+| PUT | `/api/users/{id}` | Update user | ADMIN |
+| DELETE | `/api/users/{id}` | Delete user | ADMIN |
+
+---
+
+# Students
+
+```
+/api/students
+```
+
+Student management.
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/api/students` | Retrieve all students | ADMIN |
+| GET | `/api/students/{id}` | Retrieve student details | ADMIN / PROFESSOR |
+| POST | `/api/students` | Create student | ADMIN |
+| PUT | `/api/students/{id}` | Update student | ADMIN |
+| DELETE | `/api/students/{id}` | Delete student | ADMIN |
+
+---
+
+# Professors
+
+```
+/api/professors
+```
+
+Professor management.
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/api/professors` | Retrieve all professors | ADMIN |
+| GET | `/api/professors/{id}` | Retrieve professor details | ADMIN |
+| POST | `/api/professors` | Create professor | ADMIN |
+| PUT | `/api/professors/{id}` | Update professor | ADMIN |
+| DELETE | `/api/professors/{id}` | Delete professor | ADMIN |
+
+---
+
+# Courses
+
+```
+/api/courses
+```
+
+Course management.
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/api/courses` | Retrieve all courses | ADMIN / PROFESSOR / STUDENT |
+| GET | `/api/courses/{id}` | Retrieve course details | ADMIN / PROFESSOR / STUDENT |
+| POST | `/api/courses` | Create course | ADMIN |
+| PUT | `/api/courses/{id}` | Update course | ADMIN |
+| DELETE | `/api/courses/{id}` | Delete course | ADMIN |
+
+---
+
+# Enrollments
+
+```
+/api/enrollments
+```
+
+Student course enrollment management.
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/api/enrollments` | Retrieve all enrollments | ADMIN / PROFESSOR |
+| GET | `/api/enrollments/{id}` | Retrieve enrollment details | ADMIN / PROFESSOR |
+| GET | `/api/enrollments/student/{studentId}` | Retrieve student enrollments | STUDENT |
+| POST | `/api/enrollments` | Create enrollment | ADMIN |
+| PUT | `/api/enrollments/{id}` | Update enrollment | ADMIN |
+| PATCH | `/api/enrollments/{id}/grade` | Update student grade | ADMIN / PROFESSOR |
+| DELETE | `/api/enrollments/{id}` | Delete enrollment | ADMIN |
+
+---
+
+# Common Response Codes
+
+| Code | Meaning |
+|------|---------|
+| 200 OK | Request completed successfully |
+| 201 Created | Resource successfully created |
+| 204 No Content | Resource successfully deleted |
+| 400 Bad Request | Invalid request data |
+| 401 Unauthorized | Missing or invalid authentication |
+| 403 Forbidden | Authenticated user does not have permission |
+| 404 Not Found | Resource does not exist |
+
+---
+
+# Authentication Header
+
+Protected endpoints require a JWT token.
+
+Example:
+
+```http
+GET /api/courses
+
+Authorization: Bearer eyJhbGciOiJIUzI1Ni...
+```
+
+The token contains the authenticated user's identity and role, which are validated by the JWT authentication filter before accessing protected resources.
 
 # Testing
 

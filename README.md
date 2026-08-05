@@ -20,41 +20,71 @@ user interaction through natural language-based search and assistance.
 
 # Running this project
 
-The project is progressively being containerised. For now, make sure you have installed:
+The project is containerised using Docker Compose.
 
-- Java 17
-- Node.js and npm
+Requirements:
+
 - Docker
+- Java 17+ (only required if running the backend manually)
+- Node.js and npm (only required for the frontend)
 
-## Database Setup
+## Run the complete application
 
-The PostgreSQL database is containerised using Docker Compose.
-
-Start the database:
+From the project root:
 
 ```bash
-docker compose up -d
+docker compose up --build
+```
+
+This will:
+
+- Start the PostgreSQL database container
+- Build the backend Docker image
+- Start the backend application
+
+The backend API will be available at:
+
+```http
+http://localhost:8080
 ```
 
 ---
 
-## Backend Setup
+## Run components individually
+
+### Database
+
+Start only the PostgreSQL container:
+
+```bash
+docker compose up postgres -d
+```
+
+---
+
+### Backend
 
 Navigate to the backend folder:
 
-```cd backend```
+```bash
+cd backend
+```
 
-Run the Spring Boot application:
+Start only the backend / Spring Boot application container:
 
-```./gradlew bootRun```
+```bash
+docker compose up backend -d
+```
 
 The API will be available at:
 
-```http://localhost:8080```
+```http
+http://localhost:8080
+```
 
 More backend details:
 
-***See Backend [README.MD](/backend/README.md)***
+***See Backend [README.MD](./backend/README.md)***
 
 ---
 
@@ -157,7 +187,7 @@ ums/
 
 For detailed backend architecture, setup instructions, API documentation, and implementation details:
 
-***See Backend [README.MD](/backend/README.md)***
+***See Backend [README.MD](./backend/README.md)***
 
 
 # Development Workflow

@@ -12,6 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
   backend:
+    container_name: ums-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
