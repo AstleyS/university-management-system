@@ -44,7 +44,7 @@ backend/.mvn/wrapper/maven-wrapper.jar
 # Gradle
 backend/.gradle/
 backend/build/
-
+*.class
 # Spring logs
 backend/*.log
 
