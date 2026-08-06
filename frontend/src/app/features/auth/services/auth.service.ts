@@ -9,7 +9,7 @@ import {RegisterRequest, RegisterResponse} from '../models/register.model';
 })
 export class AuthService {
 
-  private apiURL = 'http://localhost:8080/auth';
+  private apiURL = 'http://localhost:8080/api/auth';
 
   constructor(
     private http: HttpClient,
