@@ -6,12 +6,12 @@ import {HttpClient} from '@angular/common/http';
 })
 export class ApiService {
 
-  private apiUrl = 'http://localhost:8080';
+  private apiURL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
   getHello() {
-    return this.http.get(this.apiUrl, {
+    return this.http.get(this.apiURL, {
       responseType: 'text'
     });
   }
