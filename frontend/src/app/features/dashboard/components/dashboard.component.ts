@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {DashboardService} from '../services/dashboard.service';
 import {AcademicStats} from '../models/dashboard';
 import {AuthService} from '../../auth/services/auth.service';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -35,10 +36,6 @@ export class DashboardComponent implements OnInit {
     this.username = this.authService.getCurrentUser()?.username ?? '';
     console.log("Current user: " + this.username)
 
-  }
-
-  showCourses() {
-    this.router.navigate(['/courses'])
   }
 
   logout() {

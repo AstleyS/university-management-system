@@ -1,0 +1,13 @@
+<h1>All Students</h1>
+@for (student of students; track student.id) {
+
+  <div class="student-card">
+    <h3> {{ student.firstName }} {{ student.lastName }} </h3>
+    <p> {{ student.email }} </p>
+  </div>
+
+} @empty {
+
+  <p> No students found! </p>
+
+}
