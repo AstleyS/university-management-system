@@ -64,7 +64,7 @@ export class LoginComponent {
             response.token
           );
 
-          // TODO: Navigate to dashboard
+          this.router.navigate(['/dashboard']);
 
         },
 
