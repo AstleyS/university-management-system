@@ -37,6 +37,10 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  showCourses() {
+    this.router.navigate(['/courses'])
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/'])

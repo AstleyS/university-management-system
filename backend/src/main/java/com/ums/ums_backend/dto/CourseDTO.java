@@ -36,6 +36,6 @@ public class CourseDTO {
     private Double credits;
 
     private List<Long> enrollmentIds = new ArrayList<>();
-    private List<Long> teachingAssignmentIds = new ArrayList<>();
+    private List<Long> courseInstructors = new ArrayList<>();
 
 }

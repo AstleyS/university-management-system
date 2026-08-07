@@ -28,7 +28,7 @@ public class CourseMapper {
                     .collect(Collectors.toList()));
         }
         if (course.getCourseInstructors() != null) {
-            dto.setTeachingAssignmentIds(course.getCourseInstructors().stream()
+            dto.setCourseInstructors(course.getCourseInstructors().stream()
                     .map(ci -> ci.getId())
                     .collect(Collectors.toList()));
         }

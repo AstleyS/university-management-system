@@ -5,11 +5,11 @@ This directory contains organized HTTP request files for testing the University 
 ### File Organization
 
 - **auth.http** - Authentication endpoints (login/register)
-- **courses.http** - Course management endpoints
+- **courses.http** - CourseRoute management endpoints
 - **students.http** - Student management endpoints
 - **professors.http** - Professor management endpoints
 - **enrollments.http** - Enrollment management endpoints
-- **course-instructors.http** - Course instructor (professor-course mapping) endpoints
+- **course-instructors.http** - CourseRoute instructor (professor-course mapping) endpoints
 
 ### How to Use Tokens
 
@@ -72,7 +72,7 @@ Each file contains examples of:
 | **Students** | CRUD | Read | Read Own |
 | **Professors** | CRUD | Read | Read |
 | **Enrollments** | CRUD | Read + Grade | Read Own |
-| **Course Instructors** | CRUD | Read | Read |
+| **CourseRoute Instructors** | CRUD | Read | Read |
 
 ### Key Endpoint Examples
 
@@ -102,7 +102,7 @@ PATCH  /api/enrollments/{id}/grade         (Admin, Professor)
 DELETE /api/enrollments/{id}               (Admin only)
 ```
 
-#### Course Instructors (course-instructors.http)
+#### CourseRoute Instructors (course-instructors.http)
 ```
 GET    /api/course-instructors                        (Admin, Professor)
 GET    /api/course-instructors/{id}                   (All roles)

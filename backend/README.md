@@ -154,12 +154,12 @@ Faculty 1 ---- N Department
 
 ---
 
-## Course
+## CourseRoute
 Represents a university course.
 
 Relationship:
 ```
-Department 1 ---- N Course
+Department 1 ---- N CourseRoute
 ```
 
 A join table is used to represent the many-to-many relationship.
@@ -186,7 +186,7 @@ Contains:
 
 Relationship:
 ```
-Student 1 ---- N Enrollment N ---- 1 Course
+Student 1 ---- N Enrollment N ---- 1 CourseRoute
 ```
 
 ---
@@ -371,7 +371,7 @@ Examples:
 
 Example:
 ```
-Course name cannot be empty
+CourseRoute name cannot be empty
 Credits must be positive
 ```
 
@@ -383,7 +383,7 @@ Implemented in services.
 Examples:
 - Username cannot already exist
 - Student cannot enroll twice
-- Course must exist before enrollment
+- CourseRoute must exist before enrollment
 
 ---
 
@@ -430,7 +430,7 @@ Example:
     "timestamp": "2026-08-05T10:00:00",
     "status": 404,
     "error": "Not Found",
-    "message": "Course not found"
+    "message": "CourseRoute not found"
 }
 ```
 
@@ -687,7 +687,7 @@ Professor management.
 /api/courses
 ```
 
-Course management.
+CourseRoute management.
 
 | Method | Endpoint | Description | Access |
 |--------|----------|-------------|--------|

@@ -1,0 +1,14 @@
+<h1>All Courses</h1>
+@for (course of courses; track course.id) {
+
+  <div class="course-card">
+    <h3> {{ course.name }} </h3>
+    <p> {{ course.code }} </p>
+    <p> {{ course.credits }} </p>
+  </div>
+
+} @empty {
+
+  <p> No courses found! </p>
+
+}
