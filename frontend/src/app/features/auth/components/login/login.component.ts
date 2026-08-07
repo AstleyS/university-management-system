@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
-import {TokenService} from '../../services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +22,6 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private tokenService: TokenService,
     private router: Router
   ) {
 
@@ -60,8 +58,8 @@ export class LoginComponent {
 
         next: (response) => {
 
-          this.tokenService.saveToken(
-            response.token
+          this.authService.saveSession(
+            response
           );
 
           this.router.navigate(['/dashboard']);

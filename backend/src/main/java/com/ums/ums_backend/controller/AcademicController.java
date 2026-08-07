@@ -1,6 +1,6 @@
 package com.ums.ums_backend.controller;
 
-import com.ums.ums_backend.dto.StatsDTO;
+import com.ums.ums_backend.dto.AcademicStatsDTO;
 import com.ums.ums_backend.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,8 +38,8 @@ public class AcademicController {
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
     @GetMapping("/counts")
-    public ResponseEntity<StatsDTO> getCounts() {
-        StatsDTO dto = new StatsDTO(
+    public ResponseEntity<AcademicStatsDTO> getCounts() {
+        AcademicStatsDTO dto = new AcademicStatsDTO(
                 studentRepository.count(),
                 professorRepository.count(),
                 courseRepository.count(),

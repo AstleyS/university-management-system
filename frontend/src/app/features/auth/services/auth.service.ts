@@ -27,10 +27,19 @@ export class AuthService {
     this.tokenService.saveToken(
       response.token
     );
+    this.tokenService.saveUser({
+      username: response.username,
+      role: response.role
+    });
   }
 
   logout() {
     this.tokenService.removeToken();
+    this.tokenService.removeUser();
+  }
+
+  getCurrentUser() {
+    return this.tokenService.getCurrentUser();
   }
 
   register(request: RegisterRequest) {

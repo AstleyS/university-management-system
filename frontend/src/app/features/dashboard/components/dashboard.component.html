@@ -1,1 +1,17 @@
-<p>dashboard works!</p>
+<button (click)="logout()">Logout</button>
+
+
+<h1>Welcome {{username}}</h1>
+
+<h3> Academic Stats</h3>
+<div class="stats">
+  @if (stats) {
+    <p>Students:  {{ stats.students }} </p>
+    <p>Professors:  {{ stats.professors }} </p>
+    <p>Courses:  {{ stats.courses }} </p>
+    <p>Enrollments:  {{ stats.enrollments }} </p>
+    <p>Departments:  {{ stats.departments }} </p>
+    <p>Faculties:  {{ stats.faculties }} </p>
+    <p>Semesters:  {{ stats.semesters }} </p>
+  }
+</div>

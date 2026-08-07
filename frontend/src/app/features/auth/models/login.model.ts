@@ -1,3 +1,5 @@
+import {Role} from '../../../core/enums/Role';
+
 export interface LoginRequest {
 
   username: string;
@@ -6,5 +8,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
+  username: string,
+  role: Role[],
   token: string;
 }

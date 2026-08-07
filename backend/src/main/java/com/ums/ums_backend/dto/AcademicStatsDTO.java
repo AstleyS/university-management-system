@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatsDTO {
+public class AcademicStatsDTO {
     private long students;
     private long professors;
     private long courses;
