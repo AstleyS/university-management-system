@@ -1,0 +1,21 @@
+<h1>All Semesters</h1>
+@for (semester of semesters; track semester.id) {
+
+  <div class="semester-card">
+    <p> {{ semester.term }} {{ semester.year }} </p>
+    @if (semester.enrollmentIds.length) {
+      <p> {{ semester.enrollmentIds }} </p>
+    } @else {
+      <p> No enrollments in this semester! </p>
+    }
+  </div>
+
+  @if (!$last) {
+    <span>---</span>
+  }
+
+} @empty {
+
+  <p> No semesters found! </p>
+
+}
