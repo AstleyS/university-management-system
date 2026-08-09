@@ -1,0 +1,18 @@
+<h1>All Enrollments</h1>
+@for (enrollment of enrollments; track enrollment.id) {
+
+  <div class="enrollment-card">
+    <p> {{ enrollment.semesterId }} </p>
+    <h3> {{ enrollment.courseId }} </h3>
+    <p> {{ enrollment.studentId }} </p>
+  </div>
+
+  @if (!$last) {
+    <span>---</span>
+  }
+
+} @empty {
+
+  <p> No enrollments found! </p>
+
+}
