@@ -1,0 +1,18 @@
+<h1>All Departments</h1>
+@for (department of departments; track department.id) {
+
+  <div class="department-card">
+    <h3> {{ department.name }} </h3>
+    <p> {{ department.code }} </p>
+    <p> {{ department.description }} </p>
+  </div>
+
+  @if (!$last) {
+    <span>---</span>
+  }
+
+} @empty {
+
+  <p> No departments found! </p>
+
+}

@@ -4,6 +4,8 @@ import {DASHBOARD_ROUTES} from './features/dashboard/dashboard.route';
 import {COURSE_ROUTES} from './features/course/course.route';
 import {STUDENT_ROUTES} from './features/student/student.route';
 import {PROFESSOR_ROUTES} from './features/professor/professor.route';
+import {DEPARTMENT_ROUTES} from './features/department/department.route';
+import {FACULTY_ROUTES} from './features/faculty/faculty.route';
 
 export const routes: Routes = [
 
@@ -12,6 +14,8 @@ export const routes: Routes = [
   ...COURSE_ROUTES,
   ...STUDENT_ROUTES,
   ...PROFESSOR_ROUTES,
+  ...DEPARTMENT_ROUTES,
+  ...FACULTY_ROUTES,
 
   {
     path: '',

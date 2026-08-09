@@ -7,6 +7,10 @@
     <p> {{ course.credits }} </p>
   </div>
 
+  @if (!$last) {
+    <span>---</span>
+  }
+
 } @empty {
 
   <p> No courses found! </p>

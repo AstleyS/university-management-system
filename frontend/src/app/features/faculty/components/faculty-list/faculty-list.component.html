@@ -1,0 +1,18 @@
+<h1>All Faculty</h1>
+@for (faculty of faculties; track faculty.id) {
+
+  <div class="faculties">
+    <h3> {{ faculty.name }} </h3>
+    <p> {{ faculty.code }} </p>
+    <p> {{ faculty.description }} </p>
+  </div>
+
+  @if (!$last) {
+    <span>---</span>
+  }
+
+} @empty {
+
+  <p> No faculties found! </p>
+
+}

@@ -6,6 +6,10 @@
     <p> {{ professor.email }} </p>
   </div>
 
+  @if (!$last) {
+    <span>---</span>
+  }
+
 } @empty {
 
   <p> No professors found! </p>
