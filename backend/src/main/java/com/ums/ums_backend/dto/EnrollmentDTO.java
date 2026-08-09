@@ -34,4 +34,8 @@ public class EnrollmentDTO {
     @NotNull(message = "Enrolment status is required.")
     private EnrollmentStatus enrollmentStatus;
 
+    private StudentEnrollmentDTO student;
+    private CourseEnrollmentDTO course;
+    private SemesterEnrollmentDTO semester;
+
 }
