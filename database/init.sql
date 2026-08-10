@@ -59,8 +59,7 @@ CREATE TABLE IF NOT EXISTS course (
     code VARCHAR(10) NOT NULL UNIQUE,
     name VARCHAR(30) NOT NULL,
     description VARCHAR(250),
-    credits DOUBLE PRECISION NOT NULL,
-    semester_id BIGINT NOT NULL REFERENCES semester(id)
+    credits DOUBLE PRECISION NOT NULL
 );
 
 -- Enrollment Table
@@ -158,14 +157,13 @@ INSERT INTO course (
     code,
     name,
     description,
-    credits,
-    semester_id
+    credits
 )
 VALUES
-(1, 'SE101', 'Software Fundamentals', 'Introduction to software engineering', 3.0, 1),
-(1, 'SE201', 'Advanced Algorithms', 'Study of advanced algorithms', 4.0, 1),
-(2, 'AI101', 'Machine Learning', 'Fundamentals of machine learning', 3.0, 1),
-(2, 'AI202', 'NLP Techniques', 'Natural language processing', 4.0, 2);
+(1, 'SE101', 'Software Fundamentals', 'Introduction to software engineering', 3.0),
+(1, 'SE201', 'Advanced Algorithms', 'Study of advanced algorithms', 4.0),
+(2, 'AI101', 'Machine Learning', 'Fundamentals of machine learning', 3.0),
+(2, 'AI202', 'NLP Techniques', 'Natural language processing', 4.0);
 
 
 -- Enrollments

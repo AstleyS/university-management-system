@@ -11,11 +11,6 @@ export const COURSE_ROUTES: Routes = [
   },
 
   {
-    path: 'courses/:id',
-    component: CourseDetailComponent
-  },
-
-  {
     path: 'courses/new',
     component: CourseFormComponent
   },
@@ -23,6 +18,11 @@ export const COURSE_ROUTES: Routes = [
   {
     path: 'courses/update',
     component: CourseFormComponent
+  },
+
+  {
+    path: 'courses/:id',
+    component: CourseDetailComponent
   }
 
 ]

@@ -1,1 +1,74 @@
-<p>course-form works!</p>
+<h1>Create Course</h1>
+
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label for="department">Department</label>
+
+    <select id="department" formControlName="departmentId">
+      <option value="" disabled>Select a department</option>
+
+      @for (department of departments; track department.id) {
+        <option [value]="department.id">
+          {{ department.name }}
+        </option>
+      }
+    </select>
+
+    @if (
+      courseForm.get('departmentId')?.invalid &&
+      courseForm.get('departmentId')?.touched
+      ) {
+      <p>Department is required.</p>
+    }
+  </div>
+
+
+  <div>
+    <label for="code">Code</label>
+    <input
+      id="code"
+      type="text"
+      formControlName="code"
+      placeholder="e.g. SE101"
+    >
+  </div>
+
+
+  <div>
+    <label for="name">Name</label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      placeholder="Course name"
+    >
+  </div>
+
+
+  <div>
+    <label for="description">Description</label>
+    <textarea
+      id="description"
+      formControlName="description"
+      placeholder="Course description"
+    ></textarea>
+  </div>
+
+
+  <div>
+    <label for="credits">Credits</label>
+    <input
+      id="credits"
+      type="number"
+      formControlName="credits"
+      min="0"
+    >
+  </div>
+
+
+  <button type="submit" [disabled]="courseForm.invalid">
+    Create Course
+  </button>
+
+</form>

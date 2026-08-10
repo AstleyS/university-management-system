@@ -2,6 +2,7 @@ package com.ums.ums_backend.dto.mapper;
 
 import com.ums.ums_backend.dto.CourseDTO;
 import com.ums.ums_backend.entity.Course;
+import com.ums.ums_backend.entity.Department;
 import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,12 @@ public class CourseMapper {
         course.setDescription(dto.getDescription());
 
         course.setCredits(dto.getCredits());
+        
+        if (dto.getDepartmentId() != null) {
+            Department department = new Department();
+            department.setId(dto.getDepartmentId());
+            course.setDepartment(department);
+        }
 
         return course;
     }

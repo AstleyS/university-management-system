@@ -7,6 +7,7 @@ import com.ums.ums_backend.entity.Department;
 import com.ums.ums_backend.exception.AlreadyExistsException;
 import com.ums.ums_backend.exception.ResourceNotFoundException;
 import com.ums.ums_backend.repository.CourseRepository;
+import com.ums.ums_backend.repository.DepartmentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class CourseService {
 
     private final CourseRepository repository;
+    private final DepartmentRepository departmentRepository;
     private final CourseMapper mapper;
 
     public List<CourseDTO> findAll() {
@@ -42,8 +44,14 @@ public class CourseService {
             );
         }
 
+        Department department = departmentRepository.findById(dto.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + dto.getDepartmentId()));
+
+
         Course course = mapper.toEntity(dto);
+        course.setDepartment(department);
         Course saved = repository.save(course);
+
         return mapper.toDTO(saved);
     }
 
@@ -63,6 +71,13 @@ public class CourseService {
         existingCourse.setName(dto.getName());
         existingCourse.setDescription(dto.getDescription());
         existingCourse.setCredits(dto.getCredits());
+        
+        // Update department if it changed
+        if (!existingCourse.getDepartment().getId().equals(dto.getDepartmentId())) {
+            Department department = departmentRepository.findById(dto.getDepartmentId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + dto.getDepartmentId()));
+            existingCourse.setDepartment(department);
+        }
 
         Course updatedCourse = repository.save(existingCourse);
         return mapper.toDTO(updatedCourse);

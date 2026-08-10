@@ -3,7 +3,7 @@
 
 <h1>Welcome {{username}}</h1>
 
-<h3> Academic Stats</h3>
+<h3>Academic Stats</h3>
 <div class="stats">
   @if (stats) {
     <p><a routerLink="/students">Students</a>:  {{ stats.students }} </p>
@@ -14,4 +14,14 @@
     <p><a routerLink="/faculties">Faculties</a>:  {{ stats.faculties }} </p>
     <p><a routerLink="/semesters">Semesters</a>:  {{ stats.semesters }} </p>
   }
+</div>
+
+<h3>Administration Operations</h3>
+
+<div class="create">
+  <p><a routerLink="/courses/new">New Course</a></p>
+  <p><a routerLink="">New Student</a></p>
+  <p><a routerLink="">New Professor</a></p>
+  <p><a routerLink="">New Enrollment</a></p>
+  <p><a routerLink="">New Course Instructor</a></p>
 </div>
