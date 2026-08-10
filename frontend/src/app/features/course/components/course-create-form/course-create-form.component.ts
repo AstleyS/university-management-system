@@ -10,10 +10,10 @@ import {DepartmentService} from '../../../department/services/department.service
   standalone: true,
   imports:
   [ReactiveFormsModule],
-  templateUrl: './course-form.component.html',
-  styleUrl: './course-form.component.scss'
+  templateUrl: './course-create-form.component.html',
+  styleUrl: './course-create-form.component.scss'
 })
-export class CourseFormComponent implements OnInit {
+export class CourseCreateFormComponent implements OnInit {
 
   courseForm: FormGroup;
   departments?: Department[];

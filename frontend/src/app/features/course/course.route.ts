@@ -1,7 +1,7 @@
 import {Routes} from '@angular/router';
 import {CourseListComponent} from './components/course-list/course-list.component';
 import {CourseDetailComponent} from './components/course-detail/course-detail.component';
-import {CourseFormComponent} from './components/course-form/course-form.component';
+import {CourseCreateFormComponent} from './components/course-create-form/course-create-form.component';
 
 export const COURSE_ROUTES: Routes = [
 
@@ -12,12 +12,12 @@ export const COURSE_ROUTES: Routes = [
 
   {
     path: 'courses/new',
-    component: CourseFormComponent
+    component: CourseCreateFormComponent
   },
 
   {
     path: 'courses/update',
-    component: CourseFormComponent
+    component: CourseCreateFormComponent
   },
 
   {
