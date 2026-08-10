@@ -1,9 +1,9 @@
 package com.ums.ums_backend.dto.mapper;
 
-import com.ums.ums_backend.dto.CourseEnrollmentDTO;
+import com.ums.ums_backend.dto.CourseSummaryDTO;
 import com.ums.ums_backend.dto.EnrollmentDTO;
-import com.ums.ums_backend.dto.SemesterEnrollmentDTO;
-import com.ums.ums_backend.dto.StudentEnrollmentDTO;
+import com.ums.ums_backend.dto.SemesterSummaryDTO;
+import com.ums.ums_backend.dto.StudentSummaryDTO;
 import com.ums.ums_backend.entity.Enrollment;
 import org.springframework.stereotype.Component;
 
@@ -21,14 +21,9 @@ public class EnrollmentMapper {
         dto.setGrade(enrollment.getGrade());
         dto.setEnrollmentStatus(enrollment.getEnrollmentStatus());
 
-        // Set IDs
-        dto.setSemesterId(enrollment.getSemester() != null ? enrollment.getSemester().getId() : null);
-        dto.setStudentId(enrollment.getStudent() != null ? enrollment.getStudent().getId() : null);
-        dto.setCourseId(enrollment.getCourse() != null ? enrollment.getCourse().getId() : null);
-
         // Build nested StudentEnrollmentDTO
         if (enrollment.getStudent() != null) {
-            StudentEnrollmentDTO studentDTO = new StudentEnrollmentDTO();
+            StudentSummaryDTO studentDTO = new StudentSummaryDTO();
             studentDTO.setId(enrollment.getStudent().getId());
             studentDTO.setFirstName(enrollment.getStudent().getFirstName());
             studentDTO.setLastName(enrollment.getStudent().getLastName());
@@ -39,7 +34,7 @@ public class EnrollmentMapper {
 
         // Build nested CourseEnrollmentDTO
         if (enrollment.getCourse() != null) {
-            CourseEnrollmentDTO courseDTO = new CourseEnrollmentDTO();
+            CourseSummaryDTO courseDTO = new CourseSummaryDTO();
             courseDTO.setId(enrollment.getCourse().getId());
             courseDTO.setCode(enrollment.getCourse().getCode());
             courseDTO.setName(enrollment.getCourse().getName());
@@ -50,7 +45,7 @@ public class EnrollmentMapper {
 
         // Build nested SemesterEnrollmentDTO
         if (enrollment.getSemester() != null) {
-            SemesterEnrollmentDTO semesterDTO = new SemesterEnrollmentDTO();
+            SemesterSummaryDTO semesterDTO = new SemesterSummaryDTO();
             semesterDTO.setId(enrollment.getSemester().getId());
             semesterDTO.setTerm(enrollment.getSemester().getTerm());
             semesterDTO.setYear(enrollment.getSemester().getYear());

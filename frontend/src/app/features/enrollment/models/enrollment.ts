@@ -1,15 +1,15 @@
 import {EnrollmentStatus} from '../../../core/enums/EnrollmentStatus';
-import {SemesterEnrollment} from './SemesterEnrollment';
-import {StudentEnrollment} from './StudentEnrollment';
-import {CourseEnrollment} from './CourseEnrollment';
+import {SemesterSummary} from './SemesterSummary';
+import {StudentSummary} from './StudentSummary';
+import {CourseSummary} from './CourseSummary';
 
 export interface Enrollment {
 
   id: number,
-  semester: SemesterEnrollment,
+  semester: SemesterSummary,
   enrollmentDate: string,
-  student: StudentEnrollment,
-  course: CourseEnrollment,
+  student: StudentSummary,
+  course: CourseSummary,
   grade: number,
   enrollmentStatus: EnrollmentStatus
 

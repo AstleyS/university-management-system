@@ -52,14 +52,14 @@ public class CourseInstructorService {
 
     public CourseInstructorDTO save(CourseInstructorDTO dto) {
 
-        Course course = courseRepository.findById(dto.getCourseId())
+        Course course = courseRepository.findById(dto.getCourse().getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Course not found with id: " + dto.getCourseId()
+                        "Course not found with id: " + dto.getCourse().getId()
                 ));
 
-        Professor professor = professorRepository.findById(dto.getProfessorId())
+        Professor professor = professorRepository.findById(dto.getProfessor().getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Professor not found with id: " + dto.getProfessorId()
+                        "Professor not found with id: " + dto.getProfessor().getId()
                 ));
 
         CourseInstructor entity = mapper.toEntity(dto);
@@ -77,20 +77,20 @@ public class CourseInstructorService {
                         "Course instructor not found with id: " + id
                 ));
 
-        if (dto.getCourseId() != null && !dto.getCourseId().equals(
+        if (dto.getCourse().getId() != null && !dto.getCourse().getId().equals(
                 existing.getCourse() != null ? existing.getCourse().getId() : null)) {
-            Course course = courseRepository.findById(dto.getCourseId())
+            Course course = courseRepository.findById(dto.getCourse().getId())
                     .orElseThrow(() -> new ResourceNotFoundException(
-                            "Course not found with id: " + dto.getCourseId()
+                            "Course not found with id: " + dto.getCourse().getId()
                     ));
             existing.setCourse(course);
         }
 
-        if (dto.getProfessorId() != null && !dto.getProfessorId().equals(
+        if (dto.getProfessor().getId() != null && !dto.getProfessor().getId().equals(
                 existing.getProfessor() != null ? existing.getProfessor().getId() : null)) {
-            Professor professor = professorRepository.findById(dto.getProfessorId())
+            Professor professor = professorRepository.findById(dto.getProfessor().getId())
                     .orElseThrow(() -> new ResourceNotFoundException(
-                            "Professor not found with id: " + dto.getProfessorId()
+                            "Professor not found with id: " + dto.getProfessor().getId()
                     ));
             existing.setProfessor(professor);
         }

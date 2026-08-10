@@ -18,24 +18,21 @@ public class EnrollmentDTO {
     private Long id;
 
     @NotNull(message = "Semester is required.")
-    private Long semesterId;
+    private SemesterSummaryDTO semester;
 
     @NotNull(message = "Enrolment date is required.")
     private LocalDate enrollmentDate;
 
     @NotNull(message = "Student is required.")
-    private Long studentId;
+    private StudentSummaryDTO student;
 
     @NotNull(message = "Course is required.")
-    private Long courseId;
+    private CourseSummaryDTO course;
 
     private Double grade;
 
     @NotNull(message = "Enrolment status is required.")
     private EnrollmentStatus enrollmentStatus;
 
-    private StudentEnrollmentDTO student;
-    private CourseEnrollmentDTO course;
-    private SemesterEnrollmentDTO semester;
 
 }

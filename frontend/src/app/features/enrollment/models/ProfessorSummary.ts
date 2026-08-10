@@ -1,4 +1,4 @@
-export interface StudentEnrollment {
+export interface ProfessorSummary {
   id: number,
   firstName: string,
   lastName: string,

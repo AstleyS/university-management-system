@@ -4,6 +4,7 @@ import com.ums.ums_backend.dto.EnrollmentDTO;
 import com.ums.ums_backend.dto.mapper.EnrollmentMapper;
 import com.ums.ums_backend.entity.Course;
 import com.ums.ums_backend.entity.Enrollment;
+import com.ums.ums_backend.entity.EnrollmentStatus;
 import com.ums.ums_backend.entity.Student;
 import com.ums.ums_backend.exception.AlreadyExistsException;
 import com.ums.ums_backend.exception.ResourceNotFoundException;
@@ -52,24 +53,24 @@ public class EnrollmentService {
     public EnrollmentDTO save(EnrollmentDTO dto) {
 
         if (repository.existsByStudentIdAndCourseIdAndSemesterId(
-                dto.getStudentId(),
-                dto.getCourseId(),
-                dto.getSemesterId())) {
+                dto.getStudent().getId(),
+                dto.getCourse().getId(),
+                dto.getSemester().getId())) {
 
             throw new AlreadyExistsException(
                     "Student is already enrolled in this course for this semester"
             );
         }
 
-        Student student = studentRepository.findById(dto.getStudentId())
+        Student student = studentRepository.findById(dto.getStudent().getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "Student not found with id: " + dto.getStudentId()
+                                "Student not found with id: " + dto.getStudent().getId()
                         )
                 );
 
-        Course course = courseRepository.findById(dto.getCourseId())
+        Course course = courseRepository.findById(dto.getCourse().getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "Course not found with id: " + dto.getCourseId()
+                                "Course not found with id: " + dto.getCourse().getId()
                         )
                 );
 
@@ -119,7 +120,7 @@ public class EnrollmentService {
         return mapper.toDTO(repository.save(enrollment));
     }
 
-    public EnrollmentDTO changeStatus(Long id, com.ums.ums_backend.entity.EnrollmentStatus status) {
+    public EnrollmentDTO changeStatus(Long id, EnrollmentStatus status) {
         Enrollment enrollment = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Enrollment not found with id: " + id

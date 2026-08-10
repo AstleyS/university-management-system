@@ -15,9 +15,9 @@ public class CourseInstructorDTO {
     private Long id;
 
     @NotNull(message = "Course is required.")
-    private Long courseId;
+    private CourseSummaryDTO course;
 
     @NotNull(message = "Professor is required.")
-    private Long professorId;
+    private ProfessorSummaryDTO professor;
 
 }

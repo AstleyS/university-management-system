@@ -1,4 +1,4 @@
-export interface CourseEnrollment {
+export interface CourseSummary {
   id: number,
   code: string,
   name: string,
