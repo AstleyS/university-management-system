@@ -7,3 +7,11 @@ export interface Faculty {
   departmentIds: number[]
 
 }
+
+export interface FacultyCreateRequest {
+
+  name: string,
+  code: string,
+  description: string,
+
+}

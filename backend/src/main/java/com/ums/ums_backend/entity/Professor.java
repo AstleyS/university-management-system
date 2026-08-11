@@ -8,6 +8,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Represents a professor teaching courses with personal information and course instructor assignments.
+ */
 @Entity
 @Getter
 @Setter

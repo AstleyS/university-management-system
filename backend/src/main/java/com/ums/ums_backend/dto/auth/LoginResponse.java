@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+/**
+ * Data Transfer Object for login responses containing username, role, and authentication token.
+ */
 @Component
 @Getter
 @Setter

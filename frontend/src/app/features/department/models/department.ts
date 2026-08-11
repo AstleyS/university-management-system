@@ -8,3 +8,12 @@ export interface Department {
   coursesIds: number[]
 
 }
+
+export interface DepartmentCreateRequest {
+
+  facultyId: number,
+  name: string,
+  code: string,
+  description: string,
+
+}

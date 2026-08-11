@@ -1,21 +1,17 @@
-package com.ums.ums_backend.dto;
+package com.ums.ums_backend.dto.request;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FacultyDTO {
-
-    private Long id;
+public class FacultyCreateRequestDTO {
 
     @NotBlank(message = "Faculty name is required.")
     @Size(min = 3, max = 30, message = "Faculty name must be between 3 and 30 characters.")
@@ -27,7 +23,4 @@ public class FacultyDTO {
 
     @Size(max = 250, message = "Description cannot exceed 250 characters.")
     private String description;
-
-    private List<Long> departmentIds = new ArrayList<>();
-
 }

@@ -12,3 +12,12 @@ export interface Student {
   enrollmentIds: number[]
 
 }
+
+export interface StudentRequest {
+
+  firstName: string;
+  lastName: string;
+  gender: Gender;
+  dateOfBirth: string;
+  email: string
+}

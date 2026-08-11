@@ -1,18 +1,21 @@
 package com.ums.ums_backend.service;
 
-import com.ums.ums_backend.dto.CourseDTO;
-import com.ums.ums_backend.dto.CourseInstructorDTO;
+import com.ums.ums_backend.dto.request.CourseInstructorCreateRequestDTO;
+import com.ums.ums_backend.dto.response.CourseResponseDTO;
+import com.ums.ums_backend.dto.response.CourseInstructorResponseDTO;
 import com.ums.ums_backend.dto.mapper.CourseMapper;
 import com.ums.ums_backend.dto.mapper.CourseInstructorMapper;
 import com.ums.ums_backend.entity.Course;
 import com.ums.ums_backend.entity.CourseInstructor;
 import com.ums.ums_backend.entity.Professor;
+import com.ums.ums_backend.exception.AlreadyExistsException;
 import com.ums.ums_backend.exception.ResourceNotFoundException;
 import com.ums.ums_backend.repository.CourseInstructorRepository;
 import com.ums.ums_backend.repository.CourseRepository;
 import com.ums.ums_backend.repository.ProfessorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,14 +29,14 @@ public class CourseInstructorService {
     private final CourseInstructorMapper mapper;
     private final CourseMapper courseMapper;
 
-    public List<CourseInstructorDTO> findAll() {
+    public List<CourseInstructorResponseDTO> findAll() {
         return repository.findAll()
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
-    public CourseInstructorDTO findById(Long id) {
+    public CourseInstructorResponseDTO findById(Long id) {
         CourseInstructor ci = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Course instructor not found with id: " + id
@@ -42,7 +45,7 @@ public class CourseInstructorService {
         return mapper.toDTO(ci);
     }
 
-    public List<CourseDTO> getCoursesByProfessorId(Long professorId) {
+    public List<CourseResponseDTO> getCoursesByProfessorId(Long professorId) {
         return repository.findByProfessorId(professorId)
                 .stream()
                 .map(CourseInstructor::getCourse)
@@ -50,27 +53,38 @@ public class CourseInstructorService {
                 .toList();
     }
 
-    public CourseInstructorDTO save(CourseInstructorDTO dto) {
+    @Transactional
+    public CourseInstructorResponseDTO associateCourseInstructor(CourseInstructorCreateRequestDTO createRequestDTO) {
 
-        Course course = courseRepository.findById(dto.getCourse().getId())
+        if (repository.existsByCourseIdAndProfessorId(
+                createRequestDTO.getCourseId(),
+                createRequestDTO.getProfessorId()
+        )) {
+            throw new AlreadyExistsException(
+                    "This professor is already assigned to this course."
+            );
+        }
+
+        Course course = courseRepository.findById(createRequestDTO.getCourseId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Course not found with id: " + dto.getCourse().getId()
+                        "Course not found with id: " + createRequestDTO.getCourseId()
                 ));
 
-        Professor professor = professorRepository.findById(dto.getProfessor().getId())
+        Professor professor = professorRepository.findById(createRequestDTO.getProfessorId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Professor not found with id: " + dto.getProfessor().getId()
+                        "Professor not found with id: " + createRequestDTO.getProfessorId()
                 ));
 
-        CourseInstructor entity = mapper.toEntity(dto);
+        CourseInstructor entity = mapper.toEntity(createRequestDTO);
         entity.setCourse(course);
         entity.setProfessor(professor);
 
-        CourseInstructor saved = repository.save(entity);
-        return mapper.toDTO(saved);
+        CourseInstructor savedCourseInstructor = repository.save(entity);
+        return mapper.toDTO(savedCourseInstructor);
     }
 
-    public CourseInstructorDTO update(Long id, CourseInstructorDTO dto) {
+    /*
+    public CourseInstructorResponseDTO update(Long id, CourseInstructorResponseDTO dto) {
 
         CourseInstructor existing = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -98,6 +112,8 @@ public class CourseInstructorService {
         CourseInstructor updated = repository.save(existing);
         return mapper.toDTO(updated);
     }
+
+     */
 
     public void delete(Long id) {
         CourseInstructor existing = repository.findById(id)

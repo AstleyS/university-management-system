@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Represents an academic term and year for course scheduling and enrollment.
+ */
 @Entity
 @Getter
 @Setter
@@ -28,8 +31,5 @@ public class Semester {
 
     @NotNull
     private Integer year;
-
-    @OneToMany(mappedBy = "semester")
-    private List<Enrollment> enrollments;
 
 }

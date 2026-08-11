@@ -1,6 +1,6 @@
 package com.ums.ums_backend.controller;
 
-import com.ums.ums_backend.dto.UserDTO;
+import com.ums.ums_backend.dto.response.UserResponseDTO;
 import com.ums.ums_backend.entity.User;
 import com.ums.ums_backend.service.UserService;
 import jakarta.validation.Valid;
@@ -23,13 +23,13 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getUsers() {
+    public ResponseEntity<List<UserResponseDTO>> getUsers() {
         return ResponseEntity.ok(service.getUsers());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getUserById(id));
     }
 
@@ -43,9 +43,9 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(
+    public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody UserDTO user) {
+            @Valid @RequestBody UserResponseDTO user) {
 
         return ResponseEntity.ok(service.updateUser(id, user));
     }

@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Represents an academic department with associated faculty and courses.
+ */
 @Entity
 @Getter
 @Setter

@@ -1,109 +1,114 @@
 package com.ums.ums_backend.service;
 
-import com.ums.ums_backend.dto.ProfessorDTO;
+import com.ums.ums_backend.dto.response.ProfessorResponseDTO;
 import com.ums.ums_backend.dto.mapper.ProfessorMapper;
+import com.ums.ums_backend.dto.request.ProfessorCreateRequestDTO;
 import com.ums.ums_backend.entity.Professor;
-import com.ums.ums_backend.entity.Student;
+import com.ums.ums_backend.entity.Role;
 import com.ums.ums_backend.entity.User;
 import com.ums.ums_backend.exception.AlreadyExistsException;
 import com.ums.ums_backend.exception.ResourceNotFoundException;
 import com.ums.ums_backend.repository.ProfessorRepository;
 import com.ums.ums_backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class ProfessorService {
 
-    private final ProfessorRepository repository;
+    private final ProfessorRepository professorRepository;
     private final UserRepository userRepository;
-    private final ProfessorMapper mapper;
 
-    public List<ProfessorDTO> findAll() {
-        return repository.findAll()
+    private final ProfessorMapper professorMapper;
+
+    private final PasswordEncoder passwordEncoder;
+
+
+    public List<ProfessorResponseDTO> findAll() {
+        return professorRepository.findAll()
                 .stream()
-                .map(mapper::toDTO)
+                .map(professorMapper::toDTO)
                 .toList();
     }
 
-    public ProfessorDTO findById(Long id) {
+    public ProfessorResponseDTO findById(Long id) {
 
-        Professor professor = repository.findById(id)
+        Professor professor = professorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Student not found with id: " + id
                 ));
 
-        return mapper.toDTO(professor);
+        return professorMapper.toDTO(professor);
     }
 
-    public ProfessorDTO save(ProfessorDTO dto) {
+    @Transactional
+    public ProfessorResponseDTO createProfessor(ProfessorCreateRequestDTO createRequestDTO) {
 
-        if (repository.existsByEmail(dto.getEmail())) {
+        if (professorRepository.existsByEmail(createRequestDTO.getEmail())) {
             throw new AlreadyExistsException(
-                    "Professor already exists with email: " + dto.getEmail()
+                    "Professor already exists with email: " + createRequestDTO.getEmail()
             );
         }
 
-        if (repository.existsByUserId(dto.getUserId())) {
-            throw new AlreadyExistsException(
-                    "User is already assigned to a student"
-            );
-        }
+        User user = new User();
+        String username = "Professor" + (professorRepository.count() + 1);
 
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                                "User not found with id: " + dto.getUserId()
-                        )
-                );
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(username + ".test"));
+        user.setRoles(Set.of(Role.STUDENT));
 
-        Professor professor = mapper.toEntity(dto);
-        professor.setUser(user);
+        User savedUser = userRepository.save(user);
 
-        Professor saved = repository.save(professor);
+        Professor professor = professorMapper.toEntity(createRequestDTO);
+        professor.setUser(savedUser);
 
-        return mapper.toDTO(saved);
+        Professor savedProfessor = professorRepository.save(professor);
+
+        return professorMapper.toDTO(savedProfessor);
     }
 
-    public ProfessorDTO update(Long id, ProfessorDTO dto) {
+    /*
+    public ProfessorResponseDTO update(Long id, ProfessorCreateRequestDTO createRequestDTO) {
 
-        Professor existingProfessor = repository.findById(id)
+        Professor existingProfessor = professorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "Professor not found with id: " + id
                         )
                 );
 
-        if (!existingProfessor.getEmail().equals(dto.getEmail())
-                && repository.existsByEmail(dto.getEmail())) {
+        if (!existingProfessor.getEmail().equals(createRequestDTO.getEmail())
+                && professorRepository.existsByEmail(createRequestDTO.getEmail())) {
             throw new AlreadyExistsException(
-                    "Professor already exists with email: " + dto.getEmail()
+                    "Professor already exists with email: " + createRequestDTO.getEmail()
             );
         }
 
-        existingProfessor.setFirstName(dto.getFirstName());
-        existingProfessor.setLastName(dto.getLastName());
-        existingProfessor.setEmail(dto.getEmail());
-        existingProfessor.setDateOfBirth(dto.getDateOfBirth());
-        existingProfessor.setGender(dto.getGender());
+        existingProfessor.setFirstName(createRequestDTO.getFirstName());
+        existingProfessor.setLastName(createRequestDTO.getLastName());
+        existingProfessor.setEmail(createRequestDTO.getEmail());
+        existingProfessor.setDateOfBirth(createRequestDTO.getDateOfBirth());
+        existingProfessor.setGender(createRequestDTO.getGender());
 
-        return mapper.toDTO(existingProfessor);
+        return professorMapper.toDTO(existingProfessor);
     }
+     */
 
     public void delete(Long id) {
 
-        Professor professor = repository.findById(id)
+        Professor professor = professorRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Professor not found with id: " + id
                         )
                 );
 
-        repository.delete(professor);
-
-        repository.deleteById(id);
+        professorRepository.delete(professor);
     }
 
 }

@@ -11,6 +11,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents a user account with credentials and role-based authentication in the system.
+ */
 @Entity
 @Getter
 @Setter

@@ -12,3 +12,13 @@ export interface Professor {
   courseIds: number[]
 
 }
+
+export interface ProfessorCreateRequest {
+
+  firstName: string,
+  lastName: string,
+  gender: Gender,
+  dateOfBirth: string,
+  email: string,
+
+}

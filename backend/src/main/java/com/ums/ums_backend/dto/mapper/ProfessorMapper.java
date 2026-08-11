@@ -1,22 +1,28 @@
 package com.ums.ums_backend.dto.mapper;
 
-import com.ums.ums_backend.dto.ProfessorDTO;
+import com.ums.ums_backend.dto.response.CourseInstructorResponseDTO;
+import com.ums.ums_backend.dto.response.ProfessorResponseDTO;
+import com.ums.ums_backend.dto.request.ProfessorCreateRequestDTO;
+import com.ums.ums_backend.dto.summary.ProfessorSummaryDTO;
+import com.ums.ums_backend.entity.CourseInstructor;
 import com.ums.ums_backend.entity.Professor;
-import com.ums.ums_backend.entity.Gender;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import java.util.stream.Collectors;
 
 @Component
+@AllArgsConstructor
 public class ProfessorMapper {
 
-    public ProfessorDTO toDTO(Professor professor) {
+    private UserMapper userMapper;
+
+    public ProfessorResponseDTO toDTO(Professor professor) {
         if (professor == null) {
             return null;
         }
 
-        ProfessorDTO dto = new ProfessorDTO();
+        ProfessorResponseDTO dto = new ProfessorResponseDTO();
         dto.setId(professor.getId());
-        dto.setUserId(professor.getUser() != null ? professor.getUser().getId() : null);
+        dto.setUser(userMapper.toDTO(professor.getUser()));
 
         dto.setFirstName(professor.getFirstName());
         dto.setLastName(professor.getLastName());
@@ -26,15 +32,52 @@ public class ProfessorMapper {
 
         dto.setEmail(professor.getEmail());
         if (professor.getCourseInstructors() != null) {
-            dto.setCourseIds(professor.getCourseInstructors().stream()
-                    .map(ci -> ci.getCourse().getId())
-                    .collect(Collectors.toList()));
+            dto.setCourses(professor.getCourseInstructors()
+                    .stream()
+                    .map(this::toCourseInstructorDTO)
+                    .toList());
         }
 
         return dto;
     }
 
-    public Professor toEntity(ProfessorDTO dto) {
+    private CourseInstructorResponseDTO toCourseInstructorDTO(
+            CourseInstructor courseInstructor) {
+
+        if (courseInstructor == null) return null;
+
+        CourseInstructorResponseDTO dto = new CourseInstructorResponseDTO();
+
+        dto.setId(courseInstructor.getId());
+
+        dto.setProfessor(toSummaryDTO(courseInstructor.getProfessor()));
+
+        return dto;
+    }
+
+
+    public ProfessorSummaryDTO toSummaryDTO(Professor professor) {
+
+        if (professor == null) {
+            return null;
+        }
+
+        ProfessorSummaryDTO summaryDTO = new ProfessorSummaryDTO();
+        summaryDTO.setId(professor.getId());
+
+        summaryDTO.setFirstName(professor.getFirstName());
+        summaryDTO.setLastName(professor.getLastName());
+
+        summaryDTO.setGender(professor.getGender());
+        summaryDTO.setDateOfBirth(professor.getDateOfBirth());
+
+        summaryDTO.setEmail(professor.getEmail());
+
+        return summaryDTO;
+    }
+
+
+    public Professor toEntity(ProfessorResponseDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -50,6 +93,26 @@ public class ProfessorMapper {
         professor.setDateOfBirth(dto.getDateOfBirth());
         if (dto.getGender() != null) {
             professor.setGender(dto.getGender());
+        }
+
+        return professor;
+    }
+
+    public Professor toEntity(ProfessorCreateRequestDTO createRequestDTO) {
+        if (createRequestDTO == null) {
+            return null;
+        }
+
+        Professor professor = new Professor();
+
+        professor.setFirstName(createRequestDTO.getFirstName());
+        professor.setLastName(createRequestDTO.getLastName());
+
+        professor.setEmail(createRequestDTO.getEmail());
+
+        professor.setDateOfBirth(createRequestDTO.getDateOfBirth());
+        if (createRequestDTO.getGender() != null) {
+            professor.setGender(createRequestDTO.getGender());
         }
 
         return professor;

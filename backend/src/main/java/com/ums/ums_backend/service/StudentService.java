@@ -1,7 +1,9 @@
 package com.ums.ums_backend.service;
 
-import com.ums.ums_backend.dto.StudentDTO;
+import com.ums.ums_backend.dto.response.StudentResponseDTO;
 import com.ums.ums_backend.dto.mapper.StudentMapper;
+import com.ums.ums_backend.dto.request.StudentCreateRequestDTO;
+import com.ums.ums_backend.entity.Role;
 import com.ums.ums_backend.entity.Student;
 import com.ums.ums_backend.entity.User;
 import com.ums.ums_backend.exception.AlreadyExistsException;
@@ -9,78 +11,81 @@ import com.ums.ums_backend.exception.ResourceNotFoundException;
 import com.ums.ums_backend.repository.StudentRepository;
 import com.ums.ums_backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class StudentService {
 
-    private final StudentRepository repository;
+    private final StudentRepository studentRepository;
     private final UserRepository userRepository;
-    private final StudentMapper mapper;
 
-    public List<StudentDTO> findAll() {
+    private final StudentMapper studentMapper;
 
-        return repository.findAll()
+    private final PasswordEncoder passwordEncoder;
+
+    public List<StudentResponseDTO> findAll() {
+
+        return studentRepository.findAll()
                 .stream()
-                .map(mapper::toDTO)
+                .map(studentMapper::toDTO)
                 .toList();
     }
 
-    public StudentDTO findById(Long id) {
+    public StudentResponseDTO findById(Long id) {
 
-        Student student = repository.findById(id)
+        Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "Student not found with id: " + id
                         )
                 );
 
-        return mapper.toDTO(student);
+        return studentMapper.toDTO(student);
     }
 
 
-    public StudentDTO save(StudentDTO dto) {
+    @Transactional
+    public StudentResponseDTO createStudent(StudentCreateRequestDTO createRequestDTO) {
 
-        if (repository.existsByEmail(dto.getEmail())) {
+        if (studentRepository.existsByEmail(createRequestDTO.getEmail())) {
             throw new AlreadyExistsException(
-                    "Student already exists with email: " + dto.getEmail()
+                    "Student already exists with email: " + createRequestDTO.getEmail()
             );
         }
 
-        if (repository.existsByUserId(dto.getUserId())) {
-            throw new AlreadyExistsException(
-                    "User is already assigned to a student"
-            );
-        }
+        User user = new User();
+        String username = "Student" + (studentRepository.count() + 1);
 
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                                "User not found with id: " + dto.getUserId()
-                        )
-                );
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(username + ".test"));
+        user.setRoles(Set.of(Role.STUDENT));
 
+        User savedUser = userRepository.save(user);
 
-        Student student = mapper.toEntity(dto);
-        student.setUser(user);
+        Student student = studentMapper.toEntity(createRequestDTO);
+        student.setUser(savedUser);
 
-        Student saved = repository.save(student);
+        Student savedStudent = studentRepository.save(student);
 
-        return mapper.toDTO(saved);
+        return studentMapper.toDTO(savedStudent);
     }
 
 
-    public StudentDTO update(Long id, StudentDTO dto) {
+    public StudentResponseDTO update(Long id, StudentCreateRequestDTO dto) {
 
-        Student existingStudent = repository.findById(id)
+        Student existingStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "Student not found with id: " + id
                         )
                 );
 
         if (!existingStudent.getEmail().equals(dto.getEmail())
-                && repository.existsByEmail(dto.getEmail())) {
+                && studentRepository.existsByEmail(dto.getEmail())) {
             throw new AlreadyExistsException(
                     "Student already exists with email: " + dto.getEmail()
             );
@@ -93,21 +98,21 @@ public class StudentService {
         existingStudent.setGender(dto.getGender());
 
 
-        return mapper.toDTO(
-                repository.save(existingStudent)
+        return studentMapper.toDTO(
+                studentRepository.save(existingStudent)
         );
     }
 
 
     public void delete(Long id) {
 
-        Student student = repository.findById(id)
+        Student student = studentRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Student not found with id: " + id
                         )
                 );
 
-        repository.delete(student);
+        studentRepository.delete(student);
     }
 }

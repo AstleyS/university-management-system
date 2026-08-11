@@ -1,13 +1,15 @@
 package com.ums.ums_backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Represents a student enrolled in the university with personal details and course enrollments.
+ */
 @Entity
 @Getter
 @Setter
@@ -37,7 +39,7 @@ public class Student {
     private String email;
 
     @OneToMany(mappedBy = "student")
-    private List<Enrollment> enrollments;
+    private List<Enrollment> Enrollments;
 
 }
 

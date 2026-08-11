@@ -1,7 +1,9 @@
 package com.ums.ums_backend.controller;
 
-import com.ums.ums_backend.dto.CourseDTO;
-import com.ums.ums_backend.dto.CourseInstructorDTO;
+import com.ums.ums_backend.dto.request.CourseCreateRequestDTO;
+import com.ums.ums_backend.dto.request.CourseInstructorCreateRequestDTO;
+import com.ums.ums_backend.dto.response.CourseResponseDTO;
+import com.ums.ums_backend.dto.response.CourseInstructorResponseDTO;
 import com.ums.ums_backend.service.CourseInstructorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,37 +25,39 @@ public class CourseInstructorController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @GetMapping
-    public ResponseEntity<List<CourseInstructorDTO>> getCourseInstructors() {
+    public ResponseEntity<List<CourseInstructorResponseDTO>> getCourseInstructors() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping("/{id}")
-    public ResponseEntity<CourseInstructorDTO> getCourseInstructorById(@PathVariable Long id) {
-        CourseInstructorDTO assignment = service.findById(id);
+    public ResponseEntity<CourseInstructorResponseDTO> getCourseInstructorById(@PathVariable Long id) {
+        CourseInstructorResponseDTO assignment = service.findById(id);
         return ResponseEntity.ok(assignment);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping("/professor/{professorId}/courses")
-    public ResponseEntity<List<CourseDTO>> getCoursesByProfessor(@PathVariable Long professorId) {
-        List<CourseDTO> courses = service.getCoursesByProfessorId(professorId);
+    public ResponseEntity<List<CourseResponseDTO>> getCoursesByProfessor(@PathVariable Long professorId) {
+        List<CourseResponseDTO> courses = service.getCoursesByProfessorId(professorId);
         return ResponseEntity.ok(courses);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<CourseInstructorDTO> createCourseInstructor(@Valid @RequestBody CourseInstructorDTO dto) {
-        CourseInstructorDTO created = service.save(dto);
+    public ResponseEntity<CourseInstructorResponseDTO> createCourseInstructor(@Valid @RequestBody CourseInstructorCreateRequestDTO createRequestDTO) {
+        CourseInstructorResponseDTO created = service.associateCourseInstructor(createRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
+    /*
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<CourseInstructorDTO> updateCourseInstructor(@PathVariable Long id, @Valid @RequestBody CourseInstructorDTO dto) {
-        CourseInstructorDTO updated = service.update(id, dto);
+    public ResponseEntity<CourseInstructorResponseDTO> updateCourseInstructor(@PathVariable Long id, @Valid @RequestBody CourseInstructorResponseDTO dto) {
+        CourseInstructorResponseDTO updated = service.update(id, dto);
         return ResponseEntity.ok(updated);
     }
+     */
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
