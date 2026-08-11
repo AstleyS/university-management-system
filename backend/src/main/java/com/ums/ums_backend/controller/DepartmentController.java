@@ -1,6 +1,7 @@
 package com.ums.ums_backend.controller;
 
-import com.ums.ums_backend.dto.DepartmentDTO;
+import com.ums.ums_backend.dto.request.DepartmentCreateRequestDTO;
+import com.ums.ums_backend.dto.response.DepartmentResponseDTO;
 import com.ums.ums_backend.service.DepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,30 +23,32 @@ public class DepartmentController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<DepartmentDTO>> getDepartments() {
+    public ResponseEntity<List<DepartmentResponseDTO>> getDepartments() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<DepartmentDTO> getDepartmentById(@PathVariable Long id) {
-        DepartmentDTO dto = service.findById(id);
+    public ResponseEntity<DepartmentResponseDTO> getDepartmentById(@PathVariable Long id) {
+        DepartmentResponseDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<DepartmentDTO> createDepartment(@Valid @RequestBody DepartmentDTO dto) {
-        DepartmentDTO created = service.save(dto);
+    public ResponseEntity<DepartmentResponseDTO> createDepartment(@Valid @RequestBody DepartmentCreateRequestDTO createRequestDTO) {
+        DepartmentResponseDTO created = service.createDepartment(createRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
+    /*
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<DepartmentDTO> updateDepartment(@PathVariable Long id, @Valid @RequestBody DepartmentDTO dto) {
-        DepartmentDTO updated = service.update(id, dto);
+    public ResponseEntity<DepartmentResponseDTO> updateDepartment(@PathVariable Long id, @Valid @RequestBody DepartmentResponseDTO dto) {
+        DepartmentResponseDTO updated = service.update(id, dto);
         return ResponseEntity.ok(updated);
     }
+     */
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

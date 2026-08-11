@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * Represents a student's enrollment in a course for a specific semester with grade and status tracking.
+ */
 @Entity
 @Getter
 @Setter

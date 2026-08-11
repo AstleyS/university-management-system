@@ -1,5 +1,6 @@
-package com.ums.ums_backend.dto;
+package com.ums.ums_backend.dto.summary;
 
+import com.ums.ums_backend.entity.Gender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -8,24 +9,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfessorSummaryDTO {
+public class StudentSummaryDTO {
 
     private Long id;
-
-    @NotBlank(message = "First name is required.")
-    @Size(min = 2, max = 30)
     private String firstName;
-
-    @NotBlank(message = "Last name is required.")
-    @Size(min = 2, max = 30)
     private String lastName;
-
-    @NotBlank(message = "Email is required.")
-    @Email(message = "Invalid email format.")
+    private Gender gender;
+    private LocalDate dateOfBirth;
     private String email;
 
 }

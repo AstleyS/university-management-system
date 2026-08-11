@@ -1,6 +1,7 @@
 package com.ums.ums_backend.controller;
 
-import com.ums.ums_backend.dto.ProfessorDTO;
+import com.ums.ums_backend.dto.request.ProfessorCreateRequestDTO;
+import com.ums.ums_backend.dto.response.ProfessorResponseDTO;
 import com.ums.ums_backend.service.ProfessorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/professors")
@@ -23,30 +23,32 @@ public class ProfessorController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
     @GetMapping
-    public ResponseEntity<List<ProfessorDTO>> getProfessors() {
+    public ResponseEntity<List<ProfessorResponseDTO>> getProfessors() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR', 'STUDENT')")
     @GetMapping("/{id}")
-    public ResponseEntity<ProfessorDTO> getProfessorById(@PathVariable Long id) {
-        ProfessorDTO professor = service.findById(id);
+    public ResponseEntity<ProfessorResponseDTO> getProfessorById(@PathVariable Long id) {
+        ProfessorResponseDTO professor = service.findById(id);
         return ResponseEntity.ok(professor);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ProfessorDTO> createProfessor(@Valid @RequestBody ProfessorDTO dto) {
-        ProfessorDTO created = service.save(dto);
+    public ResponseEntity<ProfessorResponseDTO> createProfessor(@Valid @RequestBody ProfessorCreateRequestDTO createRequestDTO) {
+        ProfessorResponseDTO created = service.createProfessor(createRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
+    /*
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessorDTO> updateProfessor(@PathVariable Long id, @Valid @RequestBody ProfessorDTO dto) {
-        ProfessorDTO updated = service.update(id, dto);
+    public ResponseEntity<ProfessorResponseDTO> updateProfessor(@PathVariable Long id, @Valid @RequestBody ProfessorResponseDTO dto) {
+        ProfessorResponseDTO updated = service.update(id, dto);
         return ResponseEntity.ok(updated);
     }
+     */
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

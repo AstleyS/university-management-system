@@ -3,11 +3,6 @@
 
   <div class="semester-card">
     <p> {{ semester.term }} {{ semester.year }} </p>
-    @if (semester.enrollmentIds.length) {
-      <p> {{ semester.enrollmentIds }} </p>
-    } @else {
-      <p> No enrollments in this semester! </p>
-    }
   </div>
 
   @if (!$last) {

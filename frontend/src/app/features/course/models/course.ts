@@ -10,3 +10,14 @@ export interface Course {
   courseInstructors: number[]
 
 }
+
+export interface CourseCreateRequest {
+
+  departmentId: number,
+  code: string,
+  name: string,
+  description: string,
+  credits: number
+
+}
+

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+/**
+ * Data Transfer Object for registration responses containing user ID, username, and assigned roles.
+ */
 @Component
 @Getter
 @Setter
@@ -17,9 +20,7 @@ import java.util.Set;
 public class RegisterResponse {
 
     private Long id;
-
     private String username;
-
     private Set<Role> role;
 
 }

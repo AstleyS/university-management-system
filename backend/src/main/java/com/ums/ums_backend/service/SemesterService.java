@@ -1,6 +1,6 @@
 package com.ums.ums_backend.service;
 
-import com.ums.ums_backend.dto.SemesterDTO;
+import com.ums.ums_backend.dto.response.SemesterResponseDTO;
 import com.ums.ums_backend.dto.mapper.SemesterMapper;
 import com.ums.ums_backend.entity.Semester;
 import com.ums.ums_backend.exception.ResourceNotFoundException;
@@ -17,14 +17,14 @@ public class SemesterService {
     private final SemesterRepository repository;
     private final SemesterMapper mapper;
 
-    public List<SemesterDTO> findAll() {
+    public List<SemesterResponseDTO> findAll() {
         return repository.findAll()
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
-    public SemesterDTO findById(Long id) {
+    public SemesterResponseDTO findById(Long id) {
         Semester semester = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Semester not found with id: " + id
@@ -33,13 +33,13 @@ public class SemesterService {
         return mapper.toDTO(semester);
     }
 
-    public SemesterDTO save(SemesterDTO dto) {
+    public SemesterResponseDTO save(SemesterResponseDTO dto) {
         Semester entity = mapper.toEntity(dto);
         Semester saved = repository.save(entity);
         return mapper.toDTO(saved);
     }
 
-    public SemesterDTO update(Long id, SemesterDTO dto) {
+    public SemesterResponseDTO update(Long id, SemesterResponseDTO dto) {
         Semester existing = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Semester not found with id: " + id

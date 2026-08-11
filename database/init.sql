@@ -106,6 +106,7 @@ VALUES
 (2026, 'FALL');
 
 
+/*
 -- Users
 INSERT INTO users (username, password)
 VALUES
@@ -149,7 +150,7 @@ VALUES
 (6, 'Student', 'Two', 'MALE', '2003-06-15', 'student2@university.edu'),
 (7, 'Student', 'Three', 'MALE', '2002-11-30', 'student3@university.edu'),
 (8, 'Student', 'Four', 'FEMALE', '2004-04-25', 'student4@university.edu');
-
+*/
 
 -- Courses
 INSERT INTO course (
@@ -165,7 +166,7 @@ VALUES
 (2, 'AI101', 'Machine Learning', 'Fundamentals of machine learning', 3.0),
 (2, 'AI202', 'NLP Techniques', 'Natural language processing', 4.0);
 
-
+/*
 -- Enrollments
 INSERT INTO enrollment (
     student_id,
@@ -193,3 +194,5 @@ VALUES
 (2, 2),
 (3, 3),
 (4, 4);
+
+ */

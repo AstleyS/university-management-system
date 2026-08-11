@@ -1,4 +1,4 @@
-package com.ums.ums_backend.dto;
+package com.ums.ums_backend.dto.summary;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,11 +14,7 @@ import lombok.Setter;
 public class SemesterSummaryDTO {
 
     private Long id;
-
-    @NotBlank(message = "Term is required.")
     private String term;
-
-    @NotNull(message = "Year is required.")
     private Integer year;
 
 }

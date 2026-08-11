@@ -1,6 +1,7 @@
 package com.ums.ums_backend.controller;
 
-import com.ums.ums_backend.dto.FacultyDTO;
+import com.ums.ums_backend.dto.request.FacultyCreateRequestDTO;
+import com.ums.ums_backend.dto.response.FacultyResponseDTO;
 import com.ums.ums_backend.service.FacultyService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,30 +23,32 @@ public class FacultyController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<FacultyDTO>> getFaculties() {
+    public ResponseEntity<List<FacultyResponseDTO>> getFaculties() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<FacultyDTO> getFacultyById(@PathVariable Long id) {
-        FacultyDTO dto = service.findById(id);
+    public ResponseEntity<FacultyResponseDTO> getFacultyById(@PathVariable Long id) {
+        FacultyResponseDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<FacultyDTO> createFaculty(@Valid @RequestBody FacultyDTO dto) {
-        FacultyDTO created = service.save(dto);
+    public ResponseEntity<FacultyResponseDTO> createFaculty(@Valid @RequestBody FacultyCreateRequestDTO createRequestDTO) {
+        FacultyResponseDTO created = service.createFaculty(createRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
+    /*
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<FacultyDTO> updateFaculty(@PathVariable Long id, @Valid @RequestBody FacultyDTO dto) {
-        FacultyDTO updated = service.update(id, dto);
+    public ResponseEntity<FacultyResponseDTO> updateFaculty(@PathVariable Long id, @Valid @RequestBody FacultyResponseDTO dto) {
+        FacultyResponseDTO updated = service.update(id, dto);
         return ResponseEntity.ok(updated);
     }
+     */
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

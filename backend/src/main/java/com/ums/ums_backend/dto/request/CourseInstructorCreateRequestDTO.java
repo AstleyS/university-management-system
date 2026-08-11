@@ -1,4 +1,4 @@
-package com.ums.ums_backend.dto;
+package com.ums.ums_backend.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,14 +10,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseInstructorDTO {
-
-    private Long id;
+public class CourseInstructorCreateRequestDTO {
 
     @NotNull(message = "Course is required.")
-    private CourseSummaryDTO course;
+    private Long courseId;
 
     @NotNull(message = "Professor is required.")
-    private ProfessorSummaryDTO professor;
-
+    private Long professorId;
 }

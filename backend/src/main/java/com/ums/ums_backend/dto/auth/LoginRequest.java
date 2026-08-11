@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+/**
+ * Data Transfer Object for login requests containing username and password for authentication.
+ */
 @Component
 @Getter
 @Setter

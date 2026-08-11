@@ -1,7 +1,8 @@
 package com.ums.ums_backend.service;
 
-import com.ums.ums_backend.dto.CourseDTO;
+import com.ums.ums_backend.dto.response.CourseResponseDTO;
 import com.ums.ums_backend.dto.mapper.CourseMapper;
+import com.ums.ums_backend.dto.request.CourseCreateRequestDTO;
 import com.ums.ums_backend.entity.Course;
 import com.ums.ums_backend.entity.Department;
 import com.ums.ums_backend.exception.AlreadyExistsException;
@@ -10,9 +11,9 @@ import com.ums.ums_backend.repository.CourseRepository;
 import com.ums.ums_backend.repository.DepartmentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,41 +21,47 @@ public class CourseService {
 
     private final CourseRepository repository;
     private final DepartmentRepository departmentRepository;
+
     private final CourseMapper mapper;
 
-    public List<CourseDTO> findAll() {
+    public List<CourseResponseDTO> findAll() {
         return repository.findAll()
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
-    public CourseDTO findById(Long id) {
+    public CourseResponseDTO findById(Long id) {
         Course course = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found with id: " + id));
 
         return mapper.toDTO(course);
     }
 
-    public CourseDTO save(CourseDTO dto) {
+    @Transactional
+    public CourseResponseDTO createCourse(CourseCreateRequestDTO createRequestDTO) {
 
-        if(repository.existsByCode(dto.getCode())) {
+        if (repository.existsByCode(createRequestDTO.getCode())) {
             throw new AlreadyExistsException(
-                    "Course already exists with code: " + dto.getCode()
+                    "Course already exists with code: " + createRequestDTO.getCode()
             );
         }
 
-        Department department = departmentRepository.findById(dto.getDepartmentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + dto.getDepartmentId()));
+        Department department = departmentRepository.findById(createRequestDTO.getDepartmentId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Department not found with id: " + createRequestDTO.getDepartmentId()
+                ));
 
+        Course course = mapper.toEntity(createRequestDTO);
 
-        Course course = mapper.toEntity(dto);
         course.setDepartment(department);
-        Course saved = repository.save(course);
 
-        return mapper.toDTO(saved);
+        Course savedCourse = repository.save(course);
+
+        return mapper.toDTO(savedCourse);
     }
 
+    /*
     public CourseDTO update(Long id, CourseDTO dto) {
 
         Course existingCourse = repository.findById(id)
@@ -83,6 +90,7 @@ public class CourseService {
         return mapper.toDTO(updatedCourse);
 
     }
+     */
 
     public void delete(Long id) {
         Course course = repository.findById(id)

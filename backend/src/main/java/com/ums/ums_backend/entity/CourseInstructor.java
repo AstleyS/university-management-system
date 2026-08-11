@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents the assignment of a professor as an instructor for a specific course.
+ */
 @Entity
 @Getter
 @Setter

@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a course offered by a department with associated enrollments and instructors.
+ */
 @Entity
 @Getter
 @Setter
@@ -32,9 +36,9 @@ public class Course {
     private Double credits;
 
     @OneToMany(mappedBy = "course")
-    private List<Enrollment> enrollments;
+    private List<Enrollment> Enrollments = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
-    private List<CourseInstructor> courseInstructors;
+    private List<CourseInstructor> courseInstructors = new ArrayList<>();
 
 }

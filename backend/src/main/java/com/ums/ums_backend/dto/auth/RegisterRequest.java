@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+/**
+ * Data Transfer Object for registration requests containing username, password, and assigned roles.
+ */
 @Component
 @Getter
 @Setter

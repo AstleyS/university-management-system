@@ -1,41 +1,98 @@
 package com.ums.ums_backend.dto.mapper;
 
-import com.ums.ums_backend.dto.StudentDTO;
+import com.ums.ums_backend.dto.response.EnrollmentResponseDTO;
+import com.ums.ums_backend.dto.response.StudentResponseDTO;
+import com.ums.ums_backend.dto.request.StudentCreateRequestDTO;
+import com.ums.ums_backend.dto.summary.StudentSummaryDTO;
 import com.ums.ums_backend.entity.Enrollment;
 import com.ums.ums_backend.entity.Student;
-import com.ums.ums_backend.entity.Gender;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import java.util.stream.Collectors;
 
 @Component
+@AllArgsConstructor
 public class StudentMapper {
 
-    public StudentDTO toDTO(Student student) {
+    private UserMapper userMapper;
+    private CourseMapper courseMapper;
+    private SemesterMapper semesterMapper;
+
+    public StudentResponseDTO toDTO(Student student) {
+
         if (student == null) {
             return null;
         }
 
-        StudentDTO dto = new StudentDTO();
+        StudentResponseDTO dto = new StudentResponseDTO();
+
         dto.setId(student.getId());
-        dto.setUserId(student.getUser() != null ? student.getUser().getId() : null);
+        dto.setUser(userMapper.toDTO(student.getUser()));
 
         dto.setFirstName(student.getFirstName());
         dto.setLastName(student.getLastName());
 
-        dto.setGender(student.getGender() != null ? student.getGender() : null);
+        dto.setGender(student.getGender());
         dto.setDateOfBirth(student.getDateOfBirth());
 
         dto.setEmail(student.getEmail());
         if (student.getEnrollments() != null) {
-            dto.setEnrollmentIds(student.getEnrollments().stream()
-                    .map(Enrollment::getId)
-                    .collect(Collectors.toList()));
+            dto.setEnrollments(student.getEnrollments()
+                    .stream()
+                    .map(this::toEnrollmentDTO)
+                    .toList());
         }
 
         return dto;
     }
 
-    public Student toEntity(StudentDTO dto) {
+    private EnrollmentResponseDTO toEnrollmentDTO(Enrollment enrollment) {
+
+        if (enrollment == null) {
+            return null;
+        }
+
+        EnrollmentResponseDTO dto = new EnrollmentResponseDTO();
+
+        dto.setId(enrollment.getId());
+        dto.setEnrollmentDate(enrollment.getEnrollmentDate());
+        dto.setGrade(enrollment.getGrade());
+        dto.setEnrollmentStatus(enrollment.getEnrollmentStatus());
+
+        if (enrollment.getCourse() != null) {
+            dto.setCourse(courseMapper.toSummaryDTO(enrollment.getCourse()));
+        }
+
+        if (enrollment.getSemester() != null) {
+            dto.setSemester(semesterMapper.toDTO(enrollment.getSemester()));
+        }
+
+        return dto;
+    }
+
+    public StudentSummaryDTO toSummaryDTO(Student student) {
+
+        if (student == null) {
+            return null;
+        }
+
+        StudentSummaryDTO summaryDTO = new StudentSummaryDTO();
+
+        summaryDTO.setId(student.getId());
+
+        summaryDTO.setFirstName(student.getFirstName());
+        summaryDTO.setLastName(student.getLastName());
+
+        summaryDTO.setGender(student.getGender());
+        summaryDTO.setDateOfBirth(student.getDateOfBirth());
+        summaryDTO.setEmail(student.getEmail());
+
+
+        return summaryDTO;
+    }
+
+
+
+    public Student toEntity(StudentResponseDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -49,9 +106,25 @@ public class StudentMapper {
         student.setEmail(dto.getEmail());
 
         student.setDateOfBirth(dto.getDateOfBirth());
-        if (dto.getGender() != null) {
-            student.setGender(dto.getGender());
+        student.setGender(dto.getGender());
+
+        return student;
+    }
+
+    public Student toEntity(StudentCreateRequestDTO dto) {
+        if (dto == null) {
+            return null;
         }
+
+        Student student = new Student();
+
+        student.setFirstName(dto.getFirstName());
+        student.setLastName(dto.getLastName());
+
+        student.setEmail(dto.getEmail());
+
+        student.setDateOfBirth(dto.getDateOfBirth());
+        student.setGender(dto.getGender());
 
         return student;
     }

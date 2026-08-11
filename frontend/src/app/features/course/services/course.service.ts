@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Course} from '../models/course';
-import {CourseRequest} from '../models/CourseRequest';
+import {Course, CourseCreateRequest} from '../models/course';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class CourseService {
     return this.http.get<Course>(`${this.apiURL}/${id}`);
   }
 
-  createCourse(request: CourseRequest) {
+  createCourse(request: CourseCreateRequest) {
     console.log('request: ', request)
     return this.http.post<Course>(
       this.apiURL,

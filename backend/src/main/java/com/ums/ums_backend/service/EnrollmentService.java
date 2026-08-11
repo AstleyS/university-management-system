@@ -1,40 +1,41 @@
 package com.ums.ums_backend.service;
 
-import com.ums.ums_backend.dto.EnrollmentDTO;
+import com.ums.ums_backend.dto.response.EnrollmentResponseDTO;
 import com.ums.ums_backend.dto.mapper.EnrollmentMapper;
-import com.ums.ums_backend.entity.Course;
-import com.ums.ums_backend.entity.Enrollment;
-import com.ums.ums_backend.entity.EnrollmentStatus;
-import com.ums.ums_backend.entity.Student;
+import com.ums.ums_backend.dto.request.EnrollmentCreateRequestDTO;
+import com.ums.ums_backend.entity.*;
 import com.ums.ums_backend.exception.AlreadyExistsException;
 import com.ums.ums_backend.exception.ResourceNotFoundException;
 import com.ums.ums_backend.repository.CourseRepository;
 import com.ums.ums_backend.repository.EnrollmentRepository;
+import com.ums.ums_backend.repository.SemesterRepository;
 import com.ums.ums_backend.repository.StudentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class EnrollmentService {
 
-    private final EnrollmentRepository repository;
+    private final EnrollmentRepository enrollmentRepository;
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
+    private final SemesterRepository semesterRepository;
+
     private final EnrollmentMapper mapper;
 
-    public List<EnrollmentDTO> findAll() {
-        return repository.findAll()
+    public List<EnrollmentResponseDTO> findAll() {
+        return enrollmentRepository.findAll()
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
-    public EnrollmentDTO findById(Long id) {
-        Enrollment enrollment = repository.findById(id)
+    public EnrollmentResponseDTO findById(Long id) {
+        Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "Enrollment not found with id: " + id
                         )
@@ -43,51 +44,58 @@ public class EnrollmentService {
         return mapper.toDTO(enrollment);
     }
 
-    public List<EnrollmentDTO> findByStudentId(Long studentId) {
-        return repository.findByStudentId(studentId)
+    public List<EnrollmentResponseDTO> findByStudentId(Long studentId) {
+        return enrollmentRepository.findByStudentId(studentId)
                 .stream()
                 .map(mapper::toDTO)
                 .toList();
     }
 
-    public EnrollmentDTO save(EnrollmentDTO dto) {
+    @Transactional
+    public EnrollmentResponseDTO createEnrollment(EnrollmentCreateRequestDTO createRequestDTO) {
 
-        if (repository.existsByStudentIdAndCourseIdAndSemesterId(
-                dto.getStudent().getId(),
-                dto.getCourse().getId(),
-                dto.getSemester().getId())) {
+        if (enrollmentRepository.existsByStudentIdAndCourseIdAndSemesterId(
+                createRequestDTO.getStudentId(),
+                createRequestDTO.getCourseId(),
+                createRequestDTO.getSemesterId())) {
 
             throw new AlreadyExistsException(
                     "Student is already enrolled in this course for this semester"
             );
         }
 
-        Student student = studentRepository.findById(dto.getStudent().getId())
+        Student student = studentRepository.findById(createRequestDTO.getStudentId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "Student not found with id: " + dto.getStudent().getId()
+                                "Student not found with id: " + createRequestDTO.getStudentId()
                         )
                 );
 
-        Course course = courseRepository.findById(dto.getCourse().getId())
+        Course course = courseRepository.findById(createRequestDTO.getCourseId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                                "Course not found with id: " + dto.getCourse().getId()
+                                "Course not found with id: " + createRequestDTO.getCourseId()
                         )
                 );
 
+        Semester semester = semesterRepository.findById(createRequestDTO.getSemesterId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                                "Semester not found with id: " + createRequestDTO.getSemesterId()
+                        )
+                );
 
-        Enrollment enrollment = mapper.toEntity(dto);
+        Enrollment enrollment = mapper.toEntity(createRequestDTO);
 
         enrollment.setStudent(student);
         enrollment.setCourse(course);
+        enrollment.setSemester(semester);
 
-        Enrollment saved = repository.save(enrollment);
+        Enrollment savedEnrollment = enrollmentRepository.save(enrollment);
 
-        return mapper.toDTO(saved);
+        return mapper.toDTO(savedEnrollment);
     }
 
-    public EnrollmentDTO update(Long id, EnrollmentDTO dto) {
+    public EnrollmentResponseDTO update(Long id, EnrollmentResponseDTO dto) {
 
-        Enrollment existing = repository.findById(id)
+        Enrollment existing = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "Enrollment not found with id: " + id
                         )
@@ -99,12 +107,12 @@ public class EnrollmentService {
             existing.setEnrollmentStatus(dto.getEnrollmentStatus());
         }
 
-        return mapper.toDTO(repository.save(existing));
+        return mapper.toDTO(enrollmentRepository.save(existing));
     }
 
-    public EnrollmentDTO updateGrade(Long id, Double grade) {
+    public EnrollmentResponseDTO updateGrade(Long id, Double grade) {
 
-        Enrollment enrollment = repository.findById(id)
+        Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "Enrollment not found with id: " + id
                         )
@@ -117,11 +125,11 @@ public class EnrollmentService {
         }
 
         enrollment.setGrade(grade);
-        return mapper.toDTO(repository.save(enrollment));
+        return mapper.toDTO(enrollmentRepository.save(enrollment));
     }
 
-    public EnrollmentDTO changeStatus(Long id, EnrollmentStatus status) {
-        Enrollment enrollment = repository.findById(id)
+    public EnrollmentResponseDTO changeStatus(Long id, EnrollmentStatus status) {
+        Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Enrollment not found with id: " + id
                 ));
@@ -131,28 +139,28 @@ public class EnrollmentService {
         }
 
         enrollment.setEnrollmentStatus(status);
-        return mapper.toDTO(repository.save(enrollment));
+        return mapper.toDTO(enrollmentRepository.save(enrollment));
     }
 
-    public EnrollmentDTO dropStudent(Long id) {
-        Enrollment enrollment = repository.findById(id)
+    public EnrollmentResponseDTO dropStudent(Long id) {
+        Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Enrollment not found with id: " + id
                 ));
 
         enrollment.setEnrollmentStatus(com.ums.ums_backend.entity.EnrollmentStatus.DROPPED);
-        return mapper.toDTO(repository.save(enrollment));
+        return mapper.toDTO(enrollmentRepository.save(enrollment));
     }
 
     public void delete(Long id) {
 
-        Enrollment enrollment = repository.findById(id)
+        Enrollment enrollment = enrollmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                                 "Enrollment not found with id: " + id
                         )
                 );
 
-        repository.delete(enrollment);
+        enrollmentRepository.delete(enrollment);
     }
 
 }

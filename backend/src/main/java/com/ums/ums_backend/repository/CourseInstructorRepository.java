@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CourseInstructorRepository extends JpaRepository<CourseInstructor, Long> {
     List<CourseInstructor> findByProfessorId(Long professorId);
+    boolean existsByCourseIdAndProfessorId(Long courseId, Long professorId);
 }

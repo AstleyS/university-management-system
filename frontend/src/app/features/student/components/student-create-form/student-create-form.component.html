@@ -1,0 +1,86 @@
+<h1>Create Student</h1>
+
+@if (errorMessage) {
+  <p>{{ errorMessage }}</p>
+}
+
+<form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label for="firstName">First Name</label>
+
+    <input
+      id="firstName"
+      type="text"
+      formControlName="firstName"
+    />
+
+    @if (studentForm.get('firstName')?.touched &&
+    studentForm.get('firstName')?.invalid) {
+      <small>First name is required and must be 3–30 characters.</small>
+    }
+  </div>
+
+  <div>
+    <label for="lastName">Last Name</label>
+
+    <input
+      id="lastName"
+      type="text"
+      formControlName="lastName"
+    />
+
+    @if (studentForm.get('lastName')?.touched &&
+    studentForm.get('lastName')?.invalid) {
+      <small>Last name is required and must be 3–30 characters.</small>
+    }
+  </div>
+
+  <div>
+    <label for="gender">Gender</label>
+
+    <select id="gender" formControlName="gender">
+      <option value="">Select gender</option>
+
+      @for (gender of genders; track gender) {
+        <option [value]="gender">
+          {{ gender }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div>
+    <label for="dateOfBirth">Date of Birth</label>
+
+    <input
+      id="dateOfBirth"
+      type="date"
+      formControlName="dateOfBirth"
+    />
+  </div>
+
+  <div>
+    <label for="email">Email</label>
+
+    <input
+      id="email"
+      type="email"
+      formControlName="email"
+    />
+
+    @if (studentForm.get('email')?.touched &&
+    studentForm.get('email')?.invalid) {
+      <small>Please enter a valid email.</small>
+    }
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="loading"
+  >
+    {{ loading ? 'Creating...' : 'Create Student' }}
+  </button>
+
+</form>
+```

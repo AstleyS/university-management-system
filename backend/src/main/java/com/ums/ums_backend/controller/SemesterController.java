@@ -1,6 +1,6 @@
 package com.ums.ums_backend.controller;
 
-import com.ums.ums_backend.dto.SemesterDTO;
+import com.ums.ums_backend.dto.response.SemesterResponseDTO;
 import com.ums.ums_backend.service.SemesterService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,30 +22,32 @@ public class SemesterController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<SemesterDTO>> getSemesters() {
+    public ResponseEntity<List<SemesterResponseDTO>> getSemesters() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<SemesterDTO> getSemesterById(@PathVariable Long id) {
-        SemesterDTO dto = service.findById(id);
+    public ResponseEntity<SemesterResponseDTO> getSemesterById(@PathVariable Long id) {
+        SemesterResponseDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<SemesterDTO> createSemester(@Valid @RequestBody SemesterDTO dto) {
-        SemesterDTO created = service.save(dto);
+    public ResponseEntity<SemesterResponseDTO> createSemester(@Valid @RequestBody SemesterResponseDTO dto) {
+        SemesterResponseDTO created = service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
+    /*
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<SemesterDTO> updateSemester(@PathVariable Long id, @Valid @RequestBody SemesterDTO dto) {
-        SemesterDTO updated = service.update(id, dto);
+    public ResponseEntity<SemesterResponseDTO> updateSemester(@PathVariable Long id, @Valid @RequestBody SemesterResponseDTO dto) {
+        SemesterResponseDTO updated = service.update(id, dto);
         return ResponseEntity.ok(updated);
     }
+     */
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

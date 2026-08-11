@@ -1,32 +1,24 @@
 package com.ums.ums_backend.dto.mapper;
 
-import com.ums.ums_backend.dto.SemesterDTO;
+import com.ums.ums_backend.dto.response.SemesterResponseDTO;
 import com.ums.ums_backend.entity.Semester;
 import org.springframework.stereotype.Component;
-
-import java.util.stream.Collectors;
 
 @Component
 public class SemesterMapper {
 
-    public SemesterDTO toDTO(Semester semester) {
+    public SemesterResponseDTO toDTO(Semester semester) {
         if (semester == null) return null;
 
-        SemesterDTO dto = new SemesterDTO();
+        SemesterResponseDTO dto = new SemesterResponseDTO();
         dto.setId(semester.getId());
         dto.setTerm(semester.getTerm());
         dto.setYear(semester.getYear());
 
-        if (semester.getEnrollments() != null) {
-            dto.setEnrollmentIds(semester.getEnrollments().stream()
-                    .map(e -> e.getId())
-                    .collect(Collectors.toList()));
-        }
-
         return dto;
     }
 
-    public Semester toEntity(SemesterDTO dto) {
+    public Semester toEntity(SemesterResponseDTO dto) {
         if (dto == null) return null;
 
         Semester semester = new Semester();
