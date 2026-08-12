@@ -75,6 +75,49 @@
     }
   </div>
 
+  <div>
+    <label>Courses</label>
+
+    @for (course of courses; track course.id) {
+
+      <div>
+        <input
+          type="checkbox"
+          [id]="'course-' + course.id"
+          [checked]="studentForm.get('courseIds')?.value?.includes(course.id)"
+          (change)="toggleCourse(course.id, $event)"
+        />
+
+        <label [for]="'course-' + course.id">
+          {{ course.code }} - {{ course.name }}
+        </label>
+      </div>
+    }
+
+    @if (studentForm.get('courseIds')?.value?.length > 0) {
+      <p>
+        Selected:
+        {{ studentForm.get('courseIds')?.value?.length }} course(s)
+      </p>
+
+      <ul>
+        @for (
+          courseId of studentForm.get('courseIds')?.value;
+          track courseId
+          ) {
+          @for (course of courses; track course.id) {
+            @if (course.id === courseId) {
+              <li>{{ course.code }} - {{ course.name }}</li>
+            }
+          }
+        }
+      </ul>
+    } @else {
+      <p>No courses selected.</p>
+    }
+
+  </div>
+
   <button
     type="submit"
     [disabled]="loading"

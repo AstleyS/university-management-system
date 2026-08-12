@@ -22,6 +22,6 @@ export interface EnrollmentCreateRequest {
   semesterId: number,
   enrollmentDate: string,
   enrollmentStatus: EnrollmentStatus
-  grade: number,
+  grade?: number,
 
 }

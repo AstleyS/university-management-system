@@ -1,4 +1,5 @@
 import {Gender} from '../../../core/enums/Gender';
+import {Enrollment} from '../../enrollment/models/enrollment';
 
 export interface Student {
 
@@ -9,7 +10,7 @@ export interface Student {
   gender: Gender,
   dateOfBirth: string,
   email: string,
-  enrollmentIds: number[]
+  enrollments?: Enrollment[]
 
 }
 

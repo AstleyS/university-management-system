@@ -36,7 +36,7 @@ public class EnrollmentController {
         return ResponseEntity.ok(enrollment);
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STUDENT')")
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<EnrollmentResponseDTO>> getEnrollmentsByStudentId(@PathVariable Long studentId) {
         List<EnrollmentResponseDTO> enrollments = service.findByStudentId(studentId);

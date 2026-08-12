@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Enrollment} from '../models/enrollment';
+import {Enrollment, EnrollmentCreateRequest} from '../models/enrollment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,13 @@ export class EnrollmentService {
   getEnrollments() {
     return this.http.get<Enrollment[]>(
       this.apiURL
+    )
+  }
+
+  createEnrollment(request: EnrollmentCreateRequest) {
+    return this.http.post<Enrollment>(
+      this.apiURL,
+      request
     )
   }
 
