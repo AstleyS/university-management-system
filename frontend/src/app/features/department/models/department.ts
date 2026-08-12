@@ -20,3 +20,12 @@ export interface DepartmentCreateRequest {
   description: string,
 
 }
+
+export interface DepartmentCreateRequest {
+
+  facultyId: number,
+  name: string,
+  code: string,
+  description: string,
+
+}

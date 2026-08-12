@@ -17,3 +17,11 @@ export interface FacultyCreateRequest {
   description: string,
 
 }
+
+export interface FacultyCreateRequest {
+
+  name: string,
+  code: string,
+  description: string,
+
+}
