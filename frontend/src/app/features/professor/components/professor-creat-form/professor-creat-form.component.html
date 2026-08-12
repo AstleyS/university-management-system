@@ -1,10 +1,10 @@
-<h1>Create Student</h1>
+<h1>Create Professor</h1>
 
 @if (errorMessage) {
   <p>{{ errorMessage }}</p>
 }
 
-<form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="professorForm" (ngSubmit)="onSubmit()">
 
   <div>
     <label for="firstName">First Name</label>
@@ -15,8 +15,8 @@
       formControlName="firstName"
     />
 
-    @if (studentForm.get('firstName')?.touched &&
-    studentForm.get('firstName')?.invalid) {
+    @if (professorForm.get('firstName')?.touched &&
+    professorForm.get('firstName')?.invalid) {
       <small>First name is required and must be 3–30 characters.</small>
     }
   </div>
@@ -30,8 +30,8 @@
       formControlName="lastName"
     />
 
-    @if (studentForm.get('lastName')?.touched &&
-    studentForm.get('lastName')?.invalid) {
+    @if (professorForm.get('lastName')?.touched &&
+    professorForm.get('lastName')?.invalid) {
       <small>Last name is required and must be 3–30 characters.</small>
     }
   </div>
@@ -69,8 +69,8 @@
       formControlName="email"
     />
 
-    @if (studentForm.get('email')?.touched &&
-    studentForm.get('email')?.invalid) {
+    @if (professorForm.get('email')?.touched &&
+    professorForm.get('email')?.invalid) {
       <small>Please enter a valid email.</small>
     }
   </div>
@@ -79,7 +79,7 @@
     type="submit"
     [disabled]="loading"
   >
-    {{ loading ? 'Creating...' : 'Create Student' }}
+    {{ loading ? 'Creating...' : 'Create Professor' }}
   </button>
 
 </form>
