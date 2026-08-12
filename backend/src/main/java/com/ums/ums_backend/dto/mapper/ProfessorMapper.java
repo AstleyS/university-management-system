@@ -31,8 +31,8 @@ public class ProfessorMapper {
         dto.setDateOfBirth(professor.getDateOfBirth());
 
         dto.setEmail(professor.getEmail());
-        if (professor.getCourseInstructors() != null) {
-            dto.setCourses(professor.getCourseInstructors()
+        if (professor.getCourses() != null) {
+            dto.setCourses(professor.getCourses()
                     .stream()
                     .map(this::toCourseInstructorDTO)
                     .toList());

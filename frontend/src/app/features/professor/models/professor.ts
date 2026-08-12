@@ -1,4 +1,5 @@
 import {Gender} from '../../../core/enums/Gender';
+import {CourseInstructor} from '../../courseInstructor/models/course-instructor';
 
 export interface Professor {
 
@@ -9,7 +10,7 @@ export interface Professor {
   gender: Gender,
   dateOfBirth: string,
   email: string,
-  courseIds: number[]
+  courses?: CourseInstructor[]
 
 }
 

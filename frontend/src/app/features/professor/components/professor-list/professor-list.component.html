@@ -1,9 +1,25 @@
 <h1>All Professors</h1>
+
 @for (professor of professors; track professor.id) {
 
   <div class="professor-card">
-    <h3> {{ professor.firstName }} {{ professor.lastName }} </h3>
-    <p> {{ professor.email }} </p>
+
+    <div>
+      <h3>{{ professor.firstName }} {{ professor.lastName }}</h3>
+      <p>{{ professor.email }}</p>
+    </div>
+
+    <div>
+      <p>
+        Courses: {{ professor.courses?.length ?? 0 }}
+      </p>
+    </div>
+
+    <div>
+      <p>Actions</p>
+      <!-- View/Edit/Delete will go here later -->
+    </div>
+
   </div>
 
   @if (!$last) {
@@ -12,6 +28,6 @@
 
 } @empty {
 
-  <p> No professors found! </p>
+  <p>No professors found!</p>
 
 }

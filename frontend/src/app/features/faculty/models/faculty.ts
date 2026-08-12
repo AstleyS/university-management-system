@@ -1,10 +1,12 @@
+import {Department} from '../../department/models/department';
+
 export interface Faculty {
 
   id: number,
   name: string,
   code: string,
   description: string,
-  departmentIds: number[]
+  departments: Department[]
 
 }
 

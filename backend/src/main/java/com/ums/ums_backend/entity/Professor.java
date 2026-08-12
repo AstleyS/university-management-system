@@ -1,7 +1,6 @@
 package com.ums.ums_backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +39,7 @@ public class Professor {
     private String email;
 
     @OneToMany(mappedBy = "professor")
-    private List<CourseInstructor> courseInstructors;
+    private List<CourseInstructor> courses;
 
 
 }

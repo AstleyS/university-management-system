@@ -1,11 +1,14 @@
+import {Faculty} from '../../faculty/models/faculty';
+import {Course} from '../../course/models/course';
+
 export interface Department {
 
   id: number,
-  facultyId: number,
+  faculty: Faculty,
   name: string,
   code: string,
   description: string,
-  coursesIds: number[]
+  courses: Course[]
 
 }
 

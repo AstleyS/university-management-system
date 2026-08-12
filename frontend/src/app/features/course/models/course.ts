@@ -1,13 +1,17 @@
+import {Department} from '../../department/models/department';
+import {Enrollment} from '../../enrollment/models/enrollment';
+import {CourseInstructor} from '../../courseInstructor/models/course-instructor';
+
 export interface Course {
 
   id: number,
-  departmentId: number,
+  department: Department,
   code: string,
   name: string,
   description: string,
   credits: number,
-  enrollmentIds: number[]
-  courseInstructors: number[]
+  enrollments: Enrollment[]
+  courseInstructors: CourseInstructor[]
 
 }
 
