@@ -18,8 +18,8 @@ export class StudentListComponent implements OnInit {
 
     this.studentService.getStudents().subscribe({
       next: (data) => {
+        console.log('students: ', data)
         this.students = data
-        console.log(data)
       },
       error: (error) => console.error(error)
     })

@@ -1,9 +1,25 @@
 <h1>All Students</h1>
+
 @for (student of students; track student.id) {
 
   <div class="student-card">
-    <h3> {{ student.firstName }} {{ student.lastName }} </h3>
-    <p> {{ student.email }} </p>
+
+    <div>
+      <h3>{{ student.firstName }} {{ student.lastName }}</h3>
+      <p>{{ student.email }}</p>
+    </div>
+
+    <div>
+      <p>
+        Enrollments: {{ student.enrollments?.length ?? 0 }}
+      </p>
+    </div>
+
+    <div>
+      <p>Actions</p>
+      <!-- View/Edit/Delete will go here later -->
+    </div>
+
   </div>
 
   @if (!$last) {
@@ -12,6 +28,6 @@
 
 } @empty {
 
-  <p> No students found! </p>
+  <p>No students found!</p>
 
 }
