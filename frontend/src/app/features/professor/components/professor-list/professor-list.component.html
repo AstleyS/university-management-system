@@ -16,8 +16,13 @@
     </div>
 
     <div>
-      <p>Actions</p>
-      <!-- View/Edit/Delete will go here later -->
+      <button [routerLink]="['/professors', professor.id]">
+        View
+      </button>
+
+      <button (click)="onDeleteProfessor(professor.id)">
+        Delete
+      </button>
     </div>
 
   </div>

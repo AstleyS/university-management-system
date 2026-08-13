@@ -1,62 +1,62 @@
 @if (loading) {
 
-  <p>Loading student...</p>
+  <p>Loading professor...</p>
 
 } @else if (errorMessage) {
 
   <p>{{ errorMessage }}</p>
 
-} @else if (student) {
+} @else if (professor) {
 
-  <div class="student-details">
+  <div class="professor-details">
     <div class="page-header">
 
       <div>
         <h1>
-          {{ student.firstName }} {{ student.lastName }}
+          {{ professor.firstName }} {{ professor.lastName }}
         </h1>
       </div>
 
-      <a routerLink="/students">
-        Back to Students
+      <a routerLink="/professors">
+        Back to Professors
       </a>
     </div>
 
     <section>
 
       <div class="section-header">
-        <h2>Student Information</h2>
+        <h2>Professor Information</h2>
 
         <button>
           Edit Information
         </button>
       </div>
 
-      <div class="student-info">
+      <div class="professor-info">
 
         <p>
           <strong>First Name:</strong>
-          {{ student.firstName }}
+          {{ professor.firstName }}
         </p>
 
         <p>
           <strong>Last Name:</strong>
-          {{ student.lastName }}
+          {{ professor.lastName }}
         </p>
 
         <p>
           <strong>Email:</strong>
-          {{ student.email }}
+          {{ professor.email }}
         </p>
 
         <p>
           <strong>Gender:</strong>
-          {{ student.gender }}
+          {{ professor.gender }}
         </p>
 
         <p>
           <strong>Date of Birth:</strong>
-          {{ student.dateOfBirth }}
+          {{ professor.dateOfBirth }}
         </p>
 
       </div>
@@ -72,7 +72,7 @@
 
           <p>
             Total:
-            {{ student.enrollments?.length ?? 0 }}
+            {{ professor.courses?.length ?? 0 }}
           </p>
         </div>
 
@@ -82,17 +82,17 @@
 
       </div>
 
-      @if ((student.enrollments?.length ?? 0) > 0) {
+      @if ((professor.courses?.length ?? 0) > 0) {
 
         <p>
-          This student currently has
-          {{ student.enrollments?.length }}
+          This professor currently has
+          {{ professor.courses?.length }}
           enrollment(s).
         </p>
 
       } @else {
 
-        <p>This student has no enrollments.</p>
+        <p>This professor has no courses.</p>
 
       }
     </section>

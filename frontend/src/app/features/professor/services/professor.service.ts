@@ -27,4 +27,8 @@ export class ProfessorService {
     )
   }
 
+  deleteProfessor(id: number) {
+
+  }
+
 }

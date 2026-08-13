@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Student} from '../../models/student';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {StudentService} from '../../services/student.service';
 import {EnrollmentService} from '../../../enrollment/services/enrollment.service';
 
 @Component({
   selector: 'app-student-detail',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './student-detail.component.html',
   styleUrl: './student-detail.component.scss'
 })
