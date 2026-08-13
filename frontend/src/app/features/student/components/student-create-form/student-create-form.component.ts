@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StudentService } from '../../services/student.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -7,7 +7,6 @@ import {Gender} from '../../../../core/enums/Gender';
 import {Course} from '../../../course/models/course';
 import {CourseService} from '../../../course/services/course.service';
 import {EnrollmentService} from '../../../enrollment/services/enrollment.service';
-import {EnrollmentCreateRequest} from '../../../enrollment/models/enrollment';
 import {EnrollmentStatus} from '../../../../core/enums/EnrollmentStatus';
 import {Semester} from '../../../semester/models/semester';
 import {forkJoin} from 'rxjs';

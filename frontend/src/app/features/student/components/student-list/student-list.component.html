@@ -10,14 +10,17 @@
     </div>
 
     <div>
-      <p>
-        Enrollments: {{ student.enrollments?.length ?? 0 }}
-      </p>
+      <p>Enrollments: {{ student.enrollments?.length ?? 0 }}</p>
     </div>
 
     <div>
-      <p>Actions</p>
-      <!-- View/Edit/Delete will go here later -->
+      <button [routerLink]="['/students', student.id]">
+        View
+      </button>
+
+      <button (click)="onDeleteStudent(student.id)">
+        Delete
+      </button>
     </div>
 
   </div>

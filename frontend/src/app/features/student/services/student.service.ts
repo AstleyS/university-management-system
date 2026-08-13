@@ -27,4 +27,9 @@ export class StudentService {
       request
     )
   }
+
+  deleteStudent(id: number) {
+
+  }
+
 }

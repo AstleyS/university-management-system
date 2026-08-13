@@ -1,1 +1,102 @@
-<p>student-detail works!</p>
+@if (loading) {
+
+  <p>Loading student...</p>
+
+} @else if (errorMessage) {
+
+  <p>{{ errorMessage }}</p>
+
+} @else if (student) {
+
+  <div class="student-details">
+    <div class="page-header">
+
+      <div>
+        <h1>
+          {{ student.firstName }} {{ student.lastName }}
+        </h1>
+
+        <p>Student ID: {{ student.id }}</p>
+      </div>
+
+      <a routerLink="/students">
+        Back to Students
+      </a>
+    </div>
+
+    <section>
+
+      <div class="section-header">
+        <h2>Student Information</h2>
+
+        <button>
+          Edit Information
+        </button>
+      </div>
+
+      <div class="student-info">
+
+        <p>
+          <strong>First Name:</strong>
+          {{ student.firstName }}
+        </p>
+
+        <p>
+          <strong>Last Name:</strong>
+          {{ student.lastName }}
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          {{ student.email }}
+        </p>
+
+        <p>
+          <strong>Gender:</strong>
+          {{ student.gender }}
+        </p>
+
+        <p>
+          <strong>Date of Birth:</strong>
+          {{ student.dateOfBirth }}
+        </p>
+
+      </div>
+
+    </section>
+
+    <section>
+
+      <div class="section-header">
+
+        <div>
+          <h2>Enrollments</h2>
+
+          <p>
+            Total:
+            {{ student.enrollments?.length ?? 0 }}
+          </p>
+        </div>
+
+        <button>
+          Manage Enrollments
+        </button>
+
+      </div>
+
+      @if ((student.enrollments?.length ?? 0) > 0) {
+
+        <p>
+          This student currently has
+          {{ student.enrollments?.length }}
+          enrollment(s).
+        </p>
+
+      } @else {
+
+        <p>This student has no enrollments.</p>
+
+      }
+    </section>
+  </div>
+}
