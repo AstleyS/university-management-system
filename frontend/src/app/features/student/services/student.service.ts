@@ -28,6 +28,14 @@ export class StudentService {
     )
   }
 
+  updateStudent(id: number, request: StudentRequest) {
+    console.log('request: ', request)
+    return this.http.put<Student>(
+      `${this.apiURL}/${id}`,
+      request
+    )
+  }
+
   deleteStudent(id: number) {
 
   }

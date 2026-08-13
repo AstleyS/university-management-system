@@ -41,14 +41,12 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(student);
     }
 
-    /*
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<StudentResponseDTO> updateStudent(@PathVariable Long id, @Valid @RequestBody StudentCreateRequestDTO createRequestDTO) {
         StudentResponseDTO student = service.update(id, createRequestDTO);
         return ResponseEntity.ok(student);
     }
-     */
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

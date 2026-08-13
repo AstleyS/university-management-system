@@ -25,41 +25,192 @@
     <section>
 
       <div class="section-header">
+
         <h2>Student Information</h2>
 
-        <button>
-          Edit Information
-        </button>
-      </div>
+        @if (!editing) {
 
-      <div class="student-info">
+          <button (click)="startEdit()">
+            Edit Information
+          </button>
 
-        <p>
-          <strong>First Name:</strong>
-          {{ student.firstName }}
-        </p>
+        } @else {
 
-        <p>
-          <strong>Last Name:</strong>
-          {{ student.lastName }}
-        </p>
+          <button (click)="cancelEdit()">
+            Cancel
+          </button>
 
-        <p>
-          <strong>Email:</strong>
-          {{ student.email }}
-        </p>
-
-        <p>
-          <strong>Gender:</strong>
-          {{ student.gender }}
-        </p>
-
-        <p>
-          <strong>Date of Birth:</strong>
-          {{ student.dateOfBirth }}
-        </p>
+        }
 
       </div>
+
+
+      @if (!editing) {
+
+        <!-- VIEW MODE -->
+
+        <div class="student-info">
+
+          <p>
+            <strong>First Name:</strong>
+            {{ student.firstName }}
+          </p>
+
+          <p>
+            <strong>Last Name:</strong>
+            {{ student.lastName }}
+          </p>
+
+          <p>
+            <strong>Email:</strong>
+            {{ student.email }}
+          </p>
+
+          <p>
+            <strong>Gender:</strong>
+            {{ student.gender }}
+          </p>
+
+          <p>
+            <strong>Date of Birth:</strong>
+            {{ student.dateOfBirth }}
+          </p>
+
+        </div>
+
+      } @else {
+
+        <!-- EDIT MODE -->
+
+        <form
+          [formGroup]="studentForm"
+          (ngSubmit)="saveStudent()"
+        >
+
+          <div>
+
+            <label for="firstName">
+              First Name
+            </label>
+
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+            />
+
+            @if (
+              studentForm.get('firstName')?.invalid &&
+              studentForm.get('firstName')?.touched
+              ) {
+              <p>First name is required.</p>
+            }
+
+          </div>
+
+
+          <div>
+
+            <label for="lastName">
+              Last Name
+            </label>
+
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+            />
+
+            @if (
+              studentForm.get('lastName')?.invalid &&
+              studentForm.get('lastName')?.touched
+              ) {
+              <p>Last name is required.</p>
+            }
+
+          </div>
+
+
+          <div>
+
+            <label for="gender">
+              Gender
+            </label>
+
+            <select
+              id="gender"
+              formControlName="gender"
+            >
+              <option value="" disabled>
+                Select gender
+              </option>
+
+              <option value="MALE">
+                Male
+              </option>
+
+              <option value="FEMALE">
+                Female
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div>
+
+            <label for="dateOfBirth">
+              Date of Birth
+            </label>
+
+            <input
+              id="dateOfBirth"
+              type="date"
+              formControlName="dateOfBirth"
+            />
+
+          </div>
+
+
+          <div>
+
+            <label for="email">
+              Email
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+            />
+
+            @if (
+              studentForm.get('email')?.invalid &&
+              studentForm.get('email')?.touched
+              ) {
+              <p>Please enter a valid email.</p>
+            }
+
+          </div>
+
+
+          <button
+            type="submit"
+            [disabled]="saving"
+          >
+
+            @if (saving) {
+              Saving...
+            } @else {
+              Save Changes
+            }
+
+          </button>
+
+        </form>
+
+      }
 
     </section>
 

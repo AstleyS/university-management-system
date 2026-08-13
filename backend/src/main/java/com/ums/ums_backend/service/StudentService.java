@@ -75,8 +75,7 @@ public class StudentService {
         return studentMapper.toDTO(savedStudent);
     }
 
-
-    public StudentResponseDTO update(Long id, StudentCreateRequestDTO dto) {
+    public StudentResponseDTO update(Long id, StudentCreateRequestDTO createRequestDTO) {
 
         Student existingStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -84,25 +83,24 @@ public class StudentService {
                         )
                 );
 
-        if (!existingStudent.getEmail().equals(dto.getEmail())
-                && studentRepository.existsByEmail(dto.getEmail())) {
+        if (!existingStudent.getEmail().equals(createRequestDTO.getEmail())
+                && studentRepository.existsByEmail(createRequestDTO.getEmail())) {
             throw new AlreadyExistsException(
-                    "Student already exists with email: " + dto.getEmail()
+                    "Student already exists with email: " + createRequestDTO.getEmail()
             );
         }
 
-        existingStudent.setFirstName(dto.getFirstName());
-        existingStudent.setLastName(dto.getLastName());
-        existingStudent.setEmail(dto.getEmail());
-        existingStudent.setDateOfBirth(dto.getDateOfBirth());
-        existingStudent.setGender(dto.getGender());
+        existingStudent.setFirstName(createRequestDTO.getFirstName());
+        existingStudent.setLastName(createRequestDTO.getLastName());
+        existingStudent.setEmail(createRequestDTO.getEmail());
+        existingStudent.setDateOfBirth(createRequestDTO.getDateOfBirth());
+        existingStudent.setGender(createRequestDTO.getGender());
 
 
         return studentMapper.toDTO(
                 studentRepository.save(existingStudent)
         );
     }
-
 
     public void delete(Long id) {
 
