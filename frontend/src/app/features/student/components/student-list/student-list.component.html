@@ -10,7 +10,7 @@
     </div>
 
     <div>
-      <p>Enrollments: {{ student.enrollments?.length ?? 0 }}</p>
+      <p>Enrollments: {{ student.enrollments.length}}</p>
     </div>
 
     <div>
@@ -26,7 +26,7 @@
   </div>
 
   @if (!$last) {
-    <span>---</span>
+    <hr>
   }
 
 } @empty {

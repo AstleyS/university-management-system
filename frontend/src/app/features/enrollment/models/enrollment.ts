@@ -10,7 +10,7 @@ export interface Enrollment {
   enrollmentDate: string,
   student: StudentSummary,
   course: CourseSummary,
-  grade: number,
+  grade: number | null,
   enrollmentStatus: EnrollmentStatus
 
 }
@@ -22,6 +22,6 @@ export interface EnrollmentCreateRequest {
   semesterId: number,
   enrollmentDate: string,
   enrollmentStatus: EnrollmentStatus
-  grade?: number,
+  grade: number | null,
 
 }

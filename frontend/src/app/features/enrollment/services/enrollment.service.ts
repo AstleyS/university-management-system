@@ -18,6 +18,7 @@ export class EnrollmentService {
   }
 
   createEnrollment(request: EnrollmentCreateRequest) {
+    console.log('request: ', request)
     return this.http.post<Enrollment>(
       this.apiURL,
       request

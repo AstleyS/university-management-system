@@ -10,7 +10,7 @@ export interface Student {
   gender: Gender,
   dateOfBirth: string,
   email: string,
-  enrollments?: Enrollment[]
+  enrollments: Enrollment[]
 
 }
 

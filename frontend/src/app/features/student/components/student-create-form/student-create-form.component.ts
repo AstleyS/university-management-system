@@ -152,7 +152,8 @@ export class StudentCreateFormComponent implements OnInit {
             courseId: Number(courseId),
             semesterId: 1, // temporary
             enrollmentDate: new Date().toISOString().split('T')[0],
-            enrollmentStatus: EnrollmentStatus.ACTIVE
+            enrollmentStatus: EnrollmentStatus.ACTIVE,
+            grade: null
           })
         );
 
