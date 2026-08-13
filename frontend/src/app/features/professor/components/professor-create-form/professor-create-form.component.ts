@@ -12,10 +12,10 @@ import {forkJoin} from 'rxjs';
   selector: 'app-professor-creat-form',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './professor-creat-form.component.html',
-  styleUrl: './professor-creat-form.component.scss'
+  templateUrl: './professor-create-form.component.html',
+  styleUrl: './professor-create-form.component.scss'
 })
-export class ProfessorCreatFormComponent implements OnInit {
+export class ProfessorCreateFormComponent implements OnInit {
 
   professorForm: FormGroup;
   courses?: Course[];
