@@ -10,7 +10,7 @@ export interface Professor {
   gender: Gender,
   dateOfBirth: string,
   email: string,
-  courses?: CourseInstructor[]
+  courses: CourseInstructor[]
 
 }
 

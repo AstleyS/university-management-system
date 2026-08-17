@@ -13,22 +13,28 @@
 
       <div>
         <h1>
-          {{ professor.firstName }} {{ professor.lastName }}
+          {{ professor.firstName }}
+          {{ professor.lastName }}
         </h1>
       </div>
 
       <a routerLink="/professors">
         Back to Professors
       </a>
+
     </div>
 
+    <!-- Professor Information -->
     <section>
 
       <div class="section-header">
         <h2>Professor Information</h2>
 
-        <button>
+        <button
+          type="button">
+
           Edit Information
+
         </button>
       </div>
 
@@ -60,39 +66,213 @@
         </p>
 
       </div>
-
     </section>
 
+    <!-- Courses -->
     <section>
 
       <div class="section-header">
 
         <div>
-          <h2>Enrollments</h2>
+          <h2>Courses</h2>
 
           <p>
             Total:
-            {{ professor.courses?.length ?? 0 }}
+            {{ professor.courses.length  }}
           </p>
+
         </div>
 
-        <button>
-          Manage Enrollments
-        </button>
+        @if (!managingCourses) {
 
+          <button
+            type="button"
+            (click)="startManagingCourses()">
+
+            Manage Courses
+          </button>
+
+        } @else {
+
+          <button
+            type="button"
+            (click)="stopManagingCourses()">
+
+            @if (hasNewCoursesSelected()) {
+
+              Done
+
+            } @else {
+
+              Cancel
+
+            }
+
+          </button>
+        }
       </div>
 
-      @if ((professor.courses?.length ?? 0) > 0) {
+      <!-- Course Management -->
 
-        <p>
-          This professor currently has
-          {{ professor.courses?.length }}
-          enrollment(s).
-        </p>
+      @if (managingCourses) {
+
+        <div class="course-management">
+
+          <form [formGroup]="professorForm">
+
+            <label>Courses</label>
+
+
+            @for (
+              course of courses;
+              track course.id
+              ) {
+
+              <div>
+
+                <input
+                  type="checkbox"
+                  [id]="'course-' + course.id"
+                  [checked]="
+                    professorForm
+                      .get('courseIds')
+                      ?.value
+                      ?.includes(course.id)
+                  "
+                  [disabled]="
+                    isCourseAlreadyAssigned(course.id)
+                  "
+                  (change)="
+                    toggleCourse(course.id, $event)
+                  "
+                />
+
+                <label
+                  [for]="'course-' + course.id">
+
+                  {{ course.code }} -
+                  {{ course.name }}
+
+                </label>
+
+              </div>
+            }
+
+            @if (professorForm.get('courseIds')?.value?.length > 0) {
+
+              <p>
+                Selected:
+                {{
+                  professorForm
+                    .get('courseIds')
+                    ?.value
+                    ?.length
+                }}
+                course(s)
+              </p>
+
+              <ul>
+
+                @for (
+                  courseId of
+                    professorForm.get('courseIds')?.value;
+                  track courseId
+                  ) {
+
+                  @for (
+                    course of courses;
+                    track course.id
+                    ) {
+
+                    @if (
+                      course.id === courseId
+                      ) {
+
+                      <li>
+                        {{ course.code }} -
+                        {{ course.name }}
+                      </li>
+
+                    }
+                  }
+                }
+              </ul>
+
+            } @else {
+
+              <p>
+                No courses selected.
+              </p>
+            }
+
+            <button
+              type="button"
+              [disabled]="
+                courseSaving ||
+                !hasNewCoursesSelected()
+              "
+              (click)="addSelectedCourses()">
+
+              @if (courseSaving) {
+
+                Adding...
+
+              } @else {
+
+                Add Selected Courses
+
+              }
+            </button>
+          </form>
+
+          @if (courseErrorMessage) {
+
+            <p>
+              {{ courseErrorMessage }}
+            </p>
+
+          }
+        </div>
+      }
+
+      <!-- Assigned Courses -->
+      @if (professor.courses.length) {
+
+        <div class="courses-list">
+
+          @for (courses of professor.courses; track courses.id) {
+
+            <div class="course-card">
+
+              @if (courses.course) {
+
+                <h3>
+                  {{ courses.course.name }}
+                </h3>
+
+                <p>
+                  <strong>Code:</strong>
+                  {{ courses.course.code }}
+                </p>
+
+              } @else {
+
+                <p>
+                  <em>Course data unavailable</em>
+                </p>
+
+              }
+
+            </div>
+          }
+        </div>
 
       } @else {
 
-        <p>This professor has no courses.</p>
+        <p>
+          This professor is not assigned
+          to any courses.
+        </p>
 
       }
     </section>

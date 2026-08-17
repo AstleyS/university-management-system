@@ -18,9 +18,13 @@ export class CourseInstructorService {
   }
 
   createCourseInstructor(request: CourseInstructorCreateRequest) {
+    console.log('request courseInstructor: ', request)
     return this.http.post<CourseInstructor>(
       this.apiURL,
       request
     );
   }
+
+  deleteCourseInstructor(id: number) {}
+
 }

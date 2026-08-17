@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class ProfessorMapper {
 
+    private final CourseMapper courseMapper;
     private UserMapper userMapper;
 
     public ProfessorResponseDTO toDTO(Professor professor) {
@@ -50,6 +51,7 @@ public class ProfessorMapper {
 
         dto.setId(courseInstructor.getId());
 
+        dto.setCourse(courseMapper.toSummaryDTO(courseInstructor.getCourse()));
         dto.setProfessor(toSummaryDTO(courseInstructor.getProfessor()));
 
         return dto;

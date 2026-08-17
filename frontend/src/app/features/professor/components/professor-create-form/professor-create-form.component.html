@@ -1,131 +1,98 @@
-<h1>Create Professor</h1>
+<div class="professor-create">
 
-@if (errorMessage) {
-  <p>{{ errorMessage }}</p>
-}
+  <h1>Create Professor</h1>
 
-<form [formGroup]="professorForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="professorForm" (ngSubmit)="onSubmit()">
 
-  <div>
-    <label for="firstName">First Name</label>
-
-    <input
-      id="firstName"
-      type="text"
-      formControlName="firstName"
-    />
-
-    @if (professorForm.get('firstName')?.touched &&
-    professorForm.get('firstName')?.invalid) {
-      <small>First name is required and must be 3–30 characters.</small>
-    }
-  </div>
-
-  <div>
-    <label for="lastName">Last Name</label>
-
-    <input
-      id="lastName"
-      type="text"
-      formControlName="lastName"
-    />
-
-    @if (professorForm.get('lastName')?.touched &&
-    professorForm.get('lastName')?.invalid) {
-      <small>Last name is required and must be 3–30 characters.</small>
-    }
-  </div>
-
-  <div>
-    <label for="gender">Gender</label>
-
-    <select id="gender" formControlName="gender">
-      <option value="">Select gender</option>
-
-      @for (gender of genders; track gender) {
-        <option [value]="gender">
-          {{ gender }}
-        </option>
+    <div>
+      <label for="firstName">First Name</label>
+      <input id="firstName" type="text" formControlName="firstName" />
+      @if (professorForm.get('firstName')?.invalid && professorForm.get('firstName')?.touched) {
+        <p class="field-error">First name must be between 2 and 30 characters.</p>
       }
-    </select>
-  </div>
+    </div>
 
-  <div>
-    <label for="dateOfBirth">Date of Birth</label>
+    <div>
+      <label for="lastName">Last Name</label>
+      <input id="lastName" type="text" formControlName="lastName" />
+      @if (professorForm.get('lastName')?.invalid && professorForm.get('lastName')?.touched) {
+        <p class="field-error">Last name must be between 2 and 30 characters.</p>
+      }
+    </div>
 
-    <input
-      id="dateOfBirth"
-      type="date"
-      formControlName="dateOfBirth"
-    />
-  </div>
+    <div>
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" />
+      @if (professorForm.get('email')?.invalid && professorForm.get('email')?.touched) {
+        <p class="field-error">A valid email is required.</p>
+      }
+    </div>
 
-  <div>
-    <label for="email">Email</label>
-
-    <input
-      id="email"
-      type="email"
-      formControlName="email"
-    />
-
-    @if (professorForm.get('email')?.touched &&
-    professorForm.get('email')?.invalid) {
-      <small>Please enter a valid email.</small>
-    }
-  </div>
-
-  <div>
-    <label>Courses</label>
-
-    @for (course of courses; track course.id) {
-
-      <div>
-        <input
-          type="checkbox"
-          [id]="'course-' + course.id"
-          [checked]="professorForm.get('courseIds')?.value?.includes(course.id)"
-          (change)="toggleCourse(course.id, $event)"
-        />
-
-        <label [for]="'course-' + course.id">
-          {{ course.code }} - {{ course.name }}
-        </label>
-      </div>
-
-    }
-
-    @if (professorForm.get('courseIds')?.value?.length > 0) {
-
-      <p>
-        Selected:
-        {{ professorForm.get('courseIds')?.value?.length }} course(s)
-      </p>
-
-      <ul>
-        @for (
-          courseId of professorForm.get('courseIds')?.value;
-          track courseId
-          ) {
-          @for (course of courses; track course.id) {
-            @if (course.id === courseId) {
-              <li>{{ course.code }} - {{ course.name }}</li>
-            }
-          }
+    <div>
+      <label for="gender">Gender</label>
+      <select id="gender" formControlName="gender">
+        <option value="" disabled>Select a gender</option>
+        @for (gender of genders; track gender) {
+          <option [value]="gender">{{ gender }}</option>
         }
-      </ul>
+      </select>
+      @if (professorForm.get('gender')?.invalid && professorForm.get('gender')?.touched) {
+        <p class="field-error">Gender is required.</p>
+      }
+    </div>
 
-    } @else {
-      <p>No courses selected.</p>
+    <div>
+      <label for="dateOfBirth">Date of Birth</label>
+      <input id="dateOfBirth" type="date" formControlName="dateOfBirth" />
+      @if (professorForm.get('dateOfBirth')?.invalid && professorForm.get('dateOfBirth')?.touched) {
+        <p class="field-error">Date of birth is required.</p>
+      }
+    </div>
+
+    <!-- Course selection -->
+    <div>
+
+      <label>Courses</label>
+
+      @if (courses.length === 0) {
+
+        <p>No courses available.</p>
+
+      } @else {
+
+        @for (course of courses; track course.id) {
+
+          <div>
+
+            <input
+              type="checkbox"
+              [id]="'course-' + course.id"
+              [checked]="professorForm.get('courseIds')?.value?.includes(course.id)"
+              (change)="toggleCourse(course.id, $event)"
+            />
+
+            <label [for]="'course-' + course.id">
+              {{ course.code }} - {{ course.name }}
+            </label>
+
+          </div>
+
+        }
+      }
+    </div>
+
+    @if (errorMessage) {
+      <p class="form-error">{{ errorMessage }}</p>
     }
-  </div>
 
+    <button type="submit" [disabled]="loading">
+      @if (loading) {
+        Creating...
+      } @else {
+        Create Professor
+      }
+    </button>
 
-  <button
-    type="submit"
-    [disabled]="loading"
-  >
-    {{ loading ? 'Creating...' : 'Create Professor' }}
-  </button>
+  </form>
 
-</form>
+</div>

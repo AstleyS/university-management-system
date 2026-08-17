@@ -61,7 +61,7 @@ public class ProfessorService {
 
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(username + ".test"));
-        user.setRoles(Set.of(Role.STUDENT));
+        user.setRoles(Set.of(Role.PROFESSOR));
 
         User savedUser = userRepository.save(user);
 

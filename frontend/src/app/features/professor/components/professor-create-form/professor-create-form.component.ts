@@ -18,7 +18,7 @@ import {forkJoin} from 'rxjs';
 export class ProfessorCreateFormComponent implements OnInit {
 
   professorForm: FormGroup;
-  courses?: Course[];
+  courses: Course[] = [];
 
   loading = false;
   errorMessage = '';
