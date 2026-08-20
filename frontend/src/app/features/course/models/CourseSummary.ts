@@ -3,4 +3,5 @@ export interface CourseSummary {
   code: string,
   name: string,
   description: string
+  credits: number,
 }

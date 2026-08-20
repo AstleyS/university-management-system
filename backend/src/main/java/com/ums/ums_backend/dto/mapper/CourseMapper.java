@@ -130,6 +130,7 @@ public class CourseMapper {
         dto.setCode(course.getCode());
         dto.setName(course.getName());
         dto.setDescription(course.getDescription());
+        dto.setCredits(course.getCredits());
 
         return dto;
     }

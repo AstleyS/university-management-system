@@ -105,130 +105,156 @@
 
       </div>
 
+
+      <!-- COURSE MANAGEMENT -->
+
       @if (managingCourses) {
 
-      <div class="course-management">
+        <div class="course-management">
 
-        <form [formGroup]="professorForm">
+          <form [formGroup]="professorForm">
 
-          <label>Courses</label>
-
-          @for (course of courses; track course.id) {
-
-            <div>
-
-              <input
-                type="checkbox"
-                [id]="'course-' + course.id"
-                [checked]="isCourseSelected(course.id)"
-                (change)="toggleCourse(course.id, $event)"
-              />
-
-              <label [for]="'course-' + course.id">
-                {{ course.code }} - {{ course.name }}
-              </label>
-
-            </div>
-
-          }
-
-          @if (professorForm.get('courseIds')?.value?.length > 0) {
+            <h3>Manage Courses</h3>
 
             <p>
-              Selected:
-              {{ professorForm.get('courseIds')?.value?.length }}
-              course(s)
+              Select the courses that should be assigned
+              to this professor.
             </p>
 
-          } @else {
 
-            <p>
-              No courses selected.
-            </p>
+            @for (course of courses; track course.id) {
 
-          }
+              <div>
 
-          <button
-            type="button"
-            [disabled]="courseSaving || !hasCourseChanges()"
-            (click)="saveCourseChanges()"
-          >
+                <input
+                  type="checkbox"
+                  [id]="'course-' + course.id"
+                  [checked]="isCourseSelected(course.id)"
+                  (change)="toggleCourse(course.id, $event)"
+                />
 
-            @if (courseSaving) {
-              Saving...
-            } @else {
-              Save Changes
+                <label [for]="'course-' + course.id">
+
+                  {{ course.code }} -
+                  {{ course.name }}
+
+                </label>
+
+              </div>
+
             }
 
-          </button>
 
-        </form>
+            @if (
+              professorForm.get('courseIds')?.value?.length > 0
+              ) {
 
-        @if (courseErrorMessage) {
+              <p>
 
-          <p>
-            {{ courseErrorMessage }}
-          </p>
+                Selected:
+                {{ professorForm.get('courseIds')?.value?.length }}
+                course(s)
 
-        }
+              </p>
 
-      </div>
+            } @else {
 
-    }
+              <p>
+                No courses selected.
+              </p>
+
+            }
 
 
-      <!-- Assigned Courses -->
-      @if (professor.courses.length > 0) {
+            <button
+              type="button"
+              [disabled]="
+            courseSaving ||
+            !hasCourseChanges()
+          "
+              (click)="saveCourseChanges()"
+            >
 
-        <div class="courses-list">
+              @if (courseSaving) {
 
-          @for (
-            courseInstructor of professor.courses;
-            track courseInstructor.id
-            ) {
-
-            <div class="course-card">
-
-              @if (courseInstructor.course) {
-
-                <h3>
-                  {{ courseInstructor.course.name }}
-                </h3>
-
-                <p>
-                  <strong>Code:</strong>
-                  {{ courseInstructor.course.code }}
-                </p>
-
-                @if (managingCourses) {
-
-                  <button
-                    type="button"
-                    [disabled]="courseSaving"
-                    (click)="saveCourseChanges()"
-                  >
-                    @if (courseSaving) {
-                      Removing...
-                    } @else {
-                      Remove
-                    }
-                  </button>
-
-                }
+                Saving...
 
               } @else {
 
-                <p>
-                  <em>Course data unavailable</em>
-                </p>
+                Save Changes
 
               }
 
-            </div>
+            </button>
+
+          </form>
+
+
+          @if (courseErrorMessage) {
+
+            <p>
+              {{ courseErrorMessage }}
+            </p>
 
           }
 
         </div>
+
+        <hr>
+
+      }
+
+
+      <!-- ASSIGNED COURSES -->
+
+      @if (professor.courses.length > 0) {
+
+        <table>
+
+          <thead>
+
+          <tr>
+
+            <th>Code</th>
+            <th>Course</th>
+            <th>Credits</th>
+
+          </tr>
+
+          </thead>
+
+          <tbody>
+
+            @for (
+              professorCourses of professor.courses;
+              track professorCourses.id
+              ) {
+
+              @if (professorCourses.course) {
+
+                <tr>
+
+                  <td>
+                    {{ professorCourses.course.code }}
+                  </td>
+
+                  <td>
+                    {{ professorCourses.course.name }}
+                  </td>
+
+                  <td>
+                    {{ professorCourses.course.credits }}
+                  </td>
+
+                </tr>
+
+              }
+
+            }
+
+          </tbody>
+
+        </table>
 
       } @else {
 
