@@ -17,9 +17,12 @@
 
     @if (studentForm.get('firstName')?.touched &&
     studentForm.get('firstName')?.invalid) {
-      <small>First name is required and must be 3–30 characters.</small>
+      <small>
+        First name is required and must be 2–30 characters.
+      </small>
     }
   </div>
+
 
   <div>
     <label for="lastName">Last Name</label>
@@ -32,26 +35,38 @@
 
     @if (studentForm.get('lastName')?.touched &&
     studentForm.get('lastName')?.invalid) {
-      <small>Last name is required and must be 3–30 characters.</small>
+      <small>
+        Last name is required and must be 2–30 characters.
+      </small>
     }
   </div>
+
 
   <div>
     <label for="gender">Gender</label>
 
     <select id="gender" formControlName="gender">
-      <option value="">Select gender</option>
+
+      <option value="">
+        Select gender
+      </option>
 
       @for (gender of genders; track gender) {
+
         <option [value]="gender">
           {{ gender }}
         </option>
+
       }
+
     </select>
   </div>
 
+
   <div>
-    <label for="dateOfBirth">Date of Birth</label>
+    <label for="dateOfBirth">
+      Date of Birth
+    </label>
 
     <input
       id="dateOfBirth"
@@ -59,6 +74,7 @@
       formControlName="dateOfBirth"
     />
   </div>
+
 
   <div>
     <label for="email">Email</label>
@@ -71,58 +87,156 @@
 
     @if (studentForm.get('email')?.touched &&
     studentForm.get('email')?.invalid) {
-      <small>Please enter a valid email.</small>
+
+      <small>
+        Please enter a valid email.
+      </small>
+
     }
+
   </div>
 
+
+  <hr>
+
+  <h2>Initial Enrollments</h2>
+
+  <p>
+    You can optionally assign courses now.
+    Enrollments can also be managed later.
+  </p>
+
+
   <div>
+
+    <label for="semester">
+      Semester
+    </label>
+
+    <select
+      id="semester"
+      formControlName="semesterId"
+    >
+
+      <option value="">
+        Select semester
+      </option>
+
+      @for (semester of semesters; track semester.id) {
+
+        <option [value]="semester.id">
+          {{ semester.term }} {{ semester.year }}
+        </option>
+
+      }
+
+    </select>
+
+  </div>
+
+
+  <div>
+
     <label>Courses</label>
 
     @for (course of courses; track course.id) {
 
       <div>
+
         <input
           type="checkbox"
           [id]="'course-' + course.id"
-          [checked]="studentForm.get('courseIds')?.value?.includes(course.id)"
+          [checked]="
+            studentForm
+              .get('courseIds')
+              ?.value
+              ?.includes(course.id)
+          "
           (change)="toggleCourse(course.id, $event)"
         />
 
         <label [for]="'course-' + course.id">
-          {{ course.code }} - {{ course.name }}
+
+          {{ course.code }} -
+          {{ course.name }}
+
         </label>
+
       </div>
+
     }
 
-    @if (studentForm.get('courseIds')?.value?.length > 0) {
+
+    @if (
+      studentForm.get('courseIds')?.value?.length > 0
+      ) {
+
       <p>
         Selected:
-        {{ studentForm.get('courseIds')?.value?.length }} course(s)
+        {{ studentForm.get('courseIds')?.value?.length }}
+        course(s)
       </p>
 
       <ul>
+
         @for (
           courseId of studentForm.get('courseIds')?.value;
           track courseId
           ) {
-          @for (course of courses; track course.id) {
+
+          @for (
+            course of courses;
+            track course.id
+            ) {
+
             @if (course.id === courseId) {
-              <li>{{ course.code }} - {{ course.name }}</li>
+
+              <li>
+                {{ course.code }} -
+                {{ course.name }}
+              </li>
+
             }
+
           }
+
         }
+
       </ul>
+
     } @else {
-      <p>No courses selected.</p>
+
+      <p>
+        No courses selected.
+      </p>
+
     }
 
   </div>
 
+
   <button
     type="submit"
-    [disabled]="loading || studentForm.invalid"
+    [disabled]="
+      loading ||
+      studentForm.invalid ||
+      (
+        studentForm.get('courseIds')?.value?.length > 0 &&
+        !studentForm.get('semesterId')?.value
+      )
+    "
   >
-    {{ loading ? 'Creating...' : 'Create Student' }}
+
+    @if (loading) {
+
+      Creating...
+
+    } @else {
+
+      Create Student
+
+    }
+
   </button>
 
 </form>

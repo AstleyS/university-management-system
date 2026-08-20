@@ -8,7 +8,7 @@ the management of academic operations such as students, professors, courses, enr
 Astley Santos. Contact me via [Linkedin](https://www.linkedin.com/in/astley-santos/).
 
 
-### Note: This project is still under development (last update: 7th of August)
+### Note: This project is still under development (last update: 17th-24th of August)
 
 ---
 # Introduction
