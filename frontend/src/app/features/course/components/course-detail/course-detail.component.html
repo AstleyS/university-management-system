@@ -1,1 +1,441 @@
-<p>course-detail works!</p>
+@if (loading) {
+
+  <p>Loading course...</p>
+
+} @else if (errorMessage) {
+
+  <p>{{ errorMessage }}</p>
+
+} @else if (course) {
+
+  <div class="course-details">
+
+    <div class="page-header">
+
+      <div>
+
+        <h1>
+          {{ course.name }}
+        </h1>
+
+        <p>
+          {{ course.code }}
+        </p>
+
+      </div>
+
+      <a routerLink="/courses">
+        Back to Courses
+      </a>
+
+    </div>
+
+
+    <!-- Course Information -->
+
+    <section>
+
+      <div class="section-header">
+
+        <h2>Course Information</h2>
+
+        @if (!editingCourse) {
+
+          <button
+            type="button"
+            (click)="startEditingCourse()"
+          >
+            Edit Information
+          </button>
+
+        }
+
+      </div>
+
+
+      @if (!editingCourse) {
+
+        <div class="course-info">
+
+          <p>
+            <strong>Code:</strong>
+            {{ course.code }}
+          </p>
+
+          <p>
+            <strong>Name:</strong>
+            {{ course.name }}
+          </p>
+
+          <p>
+            <strong>Credits:</strong>
+            {{ course.credits }}
+          </p>
+
+          <p>
+            <strong>Department:</strong>
+            {{ course.department?.name ?? '-' }}
+          </p>
+
+          <p>
+            <strong>Description:</strong>
+            {{ course.description || '-' }}
+          </p>
+
+        </div>
+
+      } @else {
+
+        <form
+          [formGroup]="courseForm"
+        >
+
+          <div>
+
+            <label for="code">
+              Code
+            </label>
+
+            <input
+              id="code"
+              type="text"
+              formControlName="code"
+            >
+
+          </div>
+
+
+          <div>
+
+            <label for="name">
+              Name
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+            >
+
+          </div>
+
+
+          <div>
+
+            <label for="credits">
+              Credits
+            </label>
+
+            <input
+              id="credits"
+              type="number"
+              formControlName="credits"
+            >
+
+          </div>
+
+
+          <div>
+
+            <label for="department">
+              Department
+            </label>
+
+            <select
+              id="department"
+              formControlName="departmentId"
+            >
+
+              <option value="">
+                Select department
+              </option>
+
+              @for (
+                department of departments;
+                track department.id
+                ) {
+
+                <option
+                  [value]="department.id"
+                >
+                  {{ department.name }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <div>
+
+            <label for="description">
+              Description
+            </label>
+
+            <textarea
+              id="description"
+              formControlName="description"
+            ></textarea>
+
+          </div>
+
+
+          @if (courseErrorMessage) {
+
+            <p>
+              {{ courseErrorMessage }}
+            </p>
+
+          }
+
+
+          <button
+            type="submit"
+            [disabled]="savingCourse"
+          >
+
+            @if (savingCourse) {
+              Saving...
+            } @else {
+              Save Changes
+            }
+
+          </button>
+
+
+          <button
+            type="button"
+            [disabled]="savingCourse"
+            (click)="cancelEditingCourse()"
+          >
+            Cancel
+          </button>
+
+        </form>
+
+      }
+
+    </section>
+
+
+    <!-- Professors -->
+
+    <section>
+
+      <div class="section-header">
+
+        <div>
+
+          <h2>Professors</h2>
+
+          <p>
+            Total:
+            {{ course.courseInstructors?.length ?? 0 }}
+          </p>
+
+        </div>
+
+
+        @if (!managingProfessors) {
+
+          <button
+            type="button"
+            (click)="startManagingProfessors()"
+          >
+            Manage Professors
+          </button>
+
+        } @else {
+
+          <button
+            type="button"
+            [disabled]="savingProfessors"
+            (click)="cancelManagingProfessors()"
+          >
+            Cancel
+          </button>
+
+        }
+
+      </div>
+
+
+      <!-- Professor Management -->
+
+      @if (managingProfessors) {
+
+        <div>
+
+          <form
+            [formGroup]="professorForm"
+          >
+
+            <label>
+              Professors
+            </label>
+
+
+            @for (
+              professor of professors;
+              track professor.id
+              ) {
+
+              <div>
+
+                <input
+                  type="checkbox"
+                  [id]="'professor-' + professor.id"
+                  [checked]="
+                    isProfessorSelected(professor.id)
+                  "
+                  (change)="
+                    toggleProfessor(
+                      professor.id,
+                      $event
+                    )
+                  "
+                >
+
+                <label
+                  [for]="'professor-' + professor.id"
+                >
+
+                  {{ professor.firstName }}
+                  {{ professor.lastName }}
+
+                  -
+                  {{ professor.email }}
+
+                </label>
+
+              </div>
+
+            }
+
+
+            @if (
+              professorForm
+                .get('professorIds')
+                ?.value?.length > 0
+              ) {
+
+              <p>
+
+                Selected:
+                {{
+                  professorForm
+                    .get('professorIds')
+                    ?.value?.length
+                }}
+                professor(s)
+
+              </p>
+
+            } @else {
+
+              <p>
+                No professors selected.
+              </p>
+
+            }
+
+
+            <button
+              type="button"
+              [disabled]="
+                savingProfessors ||
+                !hasProfessorChanges()
+              "
+              (click)="saveProfessorChanges()"
+            >
+
+              @if (savingProfessors) {
+                Saving...
+              } @else {
+                Save Changes
+              }
+
+            </button>
+
+          </form>
+
+
+          @if (professorErrorMessage) {
+
+            <p>
+              {{ professorErrorMessage }}
+            </p>
+
+          }
+
+        </div>
+
+      }
+
+
+      <!-- Assigned Professors -->
+
+      @if (
+        (course.courseInstructors?.length ?? 0) > 0
+        ) {
+
+        <div>
+
+          @for (
+            courseInstructor of course.courseInstructors;
+            track courseInstructor.id
+            ) {
+
+            @if (courseInstructor.professor) {
+
+              <div>
+
+                <h3>
+
+                  {{
+                    courseInstructor.professor.firstName
+                  }}
+
+                  {{
+                    courseInstructor.professor.lastName
+                  }}
+
+                </h3>
+
+                <p>
+
+                  {{
+                    courseInstructor.professor.email
+                  }}
+
+                </p>
+
+              </div>
+
+            } @else {
+
+              <p>
+                Professor data unavailable.
+              </p>
+
+            }
+
+          }
+
+        </div>
+
+      } @else {
+
+        <p>
+          This course has no professors assigned.
+        </p>
+
+      }
+
+    </section>
+
+  </div>
+
+}
