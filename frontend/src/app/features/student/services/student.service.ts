@@ -38,7 +38,7 @@ export class StudentService {
 
   deleteStudent(id: number) {
     console.log('Delete student with id: ', id)
-    this.http.delete(
+    return this.http.delete(
       `${this.apiURL}/${id}`
     )
   }

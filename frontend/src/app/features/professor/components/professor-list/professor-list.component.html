@@ -2,7 +2,7 @@
 
   <h1>Professors</h1>
 
-  <a routerLink="/professors/create">
+  <a routerLink="/professors/new">
     + Create Professor
   </a>
 
@@ -38,10 +38,7 @@
 
   <tbody>
 
-    @for (
-      professor of filteredProfessors;
-      track professor.id
-      ) {
+    @for (professor of filteredProfessors; track professor.id) {
 
       <tr>
 

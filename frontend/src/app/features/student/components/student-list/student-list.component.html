@@ -1,36 +1,115 @@
-<h1>All Students</h1>
+<div class="page-header">
 
-@for (student of students; track student.id) {
+  <h1>Students</h1>
 
-  <div class="student-card">
+  <a routerLink="/students/new">
+    + Create Student
+  </a>
 
-    <div>
-      <h3>{{ student.firstName }} {{ student.lastName }}</h3>
-      <p>{{ student.email }}</p>
-    </div>
+</div>
 
-    <div>
-      <p>Enrollments: {{ student.enrollments.length}}</p>
-    </div>
 
-    <div>
-      <button [routerLink]="['/students', student.id]">
-        View
-      </button>
+<div class="search-section">
 
-      <button (click)="onDeleteStudent(student.id)">
-        Delete
-      </button>
-    </div>
+  <label for="search">
+    Search:
+  </label>
 
-  </div>
+  <input
+    id="search"
+    type="text"
+    [(ngModel)]="searchTerm"
+    placeholder="Search students..."
+  >
 
-  @if (!$last) {
-    <hr>
-  }
+</div>
 
-} @empty {
 
-  <p>No students found!</p>
+@if (loading) {
+
+  <p>Loading students...</p>
+
+} @else if (errorMessage) {
+
+  <p>{{ errorMessage }}</p>
+
+} @else {
+
+  <table>
+
+    <thead>
+
+    <tr>
+
+      <th>Name</th>
+      <th>Email</th>
+      <th>Enrollments</th>
+      <th>Actions</th>
+
+    </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        student of filteredStudents;
+        track student.id
+        ) {
+
+        <tr>
+
+          <td>
+            {{ student.firstName }}
+            {{ student.lastName }}
+          </td>
+
+          <td>
+            {{ student.email }}
+          </td>
+
+          <td>
+            {{ student.enrollments.length }}
+          </td>
+
+          <td>
+
+            <button
+              type="button"
+              [routerLink]="[
+                '/students',
+                student.id
+              ]"
+            >
+              View
+            </button>
+
+            <button
+              type="button"
+              (click)="onDeleteStudent(student.id)"
+              disabled
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      } @empty {
+
+        <tr>
+
+          <td colspan="4">
+            No students found!
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
 
 }
