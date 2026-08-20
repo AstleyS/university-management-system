@@ -1,12 +1,16 @@
 <div class="page-header">
+
   <h1>Enrollments</h1>
 
-  <a>
+  <a routerLink="/enrollments/new">
     + Create Enrollment
   </a>
+
 </div>
 
+
 <div class="search-section">
+
   <label for="search">
     Search:
   </label>
@@ -14,29 +18,47 @@
   <input
     id="search"
     type="text"
+    [(ngModel)]="searchTerm"
     placeholder="Search enrollments..."
-  />
+  >
+
 </div>
 
-@if (enrollments.length > 0) {
+
+@if (loading) {
+
+  <p>Loading enrollments...</p>
+
+} @else if (errorMessage) {
+
+  <p>{{ errorMessage }}</p>
+
+} @else {
 
   <table>
 
     <thead>
+
     <tr>
+
       <th>Student</th>
       <th>Course</th>
       <th>Semester</th>
       <th>Status</th>
       <th>Grade</th>
-      <th>Enrollment Date</th>
+      <th>Date</th>
       <th>Actions</th>
+
     </tr>
+
     </thead>
 
     <tbody>
 
-      @for (enrollment of enrollments; track enrollment.id) {
+      @for (
+        enrollment of filteredEnrollments;
+        track enrollment.id
+        ) {
 
         <tr>
 
@@ -61,7 +83,7 @@
           </td>
 
           <td>
-            {{ enrollment.grade }}
+            {{ enrollment.grade ||  '-' }}
           </td>
 
           <td>
@@ -70,11 +92,15 @@
 
           <td>
 
-            <a
-              [routerLink]="['/enrollments', enrollment.id]"
+            <button
+              type="button"
+              [routerLink]="[
+                '/enrollments',
+                enrollment.id
+              ]"
             >
               View
-            </a>
+            </button>
 
             <button
               type="button"
@@ -87,14 +113,20 @@
 
         </tr>
 
+      } @empty {
+
+        <tr>
+
+          <td colspan="7">
+            No enrollments found!
+          </td>
+
+        </tr>
+
       }
 
     </tbody>
 
   </table>
-
-} @else {
-
-  <p>No enrollments found!</p>
 
 }

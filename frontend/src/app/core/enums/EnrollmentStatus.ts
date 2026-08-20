@@ -1,7 +1,7 @@
 export enum EnrollmentStatus {
-  ACTIVE,
-  COMPLETED,
-  PASSED,
-  FAILED,
-  DROPPED
+  ACTIVE = "ACTIVE",
+  COMPLETED = "COMPLETED",
+  PASSED = "PASSED",
+  FAILED = "FAILED",
+  DROPPED = "DROPPED"
 }

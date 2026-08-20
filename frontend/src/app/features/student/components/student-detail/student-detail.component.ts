@@ -14,6 +14,7 @@ import {Gender} from '../../../../core/enums/Gender';
 
 @Component({
   selector: 'app-student-detail',
+  standalone: true,
   imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './student-detail.component.html',
   styleUrl: './student-detail.component.scss'

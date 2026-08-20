@@ -1,0 +1,246 @@
+<h1>Create Enrollment</h1>
+
+@if (loading) {
+
+  <p>Loading enrollment options...</p>
+
+} @else if (errorMessage && !saving) {
+
+  <p>{{ errorMessage }}</p>
+
+} @else {
+
+  <form
+    [formGroup]="enrollmentForm"
+    (ngSubmit)="onSubmit()"
+  >
+
+    <!-- Student -->
+    <div>
+
+      <label for="student">
+        Student
+      </label>
+
+      <select
+        id="student"
+        formControlName="studentId"
+      >
+
+        <option
+          value=""
+          disabled
+        >
+          Select a student
+        </option>
+
+        @for (
+          student of students;
+          track student.id
+          ) {
+
+          <option [value]="student.id">
+
+            {{ student.firstName }}
+            {{ student.lastName }}
+
+          </option>
+
+        }
+
+      </select>
+
+      @if (
+        enrollmentForm.get('studentId')?.touched &&
+        enrollmentForm.get('studentId')?.invalid
+        ) {
+
+        <p>
+          Student is required.
+        </p>
+
+      }
+
+    </div>
+
+    <!-- Course -->
+    <div>
+
+      <label for="course">
+        Course
+      </label>
+
+      <select
+        id="course"
+        formControlName="courseId"
+      >
+
+        <option
+          value=""
+          disabled
+        >
+          Select a course
+        </option>
+
+        @for (
+          course of courses;
+          track course.id
+          ) {
+
+          <option [value]="course.id">
+
+            {{ course.code }} -
+            {{ course.name }}
+
+          </option>
+
+        }
+
+      </select>
+
+      @if (
+        enrollmentForm.get('courseId')?.touched &&
+        enrollmentForm.get('courseId')?.invalid
+        ) {
+
+        <p>
+          Course is required.
+        </p>
+
+      }
+
+    </div>
+
+
+    <!-- Semester -->
+    <div>
+
+      <label for="semester">
+        Semester
+      </label>
+
+      <select
+        id="semester"
+        formControlName="semesterId"
+      >
+
+        <option
+          value=""
+          disabled
+        >
+          Select a semester
+        </option>
+
+        @for (
+          semester of semesters;
+          track semester.id
+          ) {
+
+          <option [value]="semester.id">
+
+            {{ semester.term }}
+            {{ semester.year }}
+
+          </option>
+
+        }
+
+      </select>
+
+      @if (
+        enrollmentForm.get('semesterId')?.touched &&
+        enrollmentForm.get('semesterId')?.invalid
+        ) {
+
+        <p>
+          Semester is required.
+        </p>
+
+      }
+
+    </div>
+
+
+    <!-- Enrollment Date -->
+    <div>
+
+      <label for="enrollmentDate">
+        Enrollment Date
+      </label>
+
+      <input
+        id="enrollmentDate"
+        type="date"
+        formControlName="enrollmentDate"
+      />
+
+    </div>
+
+
+    <!-- Status -->
+    <div>
+
+      <label for="status">
+        Status
+      </label>
+
+      <select
+        id="status"
+        formControlName="enrollmentStatus"
+      >
+
+        @for (
+          status of enrollmentStatuses;
+          track status
+          ) {
+
+          <option [value]="status">
+
+            {{ status }}
+
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+    @if (errorMessage) {
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+    }
+
+    <!-- Actions -->
+    <div>
+
+      <button
+        type="button"
+        (click)="cancel()"
+        [disabled]="saving"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        [disabled]="saving"
+      >
+
+        @if (saving) {
+
+          Creating...
+
+        } @else {
+
+          Create Enrollment
+
+        }
+
+      </button>
+    </div>
+  </form>
+}

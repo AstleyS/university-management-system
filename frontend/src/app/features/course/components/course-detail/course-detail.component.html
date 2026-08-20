@@ -74,7 +74,7 @@
 
           <p>
             <strong>Department:</strong>
-            {{ course.department?.name ?? '-' }}
+            {{ course.department.name || '-' }}
           </p>
 
           <p>
@@ -118,7 +118,6 @@
             >
 
           </div>
-
 
           <div>
 
@@ -232,7 +231,7 @@
 
           <p>
             Total:
-            {{ course.courseInstructors?.length ?? 0 }}
+            {{ course.courseInstructors.length }}
           </p>
 
         </div>
@@ -378,7 +377,7 @@
       <!-- Assigned Professors -->
 
       @if (
-        (course.courseInstructors?.length ?? 0) > 0
+        (course.courseInstructors.length) > 0
         ) {
 
         <div>
