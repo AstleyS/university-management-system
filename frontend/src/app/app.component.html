@@ -1,1 +1,91 @@
-<router-outlet></router-outlet>
+<div class="app-layout">
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      <h2>UMS</h2>
+    </div>
+
+    <nav>
+
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Dashboard
+      </a>
+
+      <a routerLink="/students">
+        Students
+      </a>
+
+      <a routerLink="/professors">
+        Professors
+      </a>
+
+      <a routerLink="/courses">
+        Courses
+      </a>
+
+      <a routerLink="/enrollments">
+        Enrollments
+      </a>
+
+      <a routerLink="/departments">
+        Departments
+      </a>
+
+      <a routerLink="/faculties">
+        Faculties
+      </a>
+
+      <a routerLink="/semesters">
+        Semesters
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+      <button type="button">
+        Settings
+      </button>
+
+      <button
+        type="button"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </aside>
+
+  <div class="main-area">
+
+    <header class="topbar">
+
+      <div>
+        <h1>University Management System</h1>
+      </div>
+
+      <div class="user-menu">
+
+        <span>
+          Admin
+        </span>
+
+      </div>
+
+    </header>
+
+    <main class="content">
+
+      <router-outlet></router-outlet>
+
+    </main>
+
+  </div>
+</div>
