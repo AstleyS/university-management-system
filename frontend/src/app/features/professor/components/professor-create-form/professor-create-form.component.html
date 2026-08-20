@@ -85,7 +85,10 @@
       <p class="form-error">{{ errorMessage }}</p>
     }
 
-    <button type="submit" [disabled]="loading">
+    <button
+      type="submit"
+      [disabled]="loading || professorForm.invalid"
+    >
       @if (loading) {
         Creating...
       } @else {

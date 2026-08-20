@@ -6,7 +6,6 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 
 import { EnrollmentService } from '../../services/enrollment.service';

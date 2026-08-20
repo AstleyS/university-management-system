@@ -21,8 +21,8 @@ import {forkJoin} from 'rxjs';
 export class StudentCreateFormComponent implements OnInit {
 
   studentForm: FormGroup;
-  courses?: Course[];
-  semesters?: Semester[];
+  courses: Course[] = [];
+  semesters: Semester[] = [];
 
   loading = false;
   errorMessage = '';

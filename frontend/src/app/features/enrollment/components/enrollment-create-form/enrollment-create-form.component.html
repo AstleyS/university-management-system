@@ -227,7 +227,7 @@
 
       <button
         type="submit"
-        [disabled]="saving"
+        [disabled]="saving || enrollmentForm.invalid"
       >
 
         @if (saving) {

@@ -120,7 +120,7 @@
 
   <button
     type="submit"
-    [disabled]="loading"
+    [disabled]="loading || studentForm.invalid"
   >
     {{ loading ? 'Creating...' : 'Create Student' }}
   </button>

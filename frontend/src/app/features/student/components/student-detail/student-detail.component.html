@@ -216,19 +216,28 @@
 
         @if (!managingEnrollments) {
 
-          <button (click)="startManagingEnrollments()">
+          <button
+            type="button"
+            (click)="startManagingEnrollments()">
+
             Manage Enrollments
+
           </button>
 
         } @else {
 
-          <button (click)="stopManagingEnrollments()">
+          <button
+            type="button"
+            (click)="stopManagingEnrollments()">
+
             Done Managing
+
           </button>
 
         }
 
       </div>
+
 
       <!-- MANAGEMENT MODE -->
 
@@ -239,7 +248,11 @@
         <h3>Add Enrollment</h3>
 
         @if (enrollmentErrorMessage) {
-          <p>{{ enrollmentErrorMessage }}</p>
+
+          <p>
+            {{ enrollmentErrorMessage }}
+          </p>
+
         }
 
         <form
@@ -328,11 +341,27 @@
               id="status"
               formControlName="enrollmentStatus"
             >
-              <option value="ACTIVE">Active</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="PASSED">Passed</option>
-              <option value="FAILED">Failed</option>
-              <option value="DROPPED">Dropped</option>
+
+              <option value="ACTIVE">
+                Active
+              </option>
+
+              <option value="COMPLETED">
+                Completed
+              </option>
+
+              <option value="PASSED">
+                Passed
+              </option>
+
+              <option value="FAILED">
+                Failed
+              </option>
+
+              <option value="DROPPED">
+                Dropped
+              </option>
+
             </select>
 
           </div>
@@ -355,13 +384,20 @@
 
           <button
             type="submit"
-            [disabled]="enrollmentSaving"
+            [disabled]="
+          enrollmentSaving ||
+          enrollmentForm.invalid
+        "
           >
 
             @if (enrollmentSaving) {
+
               Adding...
+
             } @else {
+
               Add Enrollment
+
             }
 
           </button>
@@ -377,53 +413,84 @@
 
       @if (student.enrollments.length > 0) {
 
-        @for (enrollment of student.enrollments; track enrollment.id) {
+        <table>
 
-          <div class="enrollment-card">
+          <thead>
 
-            <p>
-              <strong>Course:</strong>
-              {{ enrollment.course.name }}
-            </p>
+          <tr>
 
-            <p>
-              <strong>Enrollment Date:</strong>
-              {{ enrollment.enrollmentDate }}
-            </p>
-
-            <p>
-              <strong>Semester:</strong>
-              {{ enrollment.semester.term }}
-              {{ enrollment.semester.year }}
-            </p>
-
-            <p>
-              <strong>Status:</strong>
-              {{ enrollment.enrollmentStatus }}
-            </p>
-
-            <p>
-              <strong>Grade:</strong>
-              {{ enrollment.grade ?? '-' }}
-            </p>
+            <th>Course</th>
+            <th>Semester</th>
+            <th>Enrollment Date</th>
+            <th>Status</th>
+            <th>Grade</th>
 
             @if (managingEnrollments) {
-
-              <button (click)="removeEnrollment(enrollment.id)">
-                Remove
-              </button>
+              <th>Action</th>
             }
 
-            @if (!$last) {
-              <hr>
-            }
-          </div>
+          </tr>
 
-        }
+          </thead>
+
+          <tbody>
+
+            @for (
+              enrollment of student.enrollments;
+              track enrollment.id
+              ) {
+
+              <tr>
+
+                <td>
+                  {{ enrollment.course.name }}
+                </td>
+
+                <td>
+                  {{ enrollment.semester.term }}
+                  {{ enrollment.semester.year }}
+                </td>
+
+                <td>
+                  {{ enrollment.enrollmentDate }}
+                </td>
+
+                <td>
+                  {{ enrollment.enrollmentStatus }}
+                </td>
+
+                <td>
+                  {{ enrollment.grade ?? '-' }}
+                </td>
+
+                @if (managingEnrollments) {
+
+                  <td>
+
+                    <button
+                      type="button"
+                      (click)="removeEnrollment(enrollment.id)"
+                    >
+                      Remove
+                    </button>
+
+                  </td>
+
+                }
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
 
       } @else {
 
-        <p>This student has no enrollments.</p>
+        <p>
+          This student has no enrollments.
+        </p>
 
       }
 
