@@ -48,7 +48,6 @@
       @if (!editing) {
 
         <!-- VIEW MODE -->
-
         <div class="student-info">
 
           <p>
@@ -81,7 +80,6 @@
       } @else {
 
         <!-- EDIT MODE -->
-
         <form
           [formGroup]="studentForm"
           (ngSubmit)="saveStudent()"
@@ -469,7 +467,7 @@
 
                     <button
                       type="button"
-                      (click)="removeEnrollment(enrollment.id)"
+                      (click)="deleteEnrollment(enrollment.id)"
                     >
                       Remove
                     </button>

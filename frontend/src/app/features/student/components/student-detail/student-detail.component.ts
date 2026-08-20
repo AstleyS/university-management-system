@@ -271,6 +271,59 @@ export class StudentDetailComponent implements OnInit {
 
   }
 
-  removeEnrollment(id: number) {}
+  deleteEnrollment(id: number) {
+
+    const enrollment =
+      this.student!.enrollments.find(
+        enrollment =>
+          enrollment.id === id
+      );
+
+    if (!enrollment) {
+      return;
+    }
+
+    const confirmed = confirm(
+      `Delete enrollment for ${
+        this.student!.firstName
+      } ${
+        this.student!.lastName
+      } in ${
+        enrollment.course.code
+      }?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.enrollmentService.deleteEnrollment(id)
+      .subscribe({
+
+        next: () => {
+
+          console.log(
+            'Enrollment deleted'
+          );
+
+          this.student!.enrollments =
+            this.student!.enrollments.filter(
+              enrollment =>
+                enrollment.id !== id
+            );
+
+        },
+
+        error: (error) => {
+
+          console.error(error);
+
+          this.enrollmentErrorMessage =
+            error?.error?.message ??
+            'Failed to delete enrollment';
+
+        }
+      });
+  }
 
 }
