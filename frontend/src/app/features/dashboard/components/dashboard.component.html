@@ -1,26 +1,99 @@
-<button (click)="logout()">Logout</button>
+<div class="page dashboard">
 
+  <header class="page-header">
+    <div>
+      <h1>Welcome {{ username }}</h1>
+      <p>Here's an overview of your university.</p>
+    </div>
+  </header>
 
-<h1>Welcome {{username}}</h1>
+  <section>
+    <h2>Academic Stats</h2>
 
-<h3>Academic Stats</h3>
-<div class="stats">
-  @if (stats) {
-    <p>Students:  {{ stats.students }} </p>
-    <p>Professors:  {{ stats.professors }} </p>
-    <p>Courses:  {{ stats.courses }} </p>
-    <p>Enrollments:  {{ stats.enrollments }} </p>
-    <p>Departments:  {{ stats.departments }} </p>
-    <p>Faculties:  {{ stats.faculties }} </p>
-    <p>Semesters:  {{ stats.semesters }} </p>
-  }
-</div>
+    <div class="stats-grid">
 
-<h3>Quick Actions</h3>
+      @if (stats) {
 
-<div class="quick-actions">
-  <p><a routerLink="/courses/new">New Course</a></p>
-  <p><a routerLink="/students/new">New Student</a></p>
-  <p><a routerLink="/professors/new">New Professor</a></p>
-  <p><a routerLink="/enrollments/new">New Enrollment</a></p>
+        <div class="stat-card glass">
+          <span>Students</span>
+          <strong>{{ stats.students }}</strong>
+        </div>
+
+        <div class="stat-card glass">
+          <span>Professors</span>
+          <strong>{{ stats.professors }}</strong>
+        </div>
+
+        <div class="stat-card glass">
+          <span>Courses</span>
+          <strong>{{ stats.courses }}</strong>
+        </div>
+
+        <div class="stat-card glass">
+          <span>Enrollments</span>
+          <strong>{{ stats.enrollments }}</strong>
+        </div>
+
+        <div class="stat-card glass">
+          <span>Departments</span>
+          <strong>{{ stats.departments }}</strong>
+        </div>
+
+        <div class="stat-card glass">
+          <span>Faculties</span>
+          <strong>{{ stats.faculties }}</strong>
+        </div>
+
+        <div class="stat-card glass">
+          <span>Semesters</span>
+          <strong>{{ stats.semesters }}</strong>
+        </div>
+
+      }
+
+    </div>
+  </section>
+
+  <section class="quick-actions-section">
+
+    <h2>Quick Actions</h2>
+
+    <div class="quick-actions">
+
+      <a class="action-card glass" routerLink="/courses/new">
+        <span class="action-icon">+</span>
+        <div>
+          <strong>New Course</strong>
+          <span>Create a new course</span>
+        </div>
+      </a>
+
+      <a class="action-card glass" routerLink="/students/new">
+        <span class="action-icon">+</span>
+        <div>
+          <strong>New Student</strong>
+          <span>Add a student</span>
+        </div>
+      </a>
+
+      <a class="action-card glass" routerLink="/professors/new">
+        <span class="action-icon">+</span>
+        <div>
+          <strong>New Professor</strong>
+          <span>Add a professor</span>
+        </div>
+      </a>
+
+      <a class="action-card glass" routerLink="/enrollments/new">
+        <span class="action-icon">+</span>
+        <div>
+          <strong>New Enrollment</strong>
+          <span>Enroll a student</span>
+        </div>
+      </a>
+
+    </div>
+
+  </section>
+
 </div>

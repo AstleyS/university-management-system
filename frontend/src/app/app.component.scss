@@ -1,0 +1,257 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* Sidebar */
+
+.sidebar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  bottom: 16px;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 14px;
+  border-radius: var(--radius-lg);
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 4px 10px 24px;
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.logo div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logo strong {
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+
+.logo span:not(.logo-mark) {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* Navigation */
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow-y: auto;
+}
+
+.nav-section {
+  margin: 18px 10px 6px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav-section:first-child {
+  margin-top: 0;
+}
+
+.navigation a {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 11px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+.navigation a:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.navigation a.active {
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 550;
+}
+
+/* Bottom */
+
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.sidebar-bottom button {
+  min-height: 40px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  font-size: 14px;
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+.sidebar-bottom button:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+/* Main */
+
+.main-area {
+  width: calc(100% - 282px);
+  margin-left: 282px;
+  min-height: 100vh;
+}
+
+/* Topbar */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 82px;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.topbar-label {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* User */
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-info strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.user-info span {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* Content */
+
+.content {
+  min-height: calc(100vh - 82px);
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 210px;
+  }
+
+  .main-area {
+    width: calc(100% - 242px);
+    margin-left: 242px;
+  }
+
+  .topbar {
+    padding: 18px 24px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    position: relative;
+    top: 0;
+    left: 0;
+    bottom: auto;
+    width: 100%;
+    min-height: auto;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .main-area {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .navigation {
+    max-height: 300px;
+  }
+}

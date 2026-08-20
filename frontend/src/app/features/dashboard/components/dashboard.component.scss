@@ -1,0 +1,125 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.dashboard section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dashboard h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card span {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.stat-card strong {
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  color: var(--text-primary);
+  transition:
+    transform var(--transition),
+    background var(--transition),
+    box-shadow var(--transition);
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  background: var(--surface-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.action-card div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.action-card strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.action-card div span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+@media (max-width: 1000px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quick-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 20px;
+  }
+
+  .stats-grid,
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}

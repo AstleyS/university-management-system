@@ -1,47 +1,57 @@
 <div class="app-layout">
 
-  <aside class="sidebar">
+  <aside class="sidebar glass">
 
     <div class="logo">
-      <h2>UMS</h2>
+      <span class="logo-mark">U</span>
+      <div>
+        <strong>UMS</strong>
+        <span>University System</span>
+      </div>
     </div>
 
-    <nav>
+    <nav class="navigation">
+
+      <span class="nav-section">Overview</span>
 
       <a
-        routerLink="/"
+        routerLink="/dashboard"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        Dashboard
+        <span>Dashboard</span>
       </a>
 
-      <a routerLink="/students">
-        Students
+      <span class="nav-section">Academic</span>
+
+      <a routerLink="/students" routerLinkActive="active">
+        <span>Students</span>
       </a>
 
-      <a routerLink="/professors">
-        Professors
+      <a routerLink="/professors" routerLinkActive="active">
+        <span>Professors</span>
       </a>
 
-      <a routerLink="/courses">
-        Courses
+      <a routerLink="/courses" routerLinkActive="active">
+        <span>Courses</span>
       </a>
 
-      <a routerLink="/enrollments">
-        Enrollments
+      <a routerLink="/enrollments" routerLinkActive="active">
+        <span>Enrollments</span>
       </a>
 
-      <a routerLink="/departments">
-        Departments
+      <span class="nav-section">University</span>
+
+      <a routerLink="/departments" routerLinkActive="active">
+        <span>Departments</span>
       </a>
 
-      <a routerLink="/faculties">
-        Faculties
+      <a routerLink="/faculties" routerLinkActive="active">
+        <span>Faculties</span>
       </a>
 
-      <a routerLink="/semesters">
-        Semesters
+      <a routerLink="/semesters" routerLinkActive="active">
+        <span>Semesters</span>
       </a>
 
     </nav>
@@ -68,24 +78,25 @@
     <header class="topbar">
 
       <div>
+        <span class="topbar-label">Administration</span>
         <h1>University Management System</h1>
       </div>
 
       <div class="user-menu">
+        <div class="avatar">A</div>
 
-        <span>
-          Admin
-        </span>
-
+        <div class="user-info">
+          <strong>Admin</strong>
+          <span>Administrator</span>
+        </div>
       </div>
 
     </header>
 
     <main class="content">
-
       <router-outlet></router-outlet>
-
     </main>
 
   </div>
+
 </div>
