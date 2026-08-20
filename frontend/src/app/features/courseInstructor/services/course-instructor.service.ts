@@ -25,6 +25,8 @@ export class CourseInstructorService {
     );
   }
 
-  deleteCourseInstructor(id: number) {}
+  deleteCourseInstructor(id: number) {
+    return this.http.delete(`${this.apiURL}/${id}`)
+  }
 
 }

@@ -10,7 +10,7 @@ import { CourseInstructor } from '../../models/course-instructor';
 })
 export class CourseInstructorListComponent implements OnInit {
 
-  courseInstructors?: CourseInstructor[];
+  courseInstructors: CourseInstructor[] = [];
 
   constructor(
     private courseInstructorService: CourseInstructorService
@@ -30,4 +30,24 @@ export class CourseInstructorListComponent implements OnInit {
     });
 
   }
+
+  deleteCourseInstructor(id: number) {
+
+    this.courseInstructorService.deleteCourseInstructor(id).subscribe({
+
+      next: () => {
+
+        console.log('Enrollment deleted');
+        this.courseInstructors = this.courseInstructors.filter(
+          courseInstructors => courseInstructors.id !== id
+        );
+      },
+
+      error: (error) => {
+        console.error(error);
+      }
+
+    });
+  }
+
 }
