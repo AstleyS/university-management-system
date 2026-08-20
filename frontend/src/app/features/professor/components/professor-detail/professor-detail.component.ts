@@ -5,6 +5,7 @@ import {
   FormGroup,
   ReactiveFormsModule
 } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 import { Professor } from '../../models/professor';
 import { ProfessorService } from '../../services/professor.service';
@@ -13,7 +14,10 @@ import { Course } from '../../../course/models/course';
 import { CourseService } from '../../../course/services/course.service';
 
 import { CourseInstructorService } from '../../../courseInstructor/services/course-instructor.service';
-import { CourseInstructorCreateRequest } from '../../../courseInstructor/models/course-instructor';
+import {
+  CourseInstructor,
+  CourseInstructorCreateRequest
+} from '../../../courseInstructor/models/course-instructor';
 
 @Component({
   selector: 'app-professor-detail',
@@ -28,6 +32,7 @@ import { CourseInstructorCreateRequest } from '../../../courseInstructor/models/
 export class ProfessorDetailComponent implements OnInit {
 
   professor?: Professor;
+
   courses: Course[] = [];
 
   professorForm: FormGroup;
@@ -40,6 +45,13 @@ export class ProfessorDetailComponent implements OnInit {
   courseSaving = false;
   courseErrorMessage = '';
 
+  /*
+   * Courses assigned when management mode was opened.
+   * Used to compare against the current selection.
+   */
+  originalCourseIds: number[] = [];
+
+
   constructor(
     private route: ActivatedRoute,
     private professorService: ProfessorService,
@@ -51,7 +63,9 @@ export class ProfessorDetailComponent implements OnInit {
     this.professorForm = this.fb.group({
       courseIds: [[]]
     });
+
   }
+
 
   ngOnInit() {
 
@@ -71,23 +85,10 @@ export class ProfessorDetailComponent implements OnInit {
 
       next: (data) => {
 
-        console.log(
-          `Professor with id ${id}: `,
-          data
-        );
-
         this.professor = data;
 
-        /*
-         * Initialize the form with the professor's
-         * currently assigned courses.
-         */
         this.professorForm.patchValue({
-          courseIds: data.courses
-            ?.filter(courseInstructor => courseInstructor.course != null)
-            .map(courseInstructor =>
-              courseInstructor.course.id
-            ) ?? []
+          courseIds: this.getAssignedCourseIds()
         });
 
         this.loading = false;
@@ -104,16 +105,35 @@ export class ProfessorDetailComponent implements OnInit {
         this.loading = false;
 
       }
+
     });
+
   }
+
+
+  private getAssignedCourseIds(): number[] {
+
+    return this.professor?.courses
+      ?.filter(
+        courseInstructor =>
+          courseInstructor.course != null
+      )
+      .map(
+        courseInstructor =>
+          courseInstructor.course!.id
+      ) ?? [];
+
+  }
+
 
   loadCourseData() {
 
     this.courseService.getCourses().subscribe({
 
       next: (courses) => {
-        console.log('courses: ', courses)
+
         this.courses = courses;
+
       },
 
       error: (error) => {
@@ -124,25 +144,33 @@ export class ProfessorDetailComponent implements OnInit {
           'Failed to load course options';
 
       }
+
     });
+
   }
+
 
   startManagingCourses() {
 
     this.managingCourses = true;
+
     this.courseErrorMessage = '';
 
     /*
-     * Reset the form to the current state of the professor.
-     * This means simply opening management doesn't create
-     * any changes.
+     * Store the state BEFORE editing.
+     */
+    this.originalCourseIds = [
+      ...this.getAssignedCourseIds()
+    ];
+
+    /*
+     * Initialize the form with the current
+     * assignments.
      */
     this.professorForm.patchValue({
-      courseIds: this.professor?.courses
-        .filter(courseInstructor => courseInstructor.course != null)
-        .map(courseInstructor =>
-          courseInstructor.course.id
-        ) ?? []
+      courseIds: [
+        ...this.originalCourseIds
+      ]
     });
 
     this.loadCourseData();
@@ -152,40 +180,33 @@ export class ProfessorDetailComponent implements OnInit {
 
   stopManagingCourses() {
 
-    this.managingCourses = false;
-    this.courseErrorMessage = '';
-
     /*
-     * Discard any selections that haven't been submitted.
+     * Cancel:
+     * restore the original selection.
      */
     this.professorForm.patchValue({
-      courseIds: this.professor?.courses
-        .filter(courseInstructor => courseInstructor.course != null)
-        .map(courseInstructor =>
-          courseInstructor.course.id
-        ) ?? []
+      courseIds: [
+        ...this.originalCourseIds
+      ]
     });
+
+    this.courseErrorMessage = '';
+
+    this.managingCourses = false;
+
   }
+
 
   toggleCourse(
     courseId: number,
     event: Event
   ) {
 
-    const checkbox = event.target as HTMLInputElement;
+    const checkbox =
+      event.target as HTMLInputElement;
 
     const courseIds: number[] =
       this.professorForm.get('courseIds')?.value ?? [];
-
-
-    /*
-     * Already assigned courses cannot be removed.
-     */
-    if (this.isCourseAlreadyAssigned(courseId)) {
-
-      checkbox.checked = true;
-      return;
-    }
 
 
     if (checkbox.checked) {
@@ -205,7 +226,9 @@ export class ProfessorDetailComponent implements OnInit {
 
       this.professorForm.patchValue({
         courseIds:
-          courseIds.filter(id => id !== courseId)
+          courseIds.filter(
+            id => id !== courseId
+          )
       });
 
     }
@@ -213,133 +236,226 @@ export class ProfessorDetailComponent implements OnInit {
   }
 
 
-  isCourseAlreadyAssigned(courseId: number): boolean {
+  isCourseSelected(
+    courseId: number
+  ): boolean {
 
-    return this.professor?.courses?.some(
-      courseInstructor =>
-        courseInstructor.course?.id === courseId
-    ) ?? false;
+    const courseIds: number[] =
+      this.professorForm.get('courseIds')?.value ?? [];
+
+    return courseIds.includes(courseId);
 
   }
 
 
-  hasNewCoursesSelected(): boolean {
+  hasCourseChanges(): boolean {
 
-    if (!this.professor) {
-      return false;
-    }
-
-    const selectedCourseIds: number[] =
+    const currentCourseIds: number[] =
       this.professorForm.get('courseIds')?.value ?? [];
 
-    return selectedCourseIds.some(
+    /*
+     * Different number of courses = change.
+     */
+    if (
+      currentCourseIds.length !==
+      this.originalCourseIds.length
+    ) {
+
+      return true;
+
+    }
+
+    /*
+     * Check whether every current course
+     * existed in the original selection.
+     */
+    return currentCourseIds.some(
       courseId =>
-        !this.professor!.courses.some(
-          courseInstructor =>
-            courseInstructor.course?.id === courseId
-        )
+        !this.originalCourseIds.includes(courseId)
     );
 
   }
 
 
-  addSelectedCourses() {
+  saveCourseChanges() {
 
     if (!this.professor) {
       return;
     }
 
-    const selectedCourseIds: number[] =
+    const currentCourseIds: number[] =
       this.professorForm.get('courseIds')?.value ?? [];
 
-    /*
-     * Only add courses that aren't already assigned.
-     */
-    const newCourseIds =
-      selectedCourseIds.filter(
-        courseId =>
-          !this.professor!.courses.some(
-            courseInstructor =>
-              courseInstructor.course?.id === courseId
-          )
-      );
 
     /*
-     * Don't allow an empty addition.
+     * Courses that need to be added.
      */
-    if (newCourseIds.length === 0) {
+    const coursesToAdd =
+      currentCourseIds.filter(
+        courseId =>
+          !this.originalCourseIds.includes(courseId)
+      );
+
+
+    /*
+     * Courses that need to be removed.
+     */
+    const coursesToRemove =
+      this.originalCourseIds.filter(
+        courseId =>
+          !currentCourseIds.includes(courseId)
+      );
+
+
+    /*
+     * Nothing changed.
+     */
+    if (
+      coursesToAdd.length === 0 &&
+      coursesToRemove.length === 0
+    ) {
+
+      this.managingCourses = false;
+
       return;
+
     }
+
 
     this.courseSaving = true;
     this.courseErrorMessage = '';
 
-    let completed = 0;
 
-    for (const courseId of newCourseIds) {
+    /*
+     * Build all ADD requests.
+     */
+    const addRequests =
+      coursesToAdd.map(courseId => {
 
-      const request: CourseInstructorCreateRequest = {
+        const request: CourseInstructorCreateRequest = {
 
-        professorId: this.professor.id,
-        courseId: courseId
+          professorId: this.professor!.id,
 
-      };
+          courseId: courseId
 
-      this.courseInstructorService.createCourseInstructor(request).subscribe({
+        };
 
-        next: (createdCourseInstructor) => {
+        return this.courseInstructorService
+          .createCourseInstructor(request);
 
-          console.log(
-            'Course assigned:',
-            createdCourseInstructor
-          );
+      });
 
-          this.professor!.courses.push(
-            createdCourseInstructor
-          );
 
-          completed++;
+    /*
+     * Build all REMOVE requests.
+     *
+     * We need the CourseInstructor ID,
+     * not the Course ID.
+     */
+    const removeRequests =
+      coursesToRemove
+        .map(courseId => {
 
-          /*
-           * All course assignments succeeded.
-           */
-          if (
-            completed ===
-            newCourseIds.length
-          ) {
+          const courseInstructor =
+            this.professor!.courses.find(
+              ci =>
+                ci.course?.id === courseId
+            );
 
-            this.professorForm.patchValue({
-
-              courseIds:
-                this.professor!.courses
-                  .filter(courseInstructor => courseInstructor.course != null)
-                  .map(courseInstructor =>
-                    courseInstructor.course.id
-                  )
-
-            });
-
-            this.courseSaving = false;
-
-            // Same behaviour as clicking Done.
-            this.managingCourses = false;
-
+          if (!courseInstructor) {
+            return null;
           }
 
-        },
+          return this.courseInstructorService
+            .deleteCourseInstructor(
+              courseInstructor.id
+            );
 
-        error: (error) => {
+        })
+        .filter(
+          request => request !== null
+        );
 
-          console.error(error);
 
-          this.courseErrorMessage =
-            error?.error?.message ??
-            'Failed to assign course';
+    /*
+     * Execute everything together.
+     */
+    forkJoin([
 
-          this.courseSaving = false;
+      ...addRequests,
 
-        }
-      });
-    }
+      ...removeRequests
+
+    ]).subscribe({
+
+      next: (results) => {
+
+        console.log(
+          'Course changes saved:',
+          results
+        );
+
+
+        /*
+         * Reload the professor so the local
+         * CourseInstructor objects are completely
+         * synchronized with the backend.
+         */
+        this.professorService
+          .getProfessorById(this.professor!.id)
+          .subscribe({
+
+            next: (updatedProfessor) => {
+
+              this.professor =
+                updatedProfessor;
+
+
+              this.originalCourseIds =
+                this.getAssignedCourseIds();
+
+
+              this.professorForm.patchValue({
+
+                courseIds:
+                  this.getAssignedCourseIds()
+
+              });
+
+
+              this.courseSaving = false;
+
+              this.managingCourses = false;
+
+            },
+
+            error: (error) => {
+
+              console.error(error);
+
+              this.courseErrorMessage =
+                'Changes were saved, but failed to refresh professor data';
+
+              this.courseSaving = false;
+
+            }
+
+          });
+
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.courseErrorMessage =
+          error?.error?.message ??
+          'Failed to save course changes';
+
+        this.courseSaving = false;
+
+      }
+
+    });
   }
 }

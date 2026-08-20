@@ -12,7 +12,7 @@ export class CourseListComponent implements OnInit {
 
   constructor(private courseService: CourseService) {}
 
-  courses?: Course[]
+  courses: Course[] = []
 
   ngOnInit() {
 
@@ -27,4 +27,21 @@ export class CourseListComponent implements OnInit {
     });
   }
 
+  deleteCourse(id: number) {
+
+    this.courseService.deleteCourse(id).subscribe({
+
+      next: () => {
+
+        console.log('Course deleted');
+        this.courses = this.courses.filter(
+          course => course.id !== id
+        );
+      },
+
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
 }

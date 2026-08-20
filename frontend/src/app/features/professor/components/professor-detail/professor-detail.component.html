@@ -78,17 +78,16 @@
 
           <p>
             Total:
-            {{ professor.courses.length  }}
+            {{ professor.courses.length }}
           </p>
-
         </div>
 
         @if (!managingCourses) {
 
           <button
             type="button"
-            (click)="startManagingCourses()">
-
+            (click)="startManagingCourses()"
+          >
             Manage Courses
           </button>
 
@@ -96,164 +95,126 @@
 
           <button
             type="button"
-            (click)="stopManagingCourses()">
-
-            @if (hasNewCoursesSelected()) {
-
-              Done
-
-            } @else {
-
-              Cancel
-
-            }
-
+            [disabled]="courseSaving"
+            (click)="stopManagingCourses()"
+          >
+            Cancel
           </button>
-        }
-      </div>
 
-      <!-- Course Management -->
+        }
+
+      </div>
 
       @if (managingCourses) {
 
-        <div class="course-management">
+      <div class="course-management">
 
-          <form [formGroup]="professorForm">
+        <form [formGroup]="professorForm">
 
-            <label>Courses</label>
+          <label>Courses</label>
 
+          @for (course of courses; track course.id) {
 
-            @for (
-              course of courses;
-              track course.id
-              ) {
+            <div>
 
-              <div>
+              <input
+                type="checkbox"
+                [id]="'course-' + course.id"
+                [checked]="isCourseSelected(course.id)"
+                (change)="toggleCourse(course.id, $event)"
+              />
 
-                <input
-                  type="checkbox"
-                  [id]="'course-' + course.id"
-                  [checked]="
-                    professorForm
-                      .get('courseIds')
-                      ?.value
-                      ?.includes(course.id)
-                  "
-                  [disabled]="
-                    isCourseAlreadyAssigned(course.id)
-                  "
-                  (change)="
-                    toggleCourse(course.id, $event)
-                  "
-                />
+              <label [for]="'course-' + course.id">
+                {{ course.code }} - {{ course.name }}
+              </label>
 
-                <label
-                  [for]="'course-' + course.id">
+            </div>
 
-                  {{ course.code }} -
-                  {{ course.name }}
+          }
 
-                </label>
-
-              </div>
-            }
-
-            @if (professorForm.get('courseIds')?.value?.length > 0) {
-
-              <p>
-                Selected:
-                {{
-                  professorForm
-                    .get('courseIds')
-                    ?.value
-                    ?.length
-                }}
-                course(s)
-              </p>
-
-              <ul>
-
-                @for (
-                  courseId of
-                    professorForm.get('courseIds')?.value;
-                  track courseId
-                  ) {
-
-                  @for (
-                    course of courses;
-                    track course.id
-                    ) {
-
-                    @if (
-                      course.id === courseId
-                      ) {
-
-                      <li>
-                        {{ course.code }} -
-                        {{ course.name }}
-                      </li>
-
-                    }
-                  }
-                }
-              </ul>
-
-            } @else {
-
-              <p>
-                No courses selected.
-              </p>
-            }
-
-            <button
-              type="button"
-              [disabled]="
-                courseSaving ||
-                !hasNewCoursesSelected()
-              "
-              (click)="addSelectedCourses()">
-
-              @if (courseSaving) {
-
-                Adding...
-
-              } @else {
-
-                Add Selected Courses
-
-              }
-            </button>
-          </form>
-
-          @if (courseErrorMessage) {
+          @if (professorForm.get('courseIds')?.value?.length > 0) {
 
             <p>
-              {{ courseErrorMessage }}
+              Selected:
+              {{ professorForm.get('courseIds')?.value?.length }}
+              course(s)
+            </p>
+
+          } @else {
+
+            <p>
+              No courses selected.
             </p>
 
           }
-        </div>
-      }
+
+          <button
+            type="button"
+            [disabled]="courseSaving || !hasCourseChanges()"
+            (click)="saveCourseChanges()"
+          >
+
+            @if (courseSaving) {
+              Saving...
+            } @else {
+              Save Changes
+            }
+
+          </button>
+
+        </form>
+
+        @if (courseErrorMessage) {
+
+          <p>
+            {{ courseErrorMessage }}
+          </p>
+
+        }
+
+      </div>
+
+    }
+
 
       <!-- Assigned Courses -->
-      @if (professor.courses.length) {
+      @if (professor.courses.length > 0) {
 
         <div class="courses-list">
 
-          @for (courses of professor.courses; track courses.id) {
+          @for (
+            courseInstructor of professor.courses;
+            track courseInstructor.id
+            ) {
 
             <div class="course-card">
 
-              @if (courses.course) {
+              @if (courseInstructor.course) {
 
                 <h3>
-                  {{ courses.course.name }}
+                  {{ courseInstructor.course.name }}
                 </h3>
 
                 <p>
                   <strong>Code:</strong>
-                  {{ courses.course.code }}
+                  {{ courseInstructor.course.code }}
                 </p>
+
+                @if (managingCourses) {
+
+                  <button
+                    type="button"
+                    [disabled]="courseSaving"
+                    (click)="saveCourseChanges()"
+                  >
+                    @if (courseSaving) {
+                      Removing...
+                    } @else {
+                      Remove
+                    }
+                  </button>
+
+                }
 
               } @else {
 
@@ -264,7 +225,9 @@
               }
 
             </div>
+
           }
+
         </div>
 
       } @else {
@@ -275,6 +238,7 @@
         </p>
 
       }
+
     </section>
   </div>
 }
