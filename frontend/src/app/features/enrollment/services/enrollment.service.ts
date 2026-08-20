@@ -25,4 +25,8 @@ export class EnrollmentService {
     )
   }
 
+  deleteEnrollment(id: number) {
+    return this.http.delete(`${this.apiURL}/${id}`)
+  }
+
 }

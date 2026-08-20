@@ -1,21 +1,100 @@
-<h1>All Enrollments</h1>
-@for (enrollment of enrollments; track enrollment.id) {
+<div class="page-header">
+  <h1>Enrollments</h1>
 
-  <div class="enrollment-card">
-    <p> {{ enrollment.enrollmentStatus }}</p>
-    <p> {{ enrollment.semester.term }} {{ enrollment.semester.year }} </p>
-    <p> {{ enrollment.course.name }} </p>
-    <p> {{ enrollment.student.firstName }} {{ enrollment.student.lastName }} </p>
-    <p> {{ enrollment.grade }}</p>
-    <p> {{ enrollment.enrollmentDate }}</p>
-  </div>
+  <a>
+    + Create Enrollment
+  </a>
+</div>
 
-  @if (!$last) {
-    <hr>
-  }
+<div class="search-section">
+  <label for="search">
+    Search:
+  </label>
 
-} @empty {
+  <input
+    id="search"
+    type="text"
+    placeholder="Search enrollments..."
+  />
+</div>
 
-  <p> No enrollments found! </p>
+@if (enrollments.length > 0) {
+
+  <table>
+
+    <thead>
+    <tr>
+      <th>Student</th>
+      <th>Course</th>
+      <th>Semester</th>
+      <th>Status</th>
+      <th>Grade</th>
+      <th>Enrollment Date</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+      @for (enrollment of enrollments; track enrollment.id) {
+
+        <tr>
+
+          <td>
+            {{ enrollment.student.firstName }}
+            {{ enrollment.student.lastName }}
+          </td>
+
+          <td>
+            {{ enrollment.course.code }}
+            -
+            {{ enrollment.course.name }}
+          </td>
+
+          <td>
+            {{ enrollment.semester.term }}
+            {{ enrollment.semester.year }}
+          </td>
+
+          <td>
+            {{ enrollment.enrollmentStatus }}
+          </td>
+
+          <td>
+            {{ enrollment.grade }}
+          </td>
+
+          <td>
+            {{ enrollment.enrollmentDate }}
+          </td>
+
+          <td>
+
+            <a
+              [routerLink]="['/enrollments', enrollment.id]"
+            >
+              View
+            </a>
+
+            <button
+              type="button"
+              (click)="deleteEnrollment(enrollment.id)"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+} @else {
+
+  <p>No enrollments found!</p>
 
 }
