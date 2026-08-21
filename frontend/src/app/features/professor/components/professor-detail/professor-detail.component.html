@@ -1,91 +1,101 @@
 @if (loading) {
 
-  <p>Loading professor...</p>
+  <div class="state-card glass">
+    <p>Loading professor...</p>
+  </div>
 
 } @else if (errorMessage) {
 
-  <p>{{ errorMessage }}</p>
+  <div class="state-card glass error-state">
+    <p>{{ errorMessage }}</p>
+  </div>
 
 } @else if (professor) {
 
-  <div class="professor-details">
-    <div class="page-header">
+  <div class="page professor-details">
 
+    <header class="page-header">
       <div>
-        <h1>
-          {{ professor.firstName }}
-          {{ professor.lastName }}
-        </h1>
+        <span class="page-eyebrow">Professor</span>
+        <h1>{{ professor.firstName }} {{ professor.lastName }}</h1>
+        <p>View professor information and manage course assignments.</p>
       </div>
 
-      <a routerLink="/professors">
-        Back to Professors
+      <a class="back-link" routerLink="/professors">
+        ← Back to Professors
       </a>
+    </header>
 
-    </div>
 
-    <!-- Professor Information -->
-    <section>
+    <!-- PROFESSOR INFORMATION -->
+
+    <section class="detail-card glass">
 
       <div class="section-header">
-        <h2>Professor Information</h2>
+
+        <div>
+          <h2>Professor Information</h2>
+          <p>Personal and contact information.</p>
+        </div>
 
         <button
-          type="button">
-
+          type="button"
+          class="btn btn-secondary"
+        >
           Edit Information
-
         </button>
+
       </div>
+
 
       <div class="professor-info">
 
-        <p>
-          <strong>First Name:</strong>
-          {{ professor.firstName }}
-        </p>
+        <div class="info-item">
+          <span>First Name</span>
+          <strong>{{ professor.firstName }}</strong>
+        </div>
 
-        <p>
-          <strong>Last Name:</strong>
-          {{ professor.lastName }}
-        </p>
+        <div class="info-item">
+          <span>Last Name</span>
+          <strong>{{ professor.lastName }}</strong>
+        </div>
 
-        <p>
-          <strong>Email:</strong>
-          {{ professor.email }}
-        </p>
+        <div class="info-item">
+          <span>Email</span>
+          <strong>{{ professor.email }}</strong>
+        </div>
 
-        <p>
-          <strong>Gender:</strong>
-          {{ professor.gender }}
-        </p>
+        <div class="info-item">
+          <span>Gender</span>
+          <strong>{{ professor.gender }}</strong>
+        </div>
 
-        <p>
-          <strong>Date of Birth:</strong>
-          {{ professor.dateOfBirth }}
-        </p>
+        <div class="info-item">
+          <span>Date of Birth</span>
+          <strong>{{ professor.dateOfBirth }}</strong>
+        </div>
 
       </div>
+
     </section>
 
-    <!-- Courses -->
-    <section>
+
+    <!-- COURSES -->
+
+    <section class="detail-card glass">
 
       <div class="section-header">
 
         <div>
           <h2>Courses</h2>
-
-          <p>
-            Total:
-            {{ professor.courses.length }}
-          </p>
+          <p>{{ professor.courses.length }} assigned course(s)</p>
         </div>
 
         @if (!managingCourses) {
 
           <button
             type="button"
+            class="btn btn-secondary"
             (click)="startManagingCourses()"
           >
             Manage Courses
@@ -95,6 +105,7 @@
 
           <button
             type="button"
+            class="btn btn-secondary"
             [disabled]="courseSaving"
             (click)="stopManagingCourses()"
           >
@@ -112,95 +123,101 @@
 
         <div class="course-management">
 
+          <div class="subsection-header">
+            <h3>Manage Course Assignments</h3>
+            <p>Select the courses assigned to this professor.</p>
+          </div>
+
           <form [formGroup]="professorForm">
 
-            <h3>Manage Courses</h3>
+            <div class="course-selection">
 
-            <p>
-              Select the courses that should be assigned
-              to this professor.
-            </p>
+              @for (course of courses; track course.id) {
 
+                <label
+                  class="course-option"
+                  [for]="'course-' + course.id"
+                >
 
-            @for (course of courses; track course.id) {
+                  <input
+                    type="checkbox"
+                    [id]="'course-' + course.id"
+                    [checked]="isCourseSelected(course.id)"
+                    (change)="toggleCourse(course.id, $event)"
+                  >
 
-              <div>
+                  <span class="course-option-content">
 
-                <input
-                  type="checkbox"
-                  [id]="'course-' + course.id"
-                  [checked]="isCourseSelected(course.id)"
-                  (change)="toggleCourse(course.id, $event)"
-                />
+                    <span class="course-code">
+                      {{ course.code }}
+                    </span>
 
-                <label [for]="'course-' + course.id">
+                    <span class="course-option-name">
+                      {{ course.name }}
+                    </span>
 
-                  {{ course.code }} -
-                  {{ course.name }}
+                    <span class="course-credits">
+                      {{ course.credits }} credits
+                    </span>
+
+                  </span>
 
                 </label>
 
-              </div>
+              }
 
-            }
-
-
-            @if (
-              professorForm.get('courseIds')?.value?.length > 0
-              ) {
-
-              <p>
-
-                Selected:
-                {{ professorForm.get('courseIds')?.value?.length }}
-                course(s)
-
-              </p>
-
-            } @else {
-
-              <p>
-                No courses selected.
-              </p>
-
-            }
+            </div>
 
 
-            <button
-              type="button"
-              [disabled]="
-            courseSaving ||
-            !hasCourseChanges()
-          "
-              (click)="saveCourseChanges()"
-            >
+            <div class="selection-summary">
 
-              @if (courseSaving) {
+              @if (professorForm.get('courseIds')?.value?.length > 0) {
 
-                Saving...
+                <p>
+                  <strong>
+                    {{ professorForm.get('courseIds')?.value?.length }}
+                  </strong>
+                  course(s) selected
+                </p>
 
               } @else {
 
-                Save Changes
+                <p>No courses selected.</p>
 
               }
 
-            </button>
+            </div>
+
+
+            <div class="form-actions">
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                [disabled]="courseSaving || !hasCourseChanges()"
+                (click)="saveCourseChanges()"
+              >
+                @if (courseSaving) {
+                  Saving...
+                } @else {
+                  Save Changes
+                }
+              </button>
+
+            </div>
 
           </form>
 
 
           @if (courseErrorMessage) {
 
-            <p>
+            <div class="form-error">
               {{ courseErrorMessage }}
-            </p>
+            </div>
 
           }
 
         </div>
-
-        <hr>
 
       }
 
@@ -209,62 +226,71 @@
 
       @if (professor.courses.length > 0) {
 
-        <table>
+        <div class="assigned-courses">
 
-          <thead>
+          <div class="table-wrapper">
 
-          <tr>
+            <table class="table">
 
-            <th>Code</th>
-            <th>Course</th>
-            <th>Credits</th>
+              <thead>
+              <tr>
+                <th>Code</th>
+                <th>Course</th>
+                <th>Credits</th>
+              </tr>
+              </thead>
 
-          </tr>
+              <tbody>
 
-          </thead>
+                @for (
+                  professorCourses of professor.courses;
+                  track professorCourses.id
+                  ) {
 
-          <tbody>
+                  @if (professorCourses.course) {
 
-            @for (
-              professorCourses of professor.courses;
-              track professorCourses.id
-              ) {
+                    <tr>
 
-              @if (professorCourses.course) {
+                      <td>
+                        <span class="course-code">
+                          {{ professorCourses.course.code }}
+                        </span>
+                      </td>
 
-                <tr>
+                      <td>
+                        <strong>
+                          {{ professorCourses.course.name }}
+                        </strong>
+                      </td>
 
-                  <td>
-                    {{ professorCourses.course.code }}
-                  </td>
+                      <td>
+                        {{ professorCourses.course.credits }}
+                      </td>
 
-                  <td>
-                    {{ professorCourses.course.name }}
-                  </td>
+                    </tr>
 
-                  <td>
-                    {{ professorCourses.course.credits }}
-                  </td>
+                  }
 
-                </tr>
+                }
 
-              }
+              </tbody>
 
-            }
+            </table>
 
-          </tbody>
+          </div>
 
-        </table>
+        </div>
 
       } @else {
 
-        <p>
-          This professor is not assigned
-          to any courses.
-        </p>
+        <div class="empty-courses">
+          <h3>No courses assigned</h3>
+          <p>This professor is not currently assigned to any courses.</p>
+        </div>
 
       }
 
     </section>
+
   </div>
 }

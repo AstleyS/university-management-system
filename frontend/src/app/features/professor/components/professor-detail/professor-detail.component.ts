@@ -18,6 +18,7 @@ import {
   CourseInstructor,
   CourseInstructorCreateRequest
 } from '../../../courseInstructor/models/course-instructor';
+import {Gender} from '../../../../core/enums/Gender';
 
 @Component({
   selector: 'app-professor-detail',
@@ -34,6 +35,7 @@ export class ProfessorDetailComponent implements OnInit {
   professor?: Professor;
 
   courses: Course[] = [];
+  genders = Object.values(Gender)
 
   professorForm: FormGroup;
 

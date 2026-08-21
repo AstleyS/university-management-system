@@ -1,51 +1,64 @@
 @if (loading) {
 
-  <p>Loading course...</p>
+  <div class="state-card glass">
+    <p>Loading course...</p>
+  </div>
 
 } @else if (errorMessage) {
 
-  <p>{{ errorMessage }}</p>
+  <div class="state-card glass error-state">
+    <p>{{ errorMessage }}</p>
+  </div>
 
 } @else if (course) {
 
-  <div class="course-details">
+  <div class="page course-details">
 
-    <div class="page-header">
+    <header class="page-header">
 
       <div>
-
-        <h1>
-          {{ course.name }}
-        </h1>
-
-        <p>
-          {{ course.code }}
-        </p>
-
+        <span class="page-eyebrow">Course</span>
+        <h1>{{ course.name }}</h1>
+        <p>{{ course.code }} · {{ course.credits }} credits</p>
       </div>
 
-      <a routerLink="/courses">
-        Back to Courses
+      <a class="back-link" routerLink="/courses">
+        ← Back to Courses
       </a>
 
-    </div>
+    </header>
 
 
-    <!-- Course Information -->
+    <!-- COURSE INFORMATION -->
 
-    <section>
+    <section class="detail-card glass">
 
       <div class="section-header">
 
-        <h2>Course Information</h2>
+        <div>
+          <h2>Course Information</h2>
+          <p>Academic information and department assignment.</p>
+        </div>
 
         @if (!editingCourse) {
 
           <button
             type="button"
+            class="btn btn-secondary"
             (click)="startEditingCourse()"
           >
             Edit Information
+          </button>
+
+        } @else {
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            [disabled]="savingCourse"
+            (click)="cancelEditingCourse()"
+          >
+            Cancel
           </button>
 
         }
@@ -57,44 +70,44 @@
 
         <div class="course-info">
 
-          <p>
-            <strong>Code:</strong>
-            {{ course.code }}
-          </p>
+          <div class="info-item">
+            <span>Code</span>
+            <strong>{{ course.code }}</strong>
+          </div>
 
-          <p>
-            <strong>Name:</strong>
-            {{ course.name }}
-          </p>
+          <div class="info-item">
+            <span>Name</span>
+            <strong>{{ course.name }}</strong>
+          </div>
 
-          <p>
-            <strong>Credits:</strong>
-            {{ course.credits }}
-          </p>
+          <div class="info-item">
+            <span>Credits</span>
+            <strong>{{ course.credits }}</strong>
+          </div>
 
-          <p>
-            <strong>Department:</strong>
-            {{ course.department.name || '-' }}
-          </p>
+          <div class="info-item">
+            <span>Department</span>
+            <strong>{{ course.department?.name || '-' }}</strong>
+          </div>
 
-          <p>
-            <strong>Description:</strong>
-            {{ course.description || '-' }}
-          </p>
+          <div class="info-item info-description">
+            <span>Description</span>
+            <strong>{{ course.description || '-' }}</strong>
+          </div>
 
         </div>
 
       } @else {
 
         <form
+          class="detail-form"
           [formGroup]="courseForm"
+          (ngSubmit)="saveProfessorChanges()"
         >
 
-          <div>
+          <div class="form-group">
 
-            <label for="code">
-              Code
-            </label>
+            <label for="code">Code</label>
 
             <input
               id="code"
@@ -105,11 +118,9 @@
           </div>
 
 
-          <div>
+          <div class="form-group">
 
-            <label for="name">
-              Name
-            </label>
+            <label for="name">Name</label>
 
             <input
               id="name"
@@ -119,11 +130,10 @@
 
           </div>
 
-          <div>
 
-            <label for="credits">
-              Credits
-            </label>
+          <div class="form-group">
+
+            <label for="credits">Credits</label>
 
             <input
               id="credits"
@@ -134,11 +144,9 @@
           </div>
 
 
-          <div>
+          <div class="form-group">
 
-            <label for="department">
-              Department
-            </label>
+            <label for="department">Department</label>
 
             <select
               id="department"
@@ -149,14 +157,9 @@
                 Select department
               </option>
 
-              @for (
-                department of departments;
-                track department.id
-                ) {
+              @for (department of departments; track department.id) {
 
-                <option
-                  [value]="department.id"
-                >
+                <option [value]="department.id">
                   {{ department.name }}
                 </option>
 
@@ -167,14 +170,13 @@
           </div>
 
 
-          <div>
+          <div class="form-group form-group-full">
 
-            <label for="description">
-              Description
-            </label>
+            <label for="description">Description</label>
 
             <textarea
               id="description"
+              rows="4"
               formControlName="description"
             ></textarea>
 
@@ -183,34 +185,28 @@
 
           @if (courseErrorMessage) {
 
-            <p>
+            <div class="form-error">
               {{ courseErrorMessage }}
-            </p>
+            </div>
 
           }
 
 
-          <button
-            type="submit"
-            [disabled]="savingCourse"
-          >
+          <div class="form-actions">
 
-            @if (savingCourse) {
-              Saving...
-            } @else {
-              Save Changes
-            }
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="savingCourse || courseForm.invalid"
+            >
+              @if (savingCourse) {
+                Saving...
+              } @else {
+                Save Changes
+              }
+            </button>
 
-          </button>
-
-
-          <button
-            type="button"
-            [disabled]="savingCourse"
-            (click)="cancelEditingCourse()"
-          >
-            Cancel
-          </button>
+          </div>
 
         </form>
 
@@ -219,28 +215,22 @@
     </section>
 
 
-    <!-- Professors -->
+    <!-- PROFESSORS -->
 
-    <section>
+    <section class="detail-card glass">
 
       <div class="section-header">
 
         <div>
-
           <h2>Professors</h2>
-
-          <p>
-            Total:
-            {{ course.courseInstructors.length }}
-          </p>
-
+          <p>{{ course.courseInstructors.length }} assigned professor(s)</p>
         </div>
-
 
         @if (!managingProfessors) {
 
           <button
             type="button"
+            class="btn btn-secondary"
             (click)="startManagingProfessors()"
           >
             Manage Professors
@@ -250,6 +240,7 @@
 
           <button
             type="button"
+            class="btn btn-secondary"
             [disabled]="savingProfessors"
             (click)="cancelManagingProfessors()"
           >
@@ -261,111 +252,107 @@
       </div>
 
 
-      <!-- Professor Management -->
+      <!-- PROFESSOR MANAGEMENT -->
 
       @if (managingProfessors) {
 
-        <div>
+        <div class="professor-management">
 
-          <form
-            [formGroup]="professorForm"
-          >
+          <div class="subsection-header">
+            <h3>Manage Professor Assignments</h3>
+            <p>Select the professors assigned to this course.</p>
+          </div>
 
-            <label>
-              Professors
-            </label>
+          <form [formGroup]="professorForm">
 
+            <div class="professor-selection">
 
-            @for (
-              professor of professors;
-              track professor.id
-              ) {
-
-              <div>
-
-                <input
-                  type="checkbox"
-                  [id]="'professor-' + professor.id"
-                  [checked]="
-                    isProfessorSelected(professor.id)
-                  "
-                  (change)="
-                    toggleProfessor(
-                      professor.id,
-                      $event
-                    )
-                  "
-                >
+              @for (professor of professors; track professor.id) {
 
                 <label
+                  class="professor-option"
                   [for]="'professor-' + professor.id"
                 >
 
-                  {{ professor.firstName }}
-                  {{ professor.lastName }}
+                  <input
+                    type="checkbox"
+                    [id]="'professor-' + professor.id"
+                    [checked]="isProfessorSelected(professor.id)"
+                    (change)="toggleProfessor(professor.id, $event)"
+                  >
 
-                  -
-                  {{ professor.email }}
+                  <span class="professor-option-content">
+
+                    <span class="professor-avatar">
+                      {{ professor.firstName.charAt(0) }}{{ professor.lastName.charAt(0) }}
+                    </span>
+
+                    <span class="professor-option-info">
+
+                      <span class="professor-name">
+                        {{ professor.firstName }} {{ professor.lastName }}
+                      </span>
+
+                      <span class="professor-email">
+                        {{ professor.email }}
+                      </span>
+
+                    </span>
+
+                  </span>
 
                 </label>
 
-              </div>
-
-            }
-
-
-            @if (
-              professorForm
-                .get('professorIds')
-                ?.value?.length > 0
-              ) {
-
-              <p>
-
-                Selected:
-                {{
-                  professorForm
-                    .get('professorIds')
-                    ?.value?.length
-                }}
-                professor(s)
-
-              </p>
-
-            } @else {
-
-              <p>
-                No professors selected.
-              </p>
-
-            }
-
-
-            <button
-              type="button"
-              [disabled]="
-                savingProfessors ||
-                !hasProfessorChanges()
-              "
-              (click)="saveProfessorChanges()"
-            >
-
-              @if (savingProfessors) {
-                Saving...
-              } @else {
-                Save Changes
               }
 
-            </button>
+            </div>
+
+
+            <div class="selection-summary">
+
+              @if (professorForm.get('professorIds')?.value?.length > 0) {
+
+                <p>
+                  <strong>
+                    {{ professorForm.get('professorIds')?.value?.length }}
+                  </strong>
+                  professor(s) selected
+                </p>
+
+              } @else {
+
+                <p>No professors selected.</p>
+
+              }
+
+            </div>
+
+
+            <div class="form-actions">
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                [disabled]="savingProfessors || !hasProfessorChanges()"
+                (click)="saveProfessorChanges()"
+              >
+                @if (savingProfessors) {
+                  Saving...
+                } @else {
+                  Save Changes
+                }
+              </button>
+
+            </div>
 
           </form>
 
 
           @if (professorErrorMessage) {
 
-            <p>
+            <div class="form-error">
               {{ professorErrorMessage }}
-            </p>
+            </div>
 
           }
 
@@ -374,13 +361,11 @@
       }
 
 
-      <!-- Assigned Professors -->
+      <!-- ASSIGNED PROFESSORS -->
 
-      @if (
-        (course.courseInstructors.length) > 0
-        ) {
+      @if (course.courseInstructors.length > 0) {
 
-        <div>
+        <div class="assigned-professors">
 
           @for (
             courseInstructor of course.courseInstructors;
@@ -389,35 +374,30 @@
 
             @if (courseInstructor.professor) {
 
-              <div>
+              <div class="professor-card">
 
-                <h3>
-
+                <div class="professor-avatar">
                   {{
-                    courseInstructor.professor.firstName
+                    courseInstructor.professor.firstName.charAt(0)
+                  }}{{
+                    courseInstructor.professor.lastName.charAt(0)
                   }}
+                </div>
 
-                  {{
-                    courseInstructor.professor.lastName
-                  }}
+                <div class="professor-card-info">
 
-                </h3>
+                  <h3>
+                    {{ courseInstructor.professor.firstName }}
+                    {{ courseInstructor.professor.lastName }}
+                  </h3>
 
-                <p>
+                  <p>
+                    {{ courseInstructor.professor.email }}
+                  </p>
 
-                  {{
-                    courseInstructor.professor.email
-                  }}
-
-                </p>
+                </div>
 
               </div>
-
-            } @else {
-
-              <p>
-                Professor data unavailable.
-              </p>
 
             }
 
@@ -427,14 +407,13 @@
 
       } @else {
 
-        <p>
-          This course has no professors assigned.
-        </p>
+        <div class="empty-professors">
+          <h3>No professors assigned</h3>
+          <p>This course is not currently assigned to any professors.</p>
+        </div>
 
       }
 
     </section>
-
   </div>
-
 }

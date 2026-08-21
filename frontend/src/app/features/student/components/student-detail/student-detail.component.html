@@ -1,42 +1,60 @@
 @if (studentLoading) {
 
-  <p>Loading student...</p>
+  <div class="state-card glass">
+    <p>Loading student...</p>
+  </div>
 
 } @else if (studentErrorMessage) {
 
-  <p>{{ studentErrorMessage }}</p>
+  <div class="state-card glass error-state">
+    <p>{{ studentErrorMessage }}</p>
+  </div>
 
 } @else if (student) {
 
-  <div class="student-details">
-    <div class="page-header">
+  <div class="page student-details">
 
+    <header class="page-header">
       <div>
-        <h1>
-          {{ student.firstName }} {{ student.lastName }}
-        </h1>
+        <span class="page-eyebrow">Student</span>
+        <h1>{{ student.firstName }} {{ student.lastName }}</h1>
+        <p>View and manage student information and enrollments.</p>
       </div>
 
-      <a routerLink="/students">
-        Back to Students
+      <a class="back-link" routerLink="/students">
+        ← Back to Students
       </a>
-    </div>
+    </header>
 
-    <section>
+
+    <!-- STUDENT INFORMATION -->
+
+    <section class="detail-card glass">
 
       <div class="section-header">
 
-        <h2>Student Information</h2>
+        <div>
+          <h2>Student Information</h2>
+          <p>Personal and contact information.</p>
+        </div>
 
         @if (!editing) {
 
-          <button (click)="startStudentInfoEdit()">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="startStudentInfoEdit()"
+          >
             Edit Information
           </button>
 
         } @else {
 
-          <button (click)="cancelStudentInfoEdit()">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="cancelStudentInfoEdit()"
+          >
             Cancel
           </button>
 
@@ -47,152 +65,149 @@
 
       @if (!editing) {
 
-        <!-- VIEW MODE -->
         <div class="student-info">
 
-          <p>
-            <strong>First Name:</strong>
-            {{ student.firstName }}
-          </p>
+          <div class="info-item">
+            <span>First Name</span>
+            <strong>{{ student.firstName }}</strong>
+          </div>
 
-          <p>
-            <strong>Last Name:</strong>
-            {{ student.lastName }}
-          </p>
+          <div class="info-item">
+            <span>Last Name</span>
+            <strong>{{ student.lastName }}</strong>
+          </div>
 
-          <p>
-            <strong>Email:</strong>
-            {{ student.email }}
-          </p>
+          <div class="info-item">
+            <span>Email</span>
+            <strong>{{ student.email }}</strong>
+          </div>
 
-          <p>
-            <strong>Gender:</strong>
-            {{ student.gender }}
-          </p>
+          <div class="info-item">
+            <span>Gender</span>
+            <strong>{{ student.gender }}</strong>
+          </div>
 
-          <p>
-            <strong>Date of Birth:</strong>
-            {{ student.dateOfBirth }}
-          </p>
+          <div class="info-item">
+            <span>Date of Birth</span>
+            <strong>{{ student.dateOfBirth }}</strong>
+          </div>
 
         </div>
 
       } @else {
 
-        <!-- EDIT MODE -->
         <form
+          class="detail-form"
           [formGroup]="studentForm"
           (ngSubmit)="saveStudent()"
         >
 
-          <div>
+          <div class="form-group">
 
-            <label for="firstName">
-              First Name
-            </label>
+            <label for="firstName">First Name</label>
 
             <input
               id="firstName"
               type="text"
               formControlName="firstName"
-            />
+            >
 
             @if (
               studentForm.get('firstName')?.invalid &&
               studentForm.get('firstName')?.touched
               ) {
-              <p>First name is required.</p>
+              <small>First name is required.</small>
             }
 
           </div>
 
 
-          <div>
+          <div class="form-group">
 
-            <label for="lastName">
-              Last Name
-            </label>
+            <label for="lastName">Last Name</label>
 
             <input
               id="lastName"
               type="text"
               formControlName="lastName"
-            />
+            >
 
             @if (
               studentForm.get('lastName')?.invalid &&
               studentForm.get('lastName')?.touched
               ) {
-              <p>Last name is required.</p>
+              <small>Last name is required.</small>
             }
 
           </div>
 
 
-        <div>
-          <label for="gender">Gender</label>
+          <div class="form-group">
 
-          <select id="gender" formControlName="gender">
-            <option value="">Select gender</option>
+            <label for="gender">Gender</label>
 
-            @for (gender of genders; track gender) {
-              <option [value]="gender">
-                {{ gender }}
-              </option>
-            }
-          </select>
-        </div>
+            <select id="gender" formControlName="gender">
+              <option value="">Select gender</option>
+
+              @for (gender of genders; track gender) {
+                <option [value]="gender">
+                  {{ gender }}
+                </option>
+              }
+
+            </select>
+
+          </div>
 
 
-          <div>
+          <div class="form-group">
 
-            <label for="dateOfBirth">
-              Date of Birth
-            </label>
+            <label for="dateOfBirth">Date of Birth</label>
 
             <input
               id="dateOfBirth"
               type="date"
               formControlName="dateOfBirth"
-            />
+            >
 
           </div>
 
 
-          <div>
+          <div class="form-group">
 
-            <label for="email">
-              Email
-            </label>
+            <label for="email">Email</label>
 
             <input
               id="email"
               type="email"
               formControlName="email"
-            />
+            >
 
             @if (
               studentForm.get('email')?.invalid &&
               studentForm.get('email')?.touched
               ) {
-              <p>Please enter a valid email.</p>
+              <small>Please enter a valid email.</small>
             }
 
           </div>
 
 
-          <button
-            type="submit"
-            [disabled]="saving"
-          >
+          <div class="form-actions">
 
-            @if (saving) {
-              Saving...
-            } @else {
-              Save Changes
-            }
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="saving"
+            >
+              @if (saving) {
+                Saving...
+              } @else {
+                Save Changes
+              }
+            </button>
 
-          </button>
+          </div>
 
         </form>
 
@@ -200,15 +215,17 @@
 
     </section>
 
-    <section>
+
+    <!-- ENROLLMENTS -->
+
+    <section class="detail-card glass">
 
       <div class="section-header">
 
         <div>
           <h2>Enrollments</h2>
-
           <p>
-            Total: {{ student.enrollments.length }}
+            {{ student.enrollments.length }} enrollment(s)
           </p>
         </div>
 
@@ -216,20 +233,20 @@
 
           <button
             type="button"
-            (click)="startManagingEnrollments()">
-
+            class="btn btn-secondary"
+            (click)="startManagingEnrollments()"
+          >
             Manage Enrollments
-
           </button>
 
         } @else {
 
           <button
             type="button"
-            (click)="stopManagingEnrollments()">
-
+            class="btn btn-secondary"
+            (click)="stopManagingEnrollments()"
+          >
             Done Managing
-
           </button>
 
         }
@@ -237,172 +254,142 @@
       </div>
 
 
-      <!-- MANAGEMENT MODE -->
+      <!-- ADD ENROLLMENT -->
 
       @if (managingEnrollments) {
 
-        <hr>
+        <div class="enrollment-form">
 
-        <h3>Add Enrollment</h3>
-
-        @if (enrollmentErrorMessage) {
-
-          <p>
-            {{ enrollmentErrorMessage }}
-          </p>
-
-        }
-
-        <form
-          [formGroup]="enrollmentForm"
-          (ngSubmit)="addEnrollment()"
-        >
-
-          <div>
-
-            <label for="course">
-              Course
-            </label>
-
-            <select
-              id="course"
-              formControlName="courseId"
-            >
-
-              <option value="" disabled>
-                Select a course
-              </option>
-
-              @for (course of courses; track course.id) {
-
-                <option [value]="course.id">
-                  {{ course.code }} - {{ course.name }}
-                </option>
-
-              }
-
-            </select>
-
+          <div class="subsection-header">
+            <h3>Add Enrollment</h3>
+            <p>Add this student to a course.</p>
           </div>
 
+          @if (enrollmentErrorMessage) {
+            <div class="form-error">
+              {{ enrollmentErrorMessage }}
+            </div>
+          }
 
-          <div>
-
-            <label for="semester">
-              Semester
-            </label>
-
-            <select
-              id="semester"
-              formControlName="semesterId"
-            >
-
-              <option value="" disabled>
-                Select a semester
-              </option>
-
-              @for (semester of semesters; track semester.id) {
-
-                <option [value]="semester.id">
-                  {{ semester.term }} {{ semester.year }}
-                </option>
-
-              }
-
-            </select>
-
-          </div>
-
-
-          <div>
-
-            <label for="enrollmentDate">
-              Enrollment Date
-            </label>
-
-            <input
-              id="enrollmentDate"
-              type="date"
-              formControlName="enrollmentDate"
-            />
-
-          </div>
-
-
-          <div>
-
-            <label for="status">
-              Status
-            </label>
-
-            <select
-              id="status"
-              formControlName="enrollmentStatus"
-            >
-
-              <option value="ACTIVE">
-                Active
-              </option>
-
-              <option value="COMPLETED">
-                Completed
-              </option>
-
-              <option value="PASSED">
-                Passed
-              </option>
-
-              <option value="FAILED">
-                Failed
-              </option>
-
-              <option value="DROPPED">
-                Dropped
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div>
-
-            <label for="grade">
-              Grade
-            </label>
-
-            <input
-              id="grade"
-              type="number"
-              formControlName="grade"
-            />
-
-          </div>
-
-
-          <button
-            type="submit"
-            [disabled]="
-          enrollmentSaving ||
-          enrollmentForm.invalid
-        "
+          <form
+            class="detail-form"
+            [formGroup]="enrollmentForm"
+            (ngSubmit)="addEnrollment()"
           >
 
-            @if (enrollmentSaving) {
+            <div class="form-group">
 
-              Adding...
+              <label for="course">Course</label>
 
-            } @else {
+              <select
+                id="course"
+                formControlName="courseId"
+              >
 
-              Add Enrollment
+                <option value="" disabled>
+                  Select a course
+                </option>
 
-            }
+                @for (course of courses; track course.id) {
+                  <option [value]="course.id">
+                    {{ course.code }} - {{ course.name }}
+                  </option>
+                }
 
-          </button>
+              </select>
 
-        </form>
+            </div>
 
-        <hr>
+
+            <div class="form-group">
+
+              <label for="semester">Semester</label>
+
+              <select
+                id="semester"
+                formControlName="semesterId"
+              >
+
+                <option value="" disabled>
+                  Select a semester
+                </option>
+
+                @for (semester of semesters; track semester.id) {
+                  <option [value]="semester.id">
+                    {{ semester.term }} {{ semester.year }}
+                  </option>
+                }
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="enrollmentDate">Enrollment Date</label>
+
+              <input
+                id="enrollmentDate"
+                type="date"
+                formControlName="enrollmentDate"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="status">Status</label>
+
+              <select
+                id="status"
+                formControlName="enrollmentStatus"
+              >
+
+                <option value="ACTIVE">Active</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="PASSED">Passed</option>
+                <option value="FAILED">Failed</option>
+                <option value="DROPPED">Dropped</option>
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="grade">Grade</label>
+
+              <input
+                id="grade"
+                type="number"
+                formControlName="grade"
+              >
+
+            </div>
+
+
+            <div class="form-actions">
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="enrollmentSaving || enrollmentForm.invalid"
+              >
+                @if (enrollmentSaving) {
+                  Adding...
+                } @else {
+                  Add Enrollment
+                }
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
 
       }
 
@@ -411,88 +398,89 @@
 
       @if (student.enrollments.length > 0) {
 
-        <table>
+        <div class="enrollment-table-wrapper">
 
-          <thead>
+          <table class="table">
 
-          <tr>
+            <thead>
+            <tr>
+              <th>Course</th>
+              <th>Semester</th>
+              <th>Enrollment Date</th>
+              <th>Status</th>
+              <th>Grade</th>
 
-            <th>Course</th>
-            <th>Semester</th>
-            <th>Enrollment Date</th>
-            <th>Status</th>
-            <th>Grade</th>
+              @if (managingEnrollments) {
+                <th></th>
+              }
 
-            @if (managingEnrollments) {
-              <th>Action</th>
-            }
+            </tr>
+            </thead>
 
-          </tr>
+            <tbody>
 
-          </thead>
+              @for (enrollment of student.enrollments; track enrollment.id) {
 
-          <tbody>
-
-            @for (
-              enrollment of student.enrollments;
-              track enrollment.id
-              ) {
-
-              <tr>
-
-                <td>
-                  {{ enrollment.course.name }}
-                </td>
-
-                <td>
-                  {{ enrollment.semester.term }}
-                  {{ enrollment.semester.year }}
-                </td>
-
-                <td>
-                  {{ enrollment.enrollmentDate }}
-                </td>
-
-                <td>
-                  {{ enrollment.enrollmentStatus }}
-                </td>
-
-                <td>
-                  {{ enrollment.grade ?? '-' }}
-                </td>
-
-                @if (managingEnrollments) {
+                <tr>
 
                   <td>
-
-                    <button
-                      type="button"
-                      (click)="deleteEnrollment(enrollment.id)"
-                    >
-                      Remove
-                    </button>
-
+                    <strong>{{ enrollment.course.name }}</strong>
                   </td>
 
-                }
+                  <td>
+                    {{ enrollment.semester.term }}
+                    {{ enrollment.semester.year }}
+                  </td>
 
-              </tr>
+                  <td>
+                    {{ enrollment.enrollmentDate }}
+                  </td>
 
-            }
+                  <td>
+                    <span class="status">
+                      {{ enrollment.enrollmentStatus }}
+                    </span>
+                  </td>
 
-          </tbody>
+                  <td>
+                    {{ enrollment.grade ?? '-' }}
+                  </td>
 
-        </table>
+                  @if (managingEnrollments) {
+
+                    <td>
+
+                      <button
+                        type="button"
+                        class="table-action danger"
+                        (click)="deleteEnrollment(enrollment.id)"
+                      >
+                        Remove
+                      </button>
+
+                    </td>
+
+                  }
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
 
       } @else {
 
-        <p>
-          This student has no enrollments.
-        </p>
+        <div class="empty-enrollments">
+          <h3>No enrollments</h3>
+          <p>This student has no enrollments.</p>
+        </div>
 
       }
 
     </section>
-
   </div>
 }
