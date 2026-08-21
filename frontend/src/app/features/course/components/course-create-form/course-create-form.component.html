@@ -1,74 +1,207 @@
-<h1>Create Course</h1>
+<div class="page course-form-page">
 
-<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+  <header class="page-header">
 
-  <div>
-    <label for="department">Department</label>
+    <div>
+      <span class="page-eyebrow">Courses</span>
+      <h1>Create Course</h1>
+      <p>Add a new course and assign it to a department.</p>
+    </div>
 
-    <select id="department" formControlName="departmentId">
-      <option value="" disabled>Select a department</option>
+    <a class="back-link" routerLink="/courses">
+      ← Back to Courses
+    </a>
 
-      @for (department of departments; track department.id) {
-        <option [value]="department.id">
-          {{ department.name }}
-        </option>
-      }
-    </select>
+  </header>
 
-    @if (
-      courseForm.get('departmentId')?.invalid &&
-      courseForm.get('departmentId')?.touched
-      ) {
-      <p>Department is required.</p>
+
+  <div class="form-card glass">
+
+    @if (errorMessage) {
+
+      <div class="form-error">
+        {{ errorMessage }}
+      </div>
+
     }
+
+
+    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+
+      <section>
+
+        <div class="section-header">
+
+          <div>
+            <h2>Course Information</h2>
+            <p>Enter the academic information for this course.</p>
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <div class="form-group">
+
+            <label for="department">Department</label>
+
+            <select id="department" formControlName="departmentId">
+
+              <option value="" disabled>
+                Select a department
+              </option>
+
+              @for (department of departments; track department.id) {
+
+                <option [value]="department.id">
+                  {{ department.name }}
+                </option>
+
+              }
+
+            </select>
+
+            @if (
+              courseForm.get('departmentId')?.invalid &&
+              courseForm.get('departmentId')?.touched
+              ) {
+
+              <small class="field-error">
+                Department is required.
+              </small>
+
+            }
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="code">Course Code</label>
+
+            <input
+              id="code"
+              type="text"
+              formControlName="code"
+              placeholder="e.g. SE101"
+            >
+
+            @if (
+              courseForm.get('code')?.invalid &&
+              courseForm.get('code')?.touched
+              ) {
+
+              <small class="field-error">
+                A valid course code is required.
+              </small>
+
+            }
+
+          </div>
+
+
+          <div class="form-group form-group-full">
+
+            <label for="name">Course Name</label>
+
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              placeholder="Course name"
+            >
+
+            @if (
+              courseForm.get('name')?.invalid &&
+              courseForm.get('name')?.touched
+              ) {
+
+              <small class="field-error">
+                A course name is required.
+              </small>
+
+            }
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="credits">Credits</label>
+
+            <input
+              id="credits"
+              type="number"
+              formControlName="credits"
+              min="0"
+            >
+
+            @if (
+              courseForm.get('credits')?.invalid &&
+              courseForm.get('credits')?.touched
+              ) {
+
+              <small class="field-error">
+                Please enter a valid number of credits.
+              </small>
+
+            }
+
+          </div>
+
+
+          <div class="form-group form-group-full">
+
+            <label for="description">Description</label>
+
+            <textarea
+              id="description"
+              rows="5"
+              formControlName="description"
+              placeholder="Course description"
+            ></textarea>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+      <div class="form-actions">
+
+        <a
+          class="btn btn-secondary"
+          routerLink="/courses"
+        >
+          Cancel
+        </a>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="loading || courseForm.invalid"
+        >
+
+          @if (loading) {
+
+            Creating...
+
+          } @else {
+
+            Create Course
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
   </div>
 
-
-  <div>
-    <label for="code">Code</label>
-    <input
-      id="code"
-      type="text"
-      formControlName="code"
-      placeholder="e.g. SE101"
-    >
-  </div>
-
-
-  <div>
-    <label for="name">Name</label>
-    <input
-      id="name"
-      type="text"
-      formControlName="name"
-      placeholder="Course name"
-    >
-  </div>
-
-
-  <div>
-    <label for="description">Description</label>
-    <textarea
-      id="description"
-      formControlName="description"
-      placeholder="Course description"
-    ></textarea>
-  </div>
-
-
-  <div>
-    <label for="credits">Credits</label>
-    <input
-      id="credits"
-      type="number"
-      formControlName="credits"
-      min="0"
-    >
-  </div>
-
-
-  <button type="submit" [disabled]="courseForm.invalid">
-    Create Course
-  </button>
-
-</form>
+</div>

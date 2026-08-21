@@ -1,242 +1,356 @@
-<h1>Create Student</h1>
+<div class="page student-form-page">
 
-@if (errorMessage) {
-  <p>{{ errorMessage }}</p>
-}
+  <header class="page-header">
 
-<form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+    <div>
+      <span class="page-eyebrow">Students</span>
+      <h1>Create Student</h1>
+      <p>Add a new student and optionally assign initial courses.</p>
+    </div>
 
-  <div>
-    <label for="firstName">First Name</label>
+    <a class="back-link" routerLink="/students">
+      ← Back to Students
+    </a>
 
-    <input
-      id="firstName"
-      type="text"
-      formControlName="firstName"
-    />
-
-    @if (studentForm.get('firstName')?.touched &&
-    studentForm.get('firstName')?.invalid) {
-      <small>
-        First name is required and must be 2–30 characters.
-      </small>
-    }
-  </div>
+  </header>
 
 
-  <div>
-    <label for="lastName">Last Name</label>
+  <div class="form-card glass">
 
-    <input
-      id="lastName"
-      type="text"
-      formControlName="lastName"
-    />
+    @if (errorMessage) {
 
-    @if (studentForm.get('lastName')?.touched &&
-    studentForm.get('lastName')?.invalid) {
-      <small>
-        Last name is required and must be 2–30 characters.
-      </small>
-    }
-  </div>
-
-
-  <div>
-    <label for="gender">Gender</label>
-
-    <select id="gender" formControlName="gender">
-
-      <option value="">
-        Select gender
-      </option>
-
-      @for (gender of genders; track gender) {
-
-        <option [value]="gender">
-          {{ gender }}
-        </option>
-
-      }
-
-    </select>
-  </div>
-
-
-  <div>
-    <label for="dateOfBirth">
-      Date of Birth
-    </label>
-
-    <input
-      id="dateOfBirth"
-      type="date"
-      formControlName="dateOfBirth"
-    />
-  </div>
-
-
-  <div>
-    <label for="email">Email</label>
-
-    <input
-      id="email"
-      type="email"
-      formControlName="email"
-    />
-
-    @if (studentForm.get('email')?.touched &&
-    studentForm.get('email')?.invalid) {
-
-      <small>
-        Please enter a valid email.
-      </small>
-
-    }
-
-  </div>
-
-
-  <hr>
-
-  <h2>Initial Enrollments</h2>
-
-  <p>
-    You can optionally assign courses now.
-    Enrollments can also be managed later.
-  </p>
-
-
-  <div>
-
-    <label for="semester">
-      Semester
-    </label>
-
-    <select
-      id="semester"
-      formControlName="semesterId"
-    >
-
-      <option value="">
-        Select semester
-      </option>
-
-      @for (semester of semesters; track semester.id) {
-
-        <option [value]="semester.id">
-          {{ semester.term }} {{ semester.year }}
-        </option>
-
-      }
-
-    </select>
-
-  </div>
-
-
-  <div>
-
-    <label>Courses</label>
-
-    @for (course of courses; track course.id) {
-
-      <div>
-
-        <input
-          type="checkbox"
-          [id]="'course-' + course.id"
-          [checked]="
-            studentForm
-              .get('courseIds')
-              ?.value
-              ?.includes(course.id)
-          "
-          (change)="toggleCourse(course.id, $event)"
-        />
-
-        <label [for]="'course-' + course.id">
-
-          {{ course.code }} -
-          {{ course.name }}
-
-        </label>
-
+      <div class="form-error">
+        {{ errorMessage }}
       </div>
 
     }
 
 
-    @if (
-      studentForm.get('courseIds')?.value?.length > 0
-      ) {
+    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
 
-      <p>
-        Selected:
-        {{ studentForm.get('courseIds')?.value?.length }}
-        course(s)
-      </p>
 
-      <ul>
+      <!-- BASIC INFORMATION -->
 
-        @for (
-          courseId of studentForm.get('courseIds')?.value;
-          track courseId
-          ) {
+      <section>
 
-          @for (
-            course of courses;
-            track course.id
-            ) {
+        <div class="section-header">
 
-            @if (course.id === courseId) {
+          <div>
+            <h2>Basic Information</h2>
+            <p>Enter the student's personal information.</p>
+          </div>
 
-              <li>
-                {{ course.code }} -
-                {{ course.name }}
-              </li>
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label for="firstName">First Name</label>
+
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+            />
+
+            @if (
+              studentForm.get('firstName')?.touched &&
+              studentForm.get('firstName')?.invalid
+              ) {
+
+              <small class="field-error">
+                First name is required and must be 2–30 characters.
+              </small>
 
             }
 
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="lastName">Last Name</label>
+
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+            />
+
+            @if (
+              studentForm.get('lastName')?.touched &&
+              studentForm.get('lastName')?.invalid
+              ) {
+
+              <small class="field-error">
+                Last name is required and must be 2–30 characters.
+              </small>
+
+            }
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="gender">Gender</label>
+
+            <select id="gender" formControlName="gender">
+
+              <option value="">
+                Select gender
+              </option>
+
+              @for (gender of genders; track gender) {
+
+                <option [value]="gender">
+                  {{ gender }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="dateOfBirth">Date of Birth</label>
+
+            <input
+              id="dateOfBirth"
+              type="date"
+              formControlName="dateOfBirth"
+            />
+
+          </div>
+
+
+          <div class="form-group form-group-full">
+
+            <label for="email">Email</label>
+
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+            />
+
+            @if (
+              studentForm.get('email')?.touched &&
+              studentForm.get('email')?.invalid
+              ) {
+
+              <small class="field-error">
+                Please enter a valid email.
+              </small>
+
+            }
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- INITIAL ENROLLMENTS -->
+
+      <section class="enrollment-section">
+
+        <div class="section-header">
+
+          <div>
+            <h2>Initial Enrollments</h2>
+            <p>
+              Optional. You can assign courses now or manage enrollments later.
+            </p>
+          </div>
+
+          <span class="optional-badge">Optional</span>
+
+        </div>
+
+
+        <div class="form-group semester-group">
+
+          <label for="semester">Semester</label>
+
+          <select
+            id="semester"
+            formControlName="semesterId"
+          >
+
+            <option value="">
+              Select semester
+            </option>
+
+            @for (semester of semesters; track semester.id) {
+
+              <option [value]="semester.id">
+                {{ semester.term }} {{ semester.year }}
+              </option>
+
+            }
+
+          </select>
+
+          <small>
+            Required only when one or more courses are selected.
+          </small>
+
+        </div>
+
+
+        <div class="course-selection">
+
+          <div class="course-selection-header">
+
+            <div>
+              <h3>Courses</h3>
+              <p>Select the courses for this student's initial enrollment.</p>
+            </div>
+
+            @if (studentForm.get('courseIds')?.value?.length > 0) {
+
+              <span class="selected-count">
+                {{ studentForm.get('courseIds')?.value?.length }}
+                selected
+              </span>
+
+            }
+
+          </div>
+
+
+          <div class="course-options">
+
+            @for (course of courses; track course.id) {
+
+              <label
+                class="course-option"
+                [for]="'course-' + course.id"
+              >
+
+                <input
+                  type="checkbox"
+                  [id]="'course-' + course.id"
+                  [checked]="
+                    studentForm
+                      .get('courseIds')
+                      ?.value
+                      ?.includes(course.id)
+                  "
+                  (change)="toggleCourse(course.id, $event)"
+                />
+
+                <span class="course-option-content">
+
+                  <span class="course-code">
+                    {{ course.code }}
+                  </span>
+
+                  <span class="course-name">
+                    {{ course.name }}
+                  </span>
+
+                </span>
+
+              </label>
+
+            }
+
+          </div>
+
+
+          @if (studentForm.get('courseIds')?.value?.length > 0) {
+
+            <div class="selected-courses">
+
+              <h3>Selected Courses</h3>
+
+              <ul>
+
+                @for (
+                  courseId of studentForm.get('courseIds')?.value;
+                  track courseId
+                  ) {
+
+                  @for (course of courses; track course.id) {
+
+                    @if (course.id === courseId) {
+
+                      <li>
+                        <span>{{ course.code }}</span>
+                        {{ course.name }}
+                      </li>
+
+                    }
+
+                  }
+
+                }
+
+              </ul>
+
+            </div>
+
+          } @else {
+
+            <div class="empty-selection">
+              No courses selected. You can add enrollments later.
+            </div>
+
           }
 
-        }
+        </div>
 
-      </ul>
+      </section>
 
-    } @else {
 
-      <p>
-        No courses selected.
-      </p>
+      <!-- ACTIONS -->
 
-    }
+      <div class="form-actions">
+
+        <a
+          class="btn btn-secondary"
+          routerLink="/students"
+        >
+          Cancel
+        </a>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="
+            loading ||
+            studentForm.invalid ||
+            (
+              studentForm.get('courseIds')?.value?.length > 0 &&
+              !studentForm.get('semesterId')?.value
+            )
+          "
+        >
+
+          @if (loading) {
+
+            Creating...
+
+          } @else {
+
+            Create Student
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
 
   </div>
 
-
-  <button
-    type="submit"
-    [disabled]="
-      loading ||
-      studentForm.invalid ||
-      (
-        studentForm.get('courseIds')?.value?.length > 0 &&
-        !studentForm.get('semesterId')?.value
-      )
-    "
-  >
-
-    @if (loading) {
-
-      Creating...
-
-    } @else {
-
-      Create Student
-
-    }
-
-  </button>
-
-</form>
+</div>

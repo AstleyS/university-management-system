@@ -1,0 +1,379 @@
+.student-form-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+
+/* ================================
+   PAGE HEADER
+================================ */
+
+.page-eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+}
+
+.back-link {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  transition: color var(--transition);
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+
+/* ================================
+   FORM CARD
+================================ */
+
+.form-card {
+  padding: 28px;
+  border-radius: var(--radius-lg);
+}
+
+.form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+
+/* ================================
+   SECTION HEADER
+================================ */
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.section-header p {
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+
+/* ================================
+   BASIC FORM
+================================ */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.form-group small {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.field-error {
+  color: var(--danger) !important;
+}
+
+
+/* ================================
+   ERROR
+================================ */
+
+.form-error {
+  padding: 12px 14px;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  border-radius: var(--radius-sm);
+  background: rgba(220, 38, 38, 0.06);
+  color: var(--danger);
+  font-size: 13px;
+}
+
+
+/* ================================
+   ENROLLMENT SECTION
+================================ */
+
+.enrollment-section {
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+
+.optional-badge {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.semester-group {
+  max-width: 360px;
+  margin-bottom: 24px;
+}
+
+
+/* ================================
+   COURSE SELECTION
+================================ */
+
+.course-selection {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+}
+
+.course-selection-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.course-selection-header h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.course-selection-header p {
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.selected-count {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* ================================
+   COURSE OPTIONS
+================================ */
+
+.course-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.course-option {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color var(--transition),
+    background var(--transition);
+}
+
+.course-option:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.course-option input {
+  width: 16px;
+  height: 16px;
+  margin: 0 12px 0 0;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+}
+
+.course-option-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+}
+
+.course-code {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.course-name {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ================================
+   SELECTED COURSES
+================================ */
+
+.selected-courses {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.selected-courses h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+
+.selected-courses ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.selected-courses li {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.selected-courses li span {
+  margin-right: 4px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.empty-selection {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-align: center;
+}
+
+
+/* ================================
+   ACTIONS
+================================ */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+
+  .form-card {
+    padding: 20px;
+  }
+
+  .section-header,
+  .course-selection-header {
+    flex-direction: column;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group-full {
+    grid-column: auto;
+  }
+
+  .course-options {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+}
