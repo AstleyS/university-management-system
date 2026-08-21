@@ -1,16 +1,65 @@
-<h1>All Semesters</h1>
-@for (semester of semesters; track semester.id) {
+<div class="page semester-list">
 
-  <div class="semester-card">
-    <p> {{ semester.term }} {{ semester.year }} </p>
-  </div>
+  <header class="page-header">
+    <div>
+      <h1>Semesters</h1>
+      <p>View the academic semesters configured in the system.</p>
+    </div>
+  </header>
 
-  @if (!$last) {
-    <hr>
+  @if (loading) {
+    <div class="state-card glass">
+      <p>Loading semesters...</p>
+    </div>
   }
 
-} @empty {
+  @else if (errorMessage) {
+    <div class="state-card glass error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
 
-  <p> No semesters found! </p>
+  @else if (!semesters.length) {
+    <div class="state-card glass">
+      <h3>No semesters found</h3>
+      <p>There are currently no semesters available.</p>
+    </div>
+  }
 
-}
+  @else {
+    <div class="table-wrapper glass">
+
+      <table class="table">
+
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Semester</th>
+        </tr>
+        </thead>
+
+        <tbody>
+          @for (semester of semesters; track semester.id) {
+            <tr>
+
+              <td>#{{ semester.id }}</td>
+
+              <td>
+                <div class="semester-name">
+                  <div class="semester-icon">
+                    S
+                  </div>
+
+                  <strong>{{ semester.term }} {{ semester.year }}</strong>
+                </div>
+              </td>
+
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+</div>

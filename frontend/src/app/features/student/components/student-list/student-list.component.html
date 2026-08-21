@@ -1,115 +1,105 @@
-<div class="page-header">
+<div class="page student-list">
 
-  <h1>Students</h1>
+  <header class="page-header">
+    <div>
+      <h1>Students</h1>
+      <p>Manage students registered in the university.</p>
+    </div>
 
-  <a routerLink="/students/new">
-    + Create Student
-  </a>
+    <a class="btn btn-primary" routerLink="/students/new">
+      + New Student
+    </a>
+  </header>
 
-</div>
+  @if (loading) {
+    <div class="state-card glass">
+      <p>Loading students...</p>
+    </div>
+  }
 
+  @else if (errorMessage) {
+    <div class="state-card glass error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
 
-<div class="search-section">
+  @else if (students.length === 0) {
+    <div class="state-card glass">
+      <h3>No students found</h3>
+      <p>Get started by adding your first student.</p>
 
-  <label for="search">
-    Search:
-  </label>
+      <a class="btn btn-primary" routerLink="/students/new">
+        + Add Student
+      </a>
+    </div>
+  }
 
-  <input
-    id="search"
-    type="text"
-    [(ngModel)]="searchTerm"
-    placeholder="Search students..."
-  >
+  @else {
+    <div class="table-wrapper glass">
 
-</div>
+      <table class="table">
 
-
-@if (loading) {
-
-  <p>Loading students...</p>
-
-} @else if (errorMessage) {
-
-  <p>{{ errorMessage }}</p>
-
-} @else {
-
-  <table>
-
-    <thead>
-
-    <tr>
-
-      <th>Name</th>
-      <th>Email</th>
-      <th>Enrollments</th>
-      <th>Actions</th>
-
-    </tr>
-
-    </thead>
-
-    <tbody>
-
-      @for (
-        student of filteredStudents;
-        track student.id
-        ) {
-
+        <thead>
         <tr>
-
-          <td>
-            {{ student.firstName }}
-            {{ student.lastName }}
-          </td>
-
-          <td>
-            {{ student.email }}
-          </td>
-
-          <td>
-            {{ student.enrollments.length }}
-          </td>
-
-          <td>
-
-            <button
-              type="button"
-              [routerLink]="[
-                '/students',
-                student.id
-              ]"
-            >
-              View
-            </button>
-
-            <button
-              type="button"
-              (click)="onDeleteStudent(student.id)"
-              disabled
-            >
-              Delete
-            </button>
-
-          </td>
-
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Date of Birth</th>
+          <th>Gender</th>
+          <th></th>
         </tr>
+        </thead>
 
-      } @empty {
+        <tbody>
+          @for (student of students; track student.id) {
+            <tr>
+              <td>#{{ student.id }}</td>
 
-        <tr>
+              <td>
+                <div class="student-name">
+                  <div class="student-avatar">
+                    {{ student.firstName.charAt(0) }}{{ student.lastName.charAt(0) }}
+                  </div>
 
-          <td colspan="4">
-            No students found!
-          </td>
+                  <span>{{ student.firstName }} {{ student.lastName }}</span>
+                </div>
+              </td>
 
-        </tr>
+              <td>{{ student.email }}</td>
 
-      }
+              <td>{{ student.dateOfBirth }}</td>
 
-    </tbody>
+              <td>
+                <span class="badge">
+                  {{ student.gender }}
+                </span>
+              </td>
 
-  </table>
+              <td>
+                <div class="table-actions">
 
-}
+                  <a
+                    class="table-action"
+                    [routerLink]="['/students', student.id]"
+                  >
+                    Edit
+                  </a>
+
+                  <button
+                    type="button"
+                    class="table-action danger"
+                    (click)="onDeleteStudent(student.id)"
+                    disabled
+                  >
+                    Delete
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

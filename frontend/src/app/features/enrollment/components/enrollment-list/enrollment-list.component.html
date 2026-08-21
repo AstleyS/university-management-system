@@ -1,129 +1,119 @@
-<div class="page-header">
+<div class="page enrollment-list">
 
-  <h1>Enrollments</h1>
+  <header class="page-header">
+    <div>
+      <h1>Enrollments</h1>
+      <p>Manage student course enrollments.</p>
+    </div>
 
-  <a routerLink="/enrollments/new">
-    + Create Enrollment
-  </a>
+    <a class="btn btn-primary" routerLink="/enrollments/new">
+      + New Enrollment
+    </a>
+  </header>
+
+  @if (loading) {
+    <div class="state-card glass">
+      <p>Loading enrollments...</p>
+    </div>
+  }
+
+  @else if (errorMessage) {
+    <div class="state-card glass error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
+
+  @else if (enrollments.length === 0) {
+    <div class="state-card glass">
+      <h3>No enrollments found</h3>
+      <p>Create the first student enrollment.</p>
+
+      <a class="btn btn-primary" routerLink="/enrollments/new">
+        + Add Enrollment
+      </a>
+    </div>
+  }
+
+  @else {
+    <div class="table-wrapper glass">
+
+      <table class="table">
+
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Student</th>
+          <th>Course</th>
+          <th>Semester</th>
+          <th>Status</th>
+          <th>Grade</th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+          @for (enrollment of enrollments; track enrollment.id) {
+            <tr>
+              <td>#{{ enrollment.id }}</td>
+
+              <td>
+                {{ enrollment.student.firstName  }} {{ enrollment.student.lastName  }}
+              </td>
+
+              <td>
+                <span class="course-code">
+                  {{ enrollment.course.code }}
+                </span>
+              </td>
+
+              <td>{{ enrollment.semester.term }} {{ enrollment.semester.year }}</td>
+
+              <td>
+                <span
+                  class="status"
+                  [class.status-active]="enrollment.enrollmentStatus === 'ACTIVE'"
+                  [class.status-failed]="enrollment.enrollmentStatus === 'FAILED'"
+                  [class.status-passed]="enrollment.enrollmentStatus === 'PASSED'"
+                >
+                  {{ enrollment.enrollmentStatus }}
+                </span>
+              </td>
+
+              <td>
+                @if (enrollment.grade !== null) {
+                  {{ enrollment.grade }}
+                } @else {
+                  <span class="text-muted">—</span>
+                }
+              </td>
+
+              <td>
+                <div class="table-actions">
+
+                  <a
+                    class="table-action"
+                    [routerLink]="['/enrollments', enrollment.id]"
+                  >
+                    Edit
+                  </a>
+
+                  <button
+                    type="button"
+                    class="table-action danger"
+                    (click)="deleteEnrollment(enrollment.id)"
+                  >
+                    Delete
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
 
 </div>
-
-
-<div class="search-section">
-
-  <label for="search">
-    Search:
-  </label>
-
-  <input
-    id="search"
-    type="text"
-    [(ngModel)]="searchTerm"
-    placeholder="Search enrollments..."
-  >
-
-</div>
-
-
-@if (loading) {
-
-  <p>Loading enrollments...</p>
-
-} @else if (errorMessage) {
-
-  <p>{{ errorMessage }}</p>
-
-} @else {
-
-  <table>
-
-    <thead>
-
-    <tr>
-
-      <th>Student</th>
-      <th>Course</th>
-      <th>Semester</th>
-      <th>Status</th>
-      <th>Grade</th>
-      <th>Date</th>
-      <th>Actions</th>
-
-    </tr>
-
-    </thead>
-
-    <tbody>
-
-      @for (
-        enrollment of filteredEnrollments;
-        track enrollment.id
-        ) {
-
-        <tr>
-
-          <td>
-            {{ enrollment.student.firstName }}
-            {{ enrollment.student.lastName }}
-          </td>
-
-          <td>
-            {{ enrollment.course.code }}
-            -
-            {{ enrollment.course.name }}
-          </td>
-
-          <td>
-            {{ enrollment.semester.term }}
-            {{ enrollment.semester.year }}
-          </td>
-
-          <td>
-            {{ enrollment.enrollmentStatus }}
-          </td>
-
-          <td>
-            {{ enrollment.grade ||  '-' }}
-          </td>
-
-          <td>
-            {{ enrollment.enrollmentDate }}
-          </td>
-
-          <td>
-
-            <button
-              type="button"
-              disabled
-            >
-              View
-            </button>
-
-            <button
-              type="button"
-              (click)="deleteEnrollment(enrollment.id)"
-            >
-              Delete
-            </button>
-
-          </td>
-
-        </tr>
-
-      } @empty {
-
-        <tr>
-
-          <td colspan="7">
-            No enrollments found!
-          </td>
-
-        </tr>
-
-      }
-
-    </tbody>
-
-  </table>
-
-}

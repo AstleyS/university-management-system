@@ -12,7 +12,9 @@ export class SemesterListComponent implements OnInit {
 
   constructor(private semesterService: SemesterService) {}
 
-  semesters?: Semester[]
+  semesters: Semester[] = []
+  loading = true
+  errorMessage = ''
 
   ngOnInit() {
 
@@ -21,9 +23,14 @@ export class SemesterListComponent implements OnInit {
       next: (data) => {
         console.log(data)
         this.semesters = data;
+        this.loading = false
       },
 
-      error: err => console.error(err)
+      error: err => {
+        console.error(err)
+        this.loading = false
+        this.errorMessage = 'Error loading semesters'
+      }
 
     });
   }

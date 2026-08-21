@@ -1,0 +1,90 @@
+.student-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+}
+
+.student-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.table-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.table-action {
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background var(--transition);
+}
+
+.table-action:hover {
+  background: var(--accent-light);
+}
+
+.table-action.danger {
+  color: var(--danger);
+}
+
+.table-action.danger:hover {
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 50px 24px;
+  text-align: center;
+}
+
+.state-card h3,
+.state-card p {
+  margin: 0;
+}
+
+.state-card p {
+  color: var(--text-secondary);
+}
+
+.error-state p {
+  color: var(--danger);
+}

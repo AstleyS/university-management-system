@@ -12,7 +12,9 @@ export class DepartmentListComponent implements OnInit {
 
   constructor(private departmentService: DepartmentService) {}
 
-  departments?: Department[];
+  departments: Department[] = [];
+  loading = true
+  errorMessage = ''
 
   ngOnInit() {
 
@@ -20,15 +22,15 @@ export class DepartmentListComponent implements OnInit {
 
       next: (data) => {
         this.departments = data;
+        this.loading = false
       },
 
-      error: err => console.error(err)
+      error: err => {
+        console.error(err)
+        this.loading = false;
+        this.errorMessage = 'Error loading departments';
+      }
 
     });
   }
-
-
-
-
-
 }

@@ -1,18 +1,78 @@
-<h1>All Departments</h1>
-@for (department of departments; track department.id) {
+<div class="page department-list">
 
-  <div class="department-card">
-    <h3> {{ department.name }} </h3>
-    <p> {{ department.code }} </p>
-    <p> {{ department.description }} </p>
-  </div>
+  <header class="page-header">
+    <div>
+      <h1>Departments</h1>
+      <p>View departments and their associated faculties.</p>
+    </div>
+  </header>
 
-  @if (!$last) {
-    <hr>
+  @if (loading) {
+    <div class="state-card glass">
+      <p>Loading departments...</p>
+    </div>
   }
 
-} @empty {
+  @else if (errorMessage) {
+    <div class="state-card glass error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
 
-  <p> No departments found! </p>
+  @else if (!departments.length) {
+    <div class="state-card glass">
+      <h3>No departments found</h3>
+      <p>There are currently no departments available.</p>
+    </div>
+  }
 
-}
+  @else {
+    <div class="table-wrapper glass">
+
+      <table class="table">
+
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Department</th>
+          <th>Description</th>
+          <th>Faculty</th>
+        </tr>
+        </thead>
+
+        <tbody>
+          @for (department of departments; track department.id) {
+            <tr>
+
+              <td>#{{ department.id }}</td>
+
+              <td>
+                <div class="entity-name">
+                  <div class="entity-icon">
+                    D
+                  </div>
+
+                  <strong>{{ department.name }}</strong>
+                </div>
+              </td>
+
+              <td class="description">
+                {{ department.description }}
+              </td>
+
+              <td>
+                <span class="badge">
+                  {{ department.faculty.name }}
+                </span>
+              </td>
+
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+</div>

@@ -12,7 +12,10 @@ export class FacultyListComponent implements OnInit {
 
   constructor(private facultyService: FacultyService ) {}
 
-  faculties?: Faculty[]
+  faculties: Faculty[] = []
+
+  loading = true
+  errorMessage = ''
 
   ngOnInit() {
 
@@ -21,13 +24,15 @@ export class FacultyListComponent implements OnInit {
       next: (data) => {
         console.log(data);
         this.faculties = data;
+        this.loading = false
       },
 
-      error: err => console.error(err)
+      error: err => {
+        console.error(err)
+        this.loading = false;
+        this.errorMessage = 'Error loading faculties'
+      }
 
     });
-
   }
-
-
 }

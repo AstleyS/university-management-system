@@ -1,18 +1,69 @@
-<h1>All Faculty</h1>
-@for (faculty of faculties; track faculty.id) {
+<div class="page faculty-list">
 
-  <div class="faculties">
-    <h3> {{ faculty.name }} </h3>
-    <p> {{ faculty.code }} </p>
-    <p> {{ faculty.description }} </p>
-  </div>
+  <header class="page-header">
+    <div>
+      <h1>Faculties</h1>
+      <p>View the faculties available in the university.</p>
+    </div>
+  </header>
 
-  @if (!$last) {
-    <hr>
+  @if (loading) {
+    <div class="state-card glass">
+      <p>Loading faculties...</p>
+    </div>
   }
 
-} @empty {
+  @else if (errorMessage) {
+    <div class="state-card glass error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
 
-  <p> No faculties found! </p>
+  @else if (!faculties.length) {
+    <div class="state-card glass">
+      <h3>No faculties found</h3>
+      <p>There are currently no faculties available.</p>
+    </div>
+  }
 
-}
+  @else {
+    <div class="table-wrapper glass">
+
+      <table class="table">
+
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+          @for (faculty of faculties; track faculty.id) {
+            <tr>
+              <td>#{{ faculty.id }}</td>
+
+              <td>
+                <div class="entity-name">
+                  <div class="entity-icon">
+                    F
+                  </div>
+
+                  <strong>{{ faculty.name }}</strong>
+                </div>
+              </td>
+
+              <td class="description">
+                {{ faculty.description }}
+              </td>
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+</div>

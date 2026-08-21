@@ -1,0 +1,73 @@
+.enrollment-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+}
+
+.course-code {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.status {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--surface-hover);
+  color: var(--text-secondary);
+}
+
+.status-active {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--success);
+}
+
+.status-passed {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--success);
+}
+
+.status-failed {
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--danger);
+}
+
+.table-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.table-action {
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background var(--transition);
+}
+
+.table-action:hover {
+  background: var(--accent-light);
+}
+
+.table-action.danger {
+  color: var(--danger);
+}
+
+.table-action.danger:hover {
+  background: rgba(220, 38, 38, 0.08);
+}

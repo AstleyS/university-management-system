@@ -1,94 +1,107 @@
-<div class="page-header">
+<div class="page professor-list">
 
-  <h1>Professors</h1>
+  <header class="page-header">
+    <div>
+      <h1>Professors</h1>
+      <p>Manage professors registered in the university.</p>
+    </div>
 
-  <a routerLink="/professors/new">
-    + Create Professor
-  </a>
+    <a class="btn btn-primary" routerLink="/professors/new">
+      + New Professor
+    </a>
+  </header>
 
+  @if (loading) {
+    <div class="state-card glass">
+      <p>Loading professors...</p>
+    </div>
+  }
+
+  @else if (errorMessage) {
+    <div class="state-card glass error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
+
+  @else if (professors.length === 0) {
+    <div class="state-card glass">
+      <h3>No professors found</h3>
+      <p>Get started by adding your first professor.</p>
+
+      <a class="btn btn-primary" routerLink="/professors/new">
+        + Add Professor
+      </a>
+    </div>
+  }
+
+  @else {
+    <div class="table-wrapper glass">
+
+      <table class="table">
+
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Date of Birth</th>
+          <th>Gender</th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+          @for (professor of professors; track professor.id) {
+            <tr>
+              <td>#{{ professor.id }}</td>
+
+              <td>
+                <div class="professor-name">
+                  <div class="professor-avatar">
+                    {{ professor.firstName.charAt(0) }}{{ professor.lastName.charAt(0) }}
+                  </div>
+
+                  <span>{{ professor.firstName }} {{ professor.lastName }}</span>
+                </div>
+              </td>
+
+              <td>{{ professor.email }}</td>
+
+              <td>{{ professor.dateOfBirth }}</td>
+
+              <td>
+                <span class="badge">
+                  {{ professor.gender }}
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+
+                  <a
+                    class="table-action"
+                    [routerLink]="['/professors', professor.id]"
+                  >
+                    Edit
+                  </a>
+
+                  <button
+                    type="button"
+                    class="table-action danger"
+                    (click)="onDeleteProfessor(professor.id)"
+                    disabled
+                  >
+                    Delete
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
 </div>
-
-<div class="search-section">
-
-  <label for="search">
-    Search:
-  </label>
-
-  <input
-    id="search"
-    type="text"
-    [(ngModel)]="searchTerm"
-    placeholder="Search professors..."
-  >
-
-</div>
-
-<table>
-
-  <thead>
-
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Courses</th>
-    <th>Actions</th>
-  </tr>
-
-  </thead>
-
-  <tbody>
-
-    @for (professor of filteredProfessors; track professor.id) {
-
-      <tr>
-
-        <td>
-          {{ professor.firstName }}
-          {{ professor.lastName }}
-        </td>
-
-        <td>
-          {{ professor.email }}
-        </td>
-
-        <td>
-          {{ professor.courses.length }}
-        </td>
-
-        <td>
-
-          <button
-            type="button"
-            [routerLink]="[
-              '/professors',
-              professor.id
-            ]"
-          >
-            View
-          </button>
-
-          <button
-            type="button"
-            disabled="disabled"
-          >
-            Delete
-          </button>
-
-        </td>
-
-      </tr>
-
-    } @empty {
-
-      <tr>
-
-        <td colspan="4">
-          No professors found!
-        </td>
-
-      </tr>
-
-    }
-
-  </tbody>
-</table>

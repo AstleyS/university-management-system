@@ -1,93 +1,107 @@
-<div class="page-header">
+<div class="page course-list">
 
-  <h1>Courses</h1>
+  <header class="page-header">
+    <div>
+      <h1>Courses</h1>
+      <p>Manage courses available in the university.</p>
+    </div>
 
-  <a routerLink="/courses/new">
-    + Create Course
-  </a>
+    <a class="btn btn-primary" routerLink="/courses/new">
+      + New Course
+    </a>
+  </header>
 
+  @if (loading) {
+    <div class="state-card glass">
+      <p>Loading courses...</p>
+    </div>
+  }
+
+  @else if (errorMessage) {
+    <div class="state-card glass error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
+
+  @else if (courses.length === 0) {
+    <div class="state-card glass">
+      <h3>No courses found</h3>
+      <p>Get started by creating your first course.</p>
+
+      <a class="btn btn-primary" routerLink="/courses/new">
+        + Add Course
+      </a>
+    </div>
+  }
+
+  @else {
+    <div class="table-wrapper glass">
+
+      <table class="table">
+
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Credits</th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+          @for (course of courses; track course.id) {
+            <tr>
+              <td>#{{ course.id }}</td>
+
+              <td>
+                <span class="course-code">
+                  {{ course.code }}
+                </span>
+              </td>
+
+              <td class="course-name">
+                {{ course.name }}
+              </td>
+
+              <td class="course-description">
+                {{ course.description }}
+              </td>
+
+              <td>
+                <span class="badge">
+                  {{ course.credits }} credits
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+
+                  <a
+                    class="table-action"
+                    [routerLink]="['/courses', course.id]"
+                  >
+                    Edit
+                  </a>
+
+                  <button
+                    type="button"
+                    class="table-action danger"
+                    (click)="deleteCourse(course.id)"
+                    disabled
+                  >
+                    Delete
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
 </div>
-
-<div class="search-section">
-
-  <label for="search">
-    Search:
-  </label>
-
-  <input
-    id="search"
-    type="text"
-    [(ngModel)]="searchTerm"
-    placeholder="Search courses..."
-  >
-
-</div>
-
-<table>
-
-  <thead>
-
-  <tr>
-    <th>Code</th>
-    <th>Name</th>
-    <th>Credits</th>
-    <th>Actions</th>
-  </tr>
-
-  </thead>
-
-  <tbody>
-
-    @for (
-      course of filteredCourses;
-      track course.id
-      ) {
-
-      <tr>
-
-        <td>
-          {{ course.code }}
-        </td>
-
-        <td>
-          {{ course.name }}
-        </td>
-
-        <td>
-          {{ course.credits }}
-        </td>
-
-        <td>
-
-          <a
-            [routerLink]="['/courses', course.id]"
-          >
-            View
-          </a>
-
-          <button
-            type="button"
-            disabled="disabled"
-          >
-            Delete
-          </button>
-
-        </td>
-
-      </tr>
-
-    } @empty {
-
-      <tr>
-
-        <td
-          colspan="4"
-        >
-          No courses found!
-        </td>
-
-      </tr>
-    }
-
-  </tbody>
-</table>
